@@ -104,4 +104,14 @@ class Character
         $this->hp = $hp;
     }
 
+    /**
+     * @param int $dice
+     *
+     * @return int
+     */
+    public function roll($dice)
+    {
+        return rand(1, $dice);
+    }
+
 }

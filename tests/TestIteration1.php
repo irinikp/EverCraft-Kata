@@ -44,4 +44,13 @@ class TestIteration1 extends \PHPUnit\Framework\TestCase
     {
         $this->assertEquals(5, $this->character->getHp());
     }
+
+    public function test_roll_dice()
+    {
+        for ($i=1; $i<=20; $i++) {
+            $dice = $this->character->roll($i);
+            $this->assertGreaterThanOrEqual(1, $dice);
+            $this->assertLessThanOrEqual($i, $dice);
+        }
+    }
 }
