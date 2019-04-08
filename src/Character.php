@@ -36,6 +36,27 @@ class Character
     protected $dead;
 
     /**
+     * @var Abilities
+     */
+    protected $abilities;
+
+    /**
+     * @return Abilities
+     */
+    public function getAbilities(): Abilities
+    {
+        return $this->abilities;
+    }
+
+    /**
+     * @param Abilities $abilities
+     */
+    public function setAbilities(Abilities $abilities): void
+    {
+        $this->abilities = $abilities;
+    }
+
+    /**
      * Character constructor.
      */
     public function __construct()
@@ -131,6 +152,9 @@ class Character
         $this->setDearOrAlive();
     }
 
+    /**
+     *
+     */
     public function setDearOrAlive()
     {
         if ($this->hp <= 0) {
