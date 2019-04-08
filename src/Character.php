@@ -191,4 +191,19 @@ class Character
         return rand(1, $dice);
     }
 
+    /**
+     * @param string $ability
+     *
+     * @return int
+     */
+    public function getAbilityModifier($ability)
+    {
+        $ability = ucfirst($ability);
+        if (Abilities::NAME[$ability]) {
+            $function = "get$ability";
+            return Abilities::MODIFIER[$this->getAbilities()->$function()];
+        } else {
+            return 0;
+        }
+    }
 }

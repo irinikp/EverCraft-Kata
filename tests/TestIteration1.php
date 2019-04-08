@@ -59,38 +59,40 @@ class TestIteration1 extends \PHPUnit\Framework\TestCase
 
     public function test_attack_roll_1()
     {
-        $hits = $this->create_mock_attack_roll(1);
+        $hits = $this->createMockAttackRoll(1);
         $this->assertFalse($hits);
     }
 
     public function test_attack_roll_5()
     {
-        $hits = $this->create_mock_attack_roll(5);
+        $hits = $this->createMockAttackRoll(5);
         $this->assertFalse($hits);
     }
 
     public function test_attack_roll_10()
     {
-        $hits = $this->create_mock_attack_roll(10);
+        $hits = $this->createMockAttackRoll(10);
         $this->assertTrue($hits);
     }
 
     public function test_attack_roll_15()
     {
-        $hits = $this->create_mock_attack_roll(15);
+        $hits = $this->createMockAttackRoll(15);
         $this->assertTrue($hits);
     }
 
     public function test_attack_roll_20()
     {
-        $hits = $this->create_mock_attack_roll(20);
+        $hits = $this->createMockAttackRoll(20);
         $this->assertTrue($hits);
     }
 
-    private function create_mock_attack_roll($dice, $target = null)
+    private function createMockAttackRoll($dice, $target = null, $strength_modifier = 0)
     {
         $character = \Mockery::mock(Character::class);
         $character->shouldReceive('roll')->withArgs([20])->once()->andReturn($dice);
+        $character->shouldReceive('getAbilityModifier')->withArgs(['strength'])->once()->andReturn($strength_modifier);
+
         if (null === $target) {
             $target = new Character();
         }
@@ -102,7 +104,7 @@ class TestIteration1 extends \PHPUnit\Framework\TestCase
     public function test_when_attack_is_successful_other_character_takes_1_point_of_damage_when_hit()
     {
         $target = new Character();
-        $this->create_mock_attack_roll(15, $target);
+        $this->createMockAttackRoll(15, $target, 0);
 
         $this->assertEquals(4, $target->getHp());
     }
@@ -110,22 +112,22 @@ class TestIteration1 extends \PHPUnit\Framework\TestCase
     public function test_when_two_attacks_are_successful_other_character_takes_2_point_of_damage_when_hit()
     {
         $target = new Character();
-        $this->create_mock_attack_roll(15, $target);
-        $this->create_mock_attack_roll(15, $target);
+        $this->createMockAttackRoll(15, $target, 0);
+        $this->createMockAttackRoll(15, $target, 0);
         $this->assertEquals(3, $target->getHp());
     }
 
     public function test_when_attack_is_unsuccessful_other_character_does_not_take_damage_when_hit()
     {
         $target = new Character();
-        $this->create_mock_attack_roll(9, $target);
+        $this->createMockAttackRoll(9, $target, 0);
         $this->assertEquals(5, $target->getHp());
     }
 
     public function test_if_a_roll_is_a_20_then_a_critical_hit_is_dealt_and_the_damage_is_doubled()
     {
         $target = new Character();
-        $this->create_mock_attack_roll(20, $target);
+        $this->createMockAttackRoll(20, $target, 0);
 
         $this->assertEquals(3, $target->getHp());
     }
@@ -192,5 +194,29 @@ class TestIteration1 extends \PHPUnit\Framework\TestCase
         $this->assertEquals(4, Abilities::getModifier(18));
         $this->assertEquals(4, Abilities::getModifier(19));
         $this->assertEquals(5, Abilities::getModifier(20));
+    }
+
+    public function test_add_strength_modifier_to_attack_roll_scenario_str3_roll13()
+    {
+        $hits = $this->createMockAttackRoll(13, null, -4);
+        $this->assertFalse($hits);
+    }
+
+    public function test_add_strength_modifier_to_attack_roll_scenario_str3_roll14()
+    {
+        $hits = $this->createMockAttackRoll(14, null, -4);
+        $this->assertTrue($hits);
+    }
+
+    public function test_add_strength_modifier_to_attack_roll_scenario_str17_roll6()
+    {
+        $hits = $this->createMockAttackRoll(6, null, 3);
+        $this->assertFalse($hits);
+    }
+
+    public function test_add_strength_modifier_to_attack_roll_scenario_str17_roll7()
+    {
+        $hits = $this->createMockAttackRoll(7, null, 3);
+        $this->assertTrue($hits);
     }
 }

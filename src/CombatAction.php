@@ -36,7 +36,7 @@ class CombatAction
     public function attackRoll()
     {
         $dice = $this->attacker->roll(20);
-        $hits = $this->hits($dice);
+        $hits = $this->hits($dice, $this->attacker->getAbilityModifier('strength'));
         if ($hits) {
             $this->target->setHp($this->target->getHp() - $this->get_damage($dice));
         }
@@ -45,12 +45,13 @@ class CombatAction
 
     /**
      * @param int $dice
+     * @param int $modifier
      *
      * @return bool
      */
-    public function hits($dice)
+    public function hits($dice, $modifier)
     {
-        return $dice >= $this->target->getAc();
+        return ($dice+$modifier) >= $this->target->getAc();
     }
 
     public function get_damage($dice)
