@@ -140,4 +140,12 @@ class TestIteration1 extends \PHPUnit\Framework\TestCase
         $this->assertTrue($this->character->isDead());
     }
 
+    public function test_when_hit_points_increase_after_0_the_character_is_alive_again()
+    {
+        $this->character->setHp(0);
+        $this->character->setHp(1);
+        $this->assertFalse($this->character->isDead());
+
+    }
+
 }

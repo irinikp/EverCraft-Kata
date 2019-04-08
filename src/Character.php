@@ -128,8 +128,15 @@ class Character
     public function setHp(int $hp): void
     {
         $this->hp = $hp;
-        if ($hp <= 0) {
+        $this->setDearOrAlive();
+    }
+
+    public function setDearOrAlive()
+    {
+        if ($this->hp <= 0) {
             $this->setDead(true);
+        } else {
+            $this->setDead(false);
         }
     }
 
