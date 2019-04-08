@@ -8,7 +8,6 @@ namespace Dnd;
  */
 class Character
 {
-
     /**
      * @var string
      */
@@ -32,6 +31,11 @@ class Character
     protected $max_hp;
 
     /**
+     * @var bool
+     */
+    protected $dead;
+
+    /**
      * Character constructor.
      */
     public function __construct()
@@ -39,6 +43,7 @@ class Character
         $this->ac     = 10;
         $this->hp     = 5;
         $this->max_hp = 5;
+        $this->dead   = false;
     }
 
     /**
@@ -123,6 +128,25 @@ class Character
     public function setHp(int $hp): void
     {
         $this->hp = $hp;
+        if ($hp <= 0) {
+            $this->setDead(true);
+        }
+    }
+
+    /**
+     * @return bool
+     */
+    public function isDead(): bool
+    {
+        return $this->dead;
+    }
+
+    /**
+     * @param bool $dead
+     */
+    public function setDead(bool $dead): void
+    {
+        $this->dead = $dead;
     }
 
     /**

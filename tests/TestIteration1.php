@@ -59,38 +59,38 @@ class TestIteration1 extends \PHPUnit\Framework\TestCase
     public function test_attack_roll_1()
     {
         $hits = $this->create_mock_attack_roll(1);
-        $this->assertEquals(false, $hits);
+        $this->assertFalse($hits);
     }
 
     public function test_attack_roll_5()
     {
         $hits = $this->create_mock_attack_roll(5);
-        $this->assertEquals(false, $hits);
+        $this->assertFalse($hits);
     }
 
     public function test_attack_roll_10()
     {
         $hits = $this->create_mock_attack_roll(10);
-        $this->assertEquals(true, $hits);
+        $this->assertTrue($hits);
     }
 
     public function test_attack_roll_15()
     {
         $hits = $this->create_mock_attack_roll(15);
-        $this->assertEquals(true, $hits);
+        $this->assertTrue($hits);
     }
 
     public function test_attack_roll_20()
     {
         $hits = $this->create_mock_attack_roll(20);
-        $this->assertEquals(true, $hits);
+        $this->assertTrue($hits);
     }
 
-    private function create_mock_attack_roll($dice, $target = NULL)
+    private function create_mock_attack_roll($dice, $target = null)
     {
         $character = \Mockery::mock(Character::class);
         $character->shouldReceive('roll')->withArgs([20])->once()->andReturn($dice);
-        if (NULL === $target) {
+        if (null === $target) {
             $target = new Character();
         }
 
@@ -120,7 +120,7 @@ class TestIteration1 extends \PHPUnit\Framework\TestCase
         $this->create_mock_attack_roll(9, $target);
         $this->assertEquals(5, $target->getHp());
     }
-    
+
     public function test_if_a_roll_is_a_20_then_a_critical_hit_is_dealt_and_the_damage_is_doubled()
     {
         $target = new Character();
@@ -128,4 +128,16 @@ class TestIteration1 extends \PHPUnit\Framework\TestCase
 
         $this->assertEquals(3, $target->getHp());
     }
+
+    public function test_new_character_is_alive()
+    {
+        $this->assertFalse($this->character->isDead());
+    }
+
+    public function test_when_hit_points_are_0_or_fewer_the_character_is_dead()
+    {
+        $this->character->setHp(0);
+        $this->assertTrue($this->character->isDead());
+    }
+
 }
