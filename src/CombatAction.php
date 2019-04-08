@@ -35,7 +35,11 @@ class CombatAction
     public function attackRoll()
     {
         $dice = $this->attacker->roll(20);
-        return $this->hits($dice);
+        $hits = $this->hits($dice);
+        if ($hits) {
+            $this->target->setHp($this->target->getHp() - 1);
+        }
+        return $hits;
     }
 
     /**

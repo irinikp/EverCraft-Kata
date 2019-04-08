@@ -26,14 +26,35 @@ class Character
      * @var int
      */
     protected $hp;
+    /**
+     * @var int
+     */
+    protected $max_hp;
 
     /**
      * Character constructor.
      */
     public function __construct()
     {
-        $this->ac = 10;
-        $this->hp = 5;
+        $this->ac     = 10;
+        $this->hp     = 5;
+        $this->max_hp = 5;
+    }
+
+    /**
+     * @return int
+     */
+    public function getMaxHp(): int
+    {
+        return $this->max_hp;
+    }
+
+    /**
+     * @param int $max_hp
+     */
+    public function setMaxHp(int $max_hp): void
+    {
+        $this->max_hp = $max_hp;
     }
 
     /**

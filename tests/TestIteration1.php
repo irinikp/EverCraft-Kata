@@ -89,9 +89,51 @@ class TestIteration1 extends \PHPUnit\Framework\TestCase
     private function create_mock_attack_roll($dice)
     {
         $character = \Mockery::mock(Character::class);
-
         $character->shouldReceive('roll')->withArgs([20])->once()->andReturn($dice);
+
         $action = new CombatAction($character, new Character());
         return $action->attackRoll();
     }
+
+    public function test_when_attack_is_successful_other_character_takes_1_point_of_damage_when_hit()
+    {
+        $character = \Mockery::mock(Character::class);
+        $character->shouldReceive('roll')->withArgs([20])->once()->andReturn(15);
+
+        $target = new Character();
+        $action = new CombatAction($character, $target);
+        $success = $action->attackRoll();
+
+        $this->assertEquals(true, $success);
+        $this->assertEquals(4, $target->getHp());
+    }
+
+    public function test_when_two_attacks_are_successful_other_character_takes_2_point_of_damage_when_hit()
+    {
+        $character = \Mockery::mock(Character::class);
+        $character->shouldReceive('roll')->withArgs([20])->twice()->andReturn(15);
+
+        $target = new Character();
+        $action = new CombatAction($character, $target);
+        $success1 = $action->attackRoll();
+        $success2 = $action->attackRoll();
+
+        $this->assertEquals(true, $success1);
+        $this->assertEquals(true, $success2);
+        $this->assertEquals(3, $target->getHp());
+    }
+
+    public function test_when_attack_is_unsuccessful_other_character_does_not_take_damage_when_hit()
+    {
+        $character = \Mockery::mock(Character::class);
+        $character->shouldReceive('roll')->withArgs([20])->once()->andReturn(9);
+
+        $target = new Character();
+        $action = new CombatAction($character, $target);
+        $success = $action->attackRoll();
+
+        $this->assertEquals(false, $success);
+        $this->assertEquals(5, $target->getHp());
+    }
+
 }
