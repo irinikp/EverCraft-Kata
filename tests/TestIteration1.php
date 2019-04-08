@@ -86,54 +86,46 @@ class TestIteration1 extends \PHPUnit\Framework\TestCase
         $this->assertEquals(true, $hits);
     }
 
-    private function create_mock_attack_roll($dice)
+    private function create_mock_attack_roll($dice, $target = NULL)
     {
         $character = \Mockery::mock(Character::class);
         $character->shouldReceive('roll')->withArgs([20])->once()->andReturn($dice);
+        if (NULL === $target) {
+            $target = new Character();
+        }
 
-        $action = new CombatAction($character, new Character());
+        $action = new CombatAction($character, $target);
         return $action->attackRoll();
     }
 
     public function test_when_attack_is_successful_other_character_takes_1_point_of_damage_when_hit()
     {
-        $character = \Mockery::mock(Character::class);
-        $character->shouldReceive('roll')->withArgs([20])->once()->andReturn(15);
-
         $target = new Character();
-        $action = new CombatAction($character, $target);
-        $success = $action->attackRoll();
+        $this->create_mock_attack_roll(15, $target);
 
-        $this->assertEquals(true, $success);
         $this->assertEquals(4, $target->getHp());
     }
 
     public function test_when_two_attacks_are_successful_other_character_takes_2_point_of_damage_when_hit()
     {
-        $character = \Mockery::mock(Character::class);
-        $character->shouldReceive('roll')->withArgs([20])->twice()->andReturn(15);
-
         $target = new Character();
-        $action = new CombatAction($character, $target);
-        $success1 = $action->attackRoll();
-        $success2 = $action->attackRoll();
-
-        $this->assertEquals(true, $success1);
-        $this->assertEquals(true, $success2);
+        $this->create_mock_attack_roll(15, $target);
+        $this->create_mock_attack_roll(15, $target);
         $this->assertEquals(3, $target->getHp());
     }
 
     public function test_when_attack_is_unsuccessful_other_character_does_not_take_damage_when_hit()
     {
-        $character = \Mockery::mock(Character::class);
-        $character->shouldReceive('roll')->withArgs([20])->once()->andReturn(9);
-
         $target = new Character();
-        $action = new CombatAction($character, $target);
-        $success = $action->attackRoll();
-
-        $this->assertEquals(false, $success);
+        $this->create_mock_attack_roll(9, $target);
         $this->assertEquals(5, $target->getHp());
     }
+    
+    public function test_if_a_roll_is_a_20_then_a_critical_hit_is_dealt_and_the_damage_is_doubled()
+    {
+        $target = new Character();
+        $this->create_mock_attack_roll(20, $target);
 
+        $this->assertEquals(3, $target->getHp());
+    }
 }

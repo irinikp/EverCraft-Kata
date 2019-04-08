@@ -8,6 +8,7 @@ namespace Dnd;
  */
 class CombatAction
 {
+    const CRITICAL = 20;
     /**
      * @var Character
      */
@@ -37,7 +38,7 @@ class CombatAction
         $dice = $this->attacker->roll(20);
         $hits = $this->hits($dice);
         if ($hits) {
-            $this->target->setHp($this->target->getHp() - 1);
+            $this->target->setHp($this->target->getHp() - $this->get_damage($dice));
         }
         return $hits;
     }
@@ -50,5 +51,14 @@ class CombatAction
     public function hits($dice)
     {
         return $dice >= $this->target->getAc();
+    }
+
+    public function get_damage($dice)
+    {
+        if ($dice < self::CRITICAL) {
+            return 1;
+        } else {
+            return 2;
+        }
     }
 }
