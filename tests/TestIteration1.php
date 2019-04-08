@@ -34,4 +34,14 @@ class TestIteration1 extends \PHPUnit\Framework\TestCase
         $this->character->setAlignment('innocent');
         $this->assertNotEquals('innocent', $this->character->getAlignment());
     }
+
+    public function test_ac()
+    {
+        $this->assertEquals(10, $this->character->getAc());
+    }
+
+    public function test_hp()
+    {
+        $this->assertEquals(5, $this->character->getHp());
+    }
 }
