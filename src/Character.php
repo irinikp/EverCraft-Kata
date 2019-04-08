@@ -41,30 +41,15 @@ class Character
     protected $abilities;
 
     /**
-     * @return Abilities
-     */
-    public function getAbilities(): Abilities
-    {
-        return $this->abilities;
-    }
-
-    /**
-     * @param Abilities $abilities
-     */
-    public function setAbilities(Abilities $abilities): void
-    {
-        $this->abilities = $abilities;
-    }
-
-    /**
      * Character constructor.
      */
     public function __construct()
     {
-        $this->ac     = 10;
-        $this->hp     = 5;
-        $this->max_hp = 5;
-        $this->dead   = false;
+        $this->ac        = 10;
+        $this->hp        = 5;
+        $this->max_hp    = 5;
+        $this->dead      = false;
+        $this->abilities = new Abilities();
     }
 
     /**
@@ -178,6 +163,22 @@ class Character
     public function setDead(bool $dead): void
     {
         $this->dead = $dead;
+    }
+
+    /**
+     * @return Abilities
+     */
+    public function getAbilities(): Abilities
+    {
+        return $this->abilities;
+    }
+
+    /**
+     * @param Abilities $abilities
+     */
+    public function setAbilities(Abilities $abilities): void
+    {
+        $this->abilities = $abilities;
     }
 
     /**

@@ -35,6 +35,19 @@ class Abilities
     protected $charisma;
 
     /**
+     * Abilities constructor.
+     */
+    public function __construct()
+    {
+        $this->strength     = 10;
+        $this->dexterity    = 10;
+        $this->constitution = 10;
+        $this->intelligence = 10;
+        $this->wisdom       = 10;
+        $this->charisma     = 10;
+    }
+
+    /**
      * @return int
      */
     public function getStrength(): int
@@ -47,7 +60,7 @@ class Abilities
      */
     public function setStrength(int $strength): void
     {
-        $this->strength = $strength;
+        if ($this->isValidAbilitiesRange($strength)) $this->strength = $strength;
     }
 
     /**
@@ -63,7 +76,7 @@ class Abilities
      */
     public function setDexterity(int $dexterity): void
     {
-        $this->dexterity = $dexterity;
+        if ($this->isValidAbilitiesRange($dexterity)) $this->dexterity = $dexterity;
     }
 
     /**
@@ -79,7 +92,7 @@ class Abilities
      */
     public function setConstitution(int $constitution): void
     {
-        $this->constitution = $constitution;
+        if ($this->isValidAbilitiesRange($constitution)) $this->constitution = $constitution;
     }
 
     /**
@@ -95,7 +108,7 @@ class Abilities
      */
     public function setIntelligence(int $intelligence): void
     {
-        $this->intelligence = $intelligence;
+        if ($this->isValidAbilitiesRange($intelligence)) $this->intelligence = $intelligence;
     }
 
     /**
@@ -111,7 +124,7 @@ class Abilities
      */
     public function setWisdom(int $wisdom): void
     {
-        $this->wisdom = $wisdom;
+        if ($this->isValidAbilitiesRange($wisdom)) $this->wisdom = $wisdom;
     }
 
     /**
@@ -127,6 +140,11 @@ class Abilities
      */
     public function setCharisma(int $charisma): void
     {
-        $this->charisma = $charisma;
+        if ($this->isValidAbilitiesRange($charisma)) $this->charisma = $charisma;
+    }
+
+    private function isValidAbilitiesRange($value): bool
+    {
+        return $value > 0 && $value <= 20;
     }
 }

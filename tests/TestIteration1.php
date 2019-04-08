@@ -145,7 +145,28 @@ class TestIteration1 extends \PHPUnit\Framework\TestCase
         $this->character->setHp(0);
         $this->character->setHp(1);
         $this->assertFalse($this->character->isDead());
+    }
 
+    public function test_abilities_default_to_10()
+    {
+        $this->assertEquals(10, $this->character->getAbilities()->getStrength());
+        $this->assertEquals(10, $this->character->getAbilities()->getDexterity());
+        $this->assertEquals(10, $this->character->getAbilities()->getConstitution());
+        $this->assertEquals(10, $this->character->getAbilities()->getIntelligence());
+        $this->assertEquals(10, $this->character->getAbilities()->getWisdom());
+        $this->assertEquals(10, $this->character->getAbilities()->getCharisma());
+    }
+
+    public function test_strength_range_from_1_to_20()
+    {
+        $this->character->getAbilities()->setStrength(0);
+        $this->assertNotEquals(0, $this->character->getAbilities()->getStrength());
+        $this->character->getAbilities()->setStrength(1);
+        $this->assertEquals(1, $this->character->getAbilities()->getStrength());
+        $this->character->getAbilities()->setStrength(20);
+        $this->assertEquals(20, $this->character->getAbilities()->getStrength());
+        $this->character->getAbilities()->setStrength(21);
+        $this->assertNotEquals(21, $this->character->getAbilities()->getStrength());
     }
 
 }
