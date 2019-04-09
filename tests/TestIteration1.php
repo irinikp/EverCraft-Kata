@@ -233,4 +233,11 @@ class TestIteration1 extends \PHPUnit\Framework\TestCase
         $this->createMockAttackRoll(7, $target, 3);
         $this->assertEquals(1, $target->getHp());
     }
+
+    public function test_double_strength_modifier_to_critical_hits()
+    {
+        $target = new Character();
+        $this->createMockAttackRoll(20, $target, 1);
+        $this->assertEquals(1, $target->getHp());
+    }
 }
