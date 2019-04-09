@@ -43,6 +43,10 @@ class Character
      * @var int
      */
     protected $xp;
+    /**
+     * @var int
+     */
+    protected $level;
 
     /**
      * Character constructor.
@@ -55,6 +59,23 @@ class Character
         $this->dead      = false;
         $this->abilities = new Abilities();
         $this->xp        = 0;
+        $this->level     = 1;
+    }
+
+    /**
+     * @return int
+     */
+    public function getLevel(): int
+    {
+        return $this->level;
+    }
+
+    /**
+     * @param int $level
+     */
+    public function setLevel(int $level): void
+    {
+        $this->level = $level;
     }
 
     /**

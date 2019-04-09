@@ -271,6 +271,11 @@ class TestIteration1 extends \PHPUnit\Framework\TestCase
         $this->assertTrue(true);
     }
 
+    public function test_default_level()
+    {
+        $this->assertEquals(1, $this->character->getLevel());
+    }
+
     private function createAttackRoll($dice, $target = null)
     {
         if (null === $target) {
