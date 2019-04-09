@@ -62,10 +62,10 @@ class CombatAction
      */
     public function calculate_damage($dice, $modifier)
     {
-        $damage = max(1, 1 + $modifier);
+        $damage = 1 + $modifier;
         if ($dice === self::CRITICAL) {
             $damage *= 2;
         }
-        return $damage;
+        return max(1, $damage);
     }
 }

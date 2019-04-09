@@ -240,4 +240,11 @@ class TestIteration1 extends \PHPUnit\Framework\TestCase
         $this->createMockAttackRoll(20, $target, 1);
         $this->assertEquals(1, $target->getHp());
     }
+
+    public function test_minimum_damage_is_always_1_even_on_a_critical_hit()
+    {
+        $target = new Character();
+        $this->createMockAttackRoll(20, $target, -4);
+        $this->assertEquals(4, $target->getHp());
+    }
 }
