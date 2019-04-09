@@ -182,6 +182,30 @@ class Character
     }
 
     /**
+     * @param string $ability
+     * @param int    $value
+     */
+    public function setAbility($ability, $value)
+    {
+        $ability = ucfirst($ability);
+        if (!Abilities::NAME[$ability]) {
+            return;
+        }
+        $function = "set$ability";
+        $this->abilities->$function($value);
+
+        if ('Dexterity' === $ability) {
+            $this->adjustAcFromDexterity();
+        }
+    }
+
+    public function adjustAcFromDexterity()
+    {
+        $modifier = $this->getAbilityModifier('dexterity');
+        $this->setAc($this->getAc() + $modifier);
+    }
+
+    /**
      * @param int $dice
      *
      * @return int
@@ -207,11 +231,10 @@ class Character
     public function getAbilityModifier($ability)
     {
         $ability = ucfirst($ability);
-        if (Abilities::NAME[$ability]) {
-            $function = "get$ability";
-            return Abilities::MODIFIER[$this->getAbilities()->$function()];
-        } else {
+        if (!Abilities::NAME[$ability]) {
             return 0;
         }
+        $function = "get$ability";
+        return Abilities::MODIFIER[$this->getAbilities()->$function()];
     }
 }

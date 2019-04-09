@@ -247,4 +247,10 @@ class TestIteration1 extends \PHPUnit\Framework\TestCase
         $this->createMockAttackRoll(20, $target, -4);
         $this->assertEquals(4, $target->getHp());
     }
+    
+    public function test_add_dexterity_modifier_to_armor_class()
+    {
+        $this->character->setAbility('dexterity', 15);
+        $this->assertEquals(12, $this->character->getAc());
+    }
 }
