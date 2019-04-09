@@ -78,6 +78,11 @@ class Abilities
         $this->charisma     = 10;
     }
 
+    public static function getModifier($ability): int
+    {
+        return self::MODIFIER[$ability];
+    }
+
     /**
      * @return int
      */
@@ -172,11 +177,6 @@ class Abilities
     public function setCharisma(int $charisma): void
     {
         if ($this->isValidAbilitiesRange($charisma)) $this->charisma = $charisma;
-    }
-
-    public static function getModifier($ability): int
-    {
-        return self::MODIFIER[$ability];
     }
 
     private function isValidAbilitiesRange($value): bool

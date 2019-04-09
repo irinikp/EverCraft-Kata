@@ -33,7 +33,7 @@ class CombatAction
     /**
      * @return bool
      */
-    public function attackRoll()
+    public function attackRoll(): bool
     {
         $dice = $this->attacker->roll(20);
         $hits = $this->hits($dice, $this->attacker->getAbilityModifier('strength'));
@@ -49,7 +49,7 @@ class CombatAction
      *
      * @return bool
      */
-    public function hits($dice, $modifier)
+    protected function hits($dice, $modifier): bool
     {
         return ($dice + $modifier) >= $this->target->getAc();
     }
@@ -60,7 +60,7 @@ class CombatAction
      *
      * @return int
      */
-    public function calculate_damage($dice, $modifier)
+    protected function calculate_damage($dice, $modifier): int
     {
         $damage = 1 + $modifier;
         if ($dice === self::CRITICAL) {

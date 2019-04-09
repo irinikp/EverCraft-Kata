@@ -79,7 +79,7 @@ class Character
     /**
      * @param string $name
      */
-    public function setName($name)
+    public function setName($name): void
     {
         $this->name = $name;
     }
@@ -95,13 +95,93 @@ class Character
     /**
      * @param string $alignment
      */
-    public function setAlignment($alignment)
+    public function setAlignment($alignment): void
     {
         try {
             $this->alignment = new Alignment($alignment);
         } catch (\Exception $e) {
             $this->alignment = '';
         }
+    }
+
+    /**
+     *
+     */
+    public function setDearOrAlive(): void
+    {
+        if ($this->hp <= 0) {
+            $this->setDead(true);
+        } else {
+            $this->setDead(false);
+        }
+    }
+
+    /**
+     * @return bool
+     */
+    public function isDead(): bool
+    {
+        return $this->dead;
+    }
+
+    /**
+     * @param bool $dead
+     */
+    public function setDead(bool $dead): void
+    {
+        $this->dead = $dead;
+    }
+
+    /**
+     * @param string $ability
+     * @param int    $value
+     */
+    public function setAbility($ability, $value): void
+    {
+        $ability = ucfirst($ability);
+        if (!Abilities::NAME[$ability]) {
+            return;
+        }
+        $function = "set$ability";
+        $this->abilities->$function($value);
+
+        if ('Dexterity' === $ability) {
+            $this->adjustAcFromDexterity();
+        }
+        if ('Constitution' === $ability) {
+            $this->adjustHpFromConstitution();
+        }
+    }
+
+    /**
+     * @param string $ability
+     *
+     * @return int
+     */
+    public function getAbilityModifier($ability): int
+    {
+        $ability = ucfirst($ability);
+        if (!Abilities::NAME[$ability]) {
+            return 0;
+        }
+        $function = "get$ability";
+        return Abilities::MODIFIER[$this->getAbilities()->$function()];
+    }
+
+    /**
+     * @return Abilities
+     */
+    public function getAbilities(): Abilities
+    {
+        return $this->abilities;
+    }
+
+    /**
+     * @param Abilities $abilities
+     */
+    public function setAbilities(Abilities $abilities): void
+    {
+        $this->abilities = $abilities;
     }
 
     /**
@@ -138,82 +218,11 @@ class Character
     }
 
     /**
-     *
-     */
-    public function setDearOrAlive()
-    {
-        if ($this->hp <= 0) {
-            $this->setDead(true);
-        } else {
-            $this->setDead(false);
-        }
-    }
-
-    /**
-     * @return bool
-     */
-    public function isDead(): bool
-    {
-        return $this->dead;
-    }
-
-    /**
-     * @param bool $dead
-     */
-    public function setDead(bool $dead): void
-    {
-        $this->dead = $dead;
-    }
-
-    /**
-     * @return Abilities
-     */
-    public function getAbilities(): Abilities
-    {
-        return $this->abilities;
-    }
-
-    /**
-     * @param Abilities $abilities
-     */
-    public function setAbilities(Abilities $abilities): void
-    {
-        $this->abilities = $abilities;
-    }
-
-    /**
-     * @param string $ability
-     * @param int    $value
-     */
-    public function setAbility($ability, $value)
-    {
-        $ability = ucfirst($ability);
-        if (!Abilities::NAME[$ability]) {
-            return;
-        }
-        $function = "set$ability";
-        $this->abilities->$function($value);
-
-        if ('Dexterity' === $ability) {
-            $this->adjustAcFromDexterity();
-        }
-        if ('Constitution' === $ability) {
-            $this->adjustHpFromConstitution();
-        }
-    }
-
-    public function adjustAcFromDexterity()
-    {
-        $modifier = $this->getAbilityModifier('dexterity');
-        $this->setAc($this->getAc() + $modifier);
-    }
-
-    /**
      * @param int $dice
      *
      * @return int
      */
-    public function roll($dice)
+    public function roll($dice): int
     {
         return rand(1, $dice);
     }
@@ -221,29 +230,20 @@ class Character
     /**
      * @param int $damage
      */
-    public function damage($damage)
+    public function damage($damage): void
     {
         $this->setHp($this->getHp() - $damage);
     }
 
-    /**
-     * @param string $ability
-     *
-     * @return int
-     */
-    public function getAbilityModifier($ability)
+    protected function adjustAcFromDexterity(): void
     {
-        $ability = ucfirst($ability);
-        if (!Abilities::NAME[$ability]) {
-            return 0;
-        }
-        $function = "get$ability";
-        return Abilities::MODIFIER[$this->getAbilities()->$function()];
+        $modifier = $this->getAbilityModifier('dexterity');
+        $this->setAc($this->getAc() + $modifier);
     }
 
-    public function adjustHpFromConstitution()
+    protected function adjustHpFromConstitution(): void
     {
         $modifier = $this->getAbilityModifier('constitution');
-        $this->setHp(max(1,$this->getHp() + $modifier));
+        $this->setHp(max(1, $this->getHp() + $modifier));
     }
 }
