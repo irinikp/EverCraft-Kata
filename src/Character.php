@@ -192,6 +192,14 @@ class Character
     }
 
     /**
+     * @param int $damage
+     */
+    public function damage($damage)
+    {
+        $this->setHp($this->getHp() - $damage);
+    }
+
+    /**
      * @param string $ability
      *
      * @return int

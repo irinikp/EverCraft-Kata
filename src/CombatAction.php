@@ -38,7 +38,7 @@ class CombatAction
         $dice = $this->attacker->roll(20);
         $hits = $this->hits($dice, $this->attacker->getAbilityModifier('strength'));
         if ($hits) {
-            $this->target->setHp($this->target->getHp() - $this->get_damage($dice));
+            $this->target->damage($this->calculate_damage($dice, $this->attacker->getAbilityModifier('strength')));
         }
         return $hits;
     }
@@ -51,15 +51,21 @@ class CombatAction
      */
     public function hits($dice, $modifier)
     {
-        return ($dice+$modifier) >= $this->target->getAc();
+        return ($dice + $modifier) >= $this->target->getAc();
     }
 
-    public function get_damage($dice)
+    /**
+     * @param int $dice
+     * @param int $modifier
+     *
+     * @return int
+     */
+    public function calculate_damage($dice, $modifier)
     {
-        if ($dice < self::CRITICAL) {
-            return 1;
-        } else {
-            return 2;
+        $damage = max(1, 1 + $modifier);
+        if ($dice === self::CRITICAL) {
+            $damage *= 2;
         }
+        return $damage;
     }
 }

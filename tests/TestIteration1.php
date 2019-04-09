@@ -219,4 +219,18 @@ class TestIteration1 extends \PHPUnit\Framework\TestCase
         $hits = $this->createMockAttackRoll(7, null, 3);
         $this->assertTrue($hits);
     }
+
+    public function test_add_strength_modifier_to_damage_scenario_str3_roll14()
+    {
+        $target = new Character();
+        $this->createMockAttackRoll(14, $target, -4);
+        $this->assertEquals(4, $target->getHp());
+    }
+
+    public function test_add_strength_modifier_to_damage_scenario_str17_roll7()
+    {
+        $target = new Character();
+        $this->createMockAttackRoll(7, $target, 3);
+        $this->assertEquals(1, $target->getHp());
+    }
 }
