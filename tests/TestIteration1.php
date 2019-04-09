@@ -253,4 +253,16 @@ class TestIteration1 extends \PHPUnit\Framework\TestCase
         $this->character->setAbility('dexterity', 15);
         $this->assertEquals(12, $this->character->getAc());
     }
+
+    public function test_add_constitution_modifier_to_hit_points()
+    {
+        $this->character->setAbility('constitution', 15);
+        $this->assertEquals(7, $this->character->getHp());
+    }
+
+    public function test_add_constitution_modifier_to_hit_points_always_at_least_1_hp()
+    {
+        $this->character->setAbility('constitution', 1);
+        $this->assertEquals(1, $this->character->getHp());
+    }
 }

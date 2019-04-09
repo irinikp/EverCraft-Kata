@@ -197,6 +197,9 @@ class Character
         if ('Dexterity' === $ability) {
             $this->adjustAcFromDexterity();
         }
+        if ('Constitution' === $ability) {
+            $this->adjustHpFromConstitution();
+        }
     }
 
     public function adjustAcFromDexterity()
@@ -236,5 +239,11 @@ class Character
         }
         $function = "get$ability";
         return Abilities::MODIFIER[$this->getAbilities()->$function()];
+    }
+
+    public function adjustHpFromConstitution()
+    {
+        $modifier = $this->getAbilityModifier('constitution');
+        $this->setHp(max(1,$this->getHp() + $modifier));
     }
 }
