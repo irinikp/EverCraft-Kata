@@ -39,6 +39,10 @@ class Character
      * @var Abilities
      */
     protected $abilities;
+    /**
+     * @var int
+     */
+    protected $xp;
 
     /**
      * Character constructor.
@@ -50,6 +54,23 @@ class Character
         $this->max_hp    = 5;
         $this->dead      = false;
         $this->abilities = new Abilities();
+        $this->xp        = 0;
+    }
+
+    /**
+     * @return int
+     */
+    public function getXp(): int
+    {
+        return $this->xp;
+    }
+
+    /**
+     * @param int $xp
+     */
+    public function setXp(int $xp): void
+    {
+        $this->xp = $xp;
     }
 
     /**
@@ -233,6 +254,11 @@ class Character
     public function damage($damage): void
     {
         $this->setHp($this->getHp() - $damage);
+    }
+
+    public function gainSuccessfulAttackXp()
+    {
+        $this->setXp($this->getXp() + 10);
     }
 
     protected function adjustAcFromDexterity(): void

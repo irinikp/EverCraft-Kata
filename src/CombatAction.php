@@ -17,17 +17,23 @@ class CombatAction
      * @var Character
      */
     protected $target;
+    /**
+     * @var int
+     */
+    protected $dice;
 
     /**
      * CombatAction constructor.
      *
      * @param Character $attacker
      * @param Character $target
+     * @param int       $dice
      */
-    public function __construct($attacker, $target)
+    public function __construct($attacker, $target, $dice)
     {
         $this->attacker = $attacker;
         $this->target   = $target;
+        $this->dice     = $dice;
     }
 
     /**
@@ -35,35 +41,33 @@ class CombatAction
      */
     public function attackRoll(): bool
     {
-        $dice = $this->attacker->roll(20);
-        $hits = $this->hits($dice, $this->attacker->getAbilityModifier('strength'));
+        $hits = $this->hits($this->attacker->getAbilityModifier('strength'));
         if ($hits) {
-            $this->target->damage($this->calculate_damage($dice, $this->attacker->getAbilityModifier('strength')));
+            $this->target->damage($this->calculate_damage($this->attacker->getAbilityModifier('strength')));
+            $this->attacker->gainSuccessfulAttackXp();
         }
         return $hits;
     }
 
     /**
-     * @param int $dice
      * @param int $modifier
      *
      * @return bool
      */
-    protected function hits($dice, $modifier): bool
+    protected function hits($modifier): bool
     {
-        return ($dice + $modifier) >= $this->target->getAc();
+        return ($this->dice + $modifier) >= $this->target->getAc();
     }
 
     /**
-     * @param int $dice
      * @param int $modifier
      *
      * @return int
      */
-    protected function calculate_damage($dice, $modifier): int
+    protected function calculate_damage($modifier): int
     {
         $damage = 1 + $modifier;
-        if ($dice === self::CRITICAL) {
+        if ($this->dice === self::CRITICAL) {
             $damage *= 2;
         }
         return max(1, $damage);

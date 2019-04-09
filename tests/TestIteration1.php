@@ -6,7 +6,6 @@ require __DIR__ . '/../vendor/autoload.php';
 
 use Dnd\Abilities;
 use Dnd\Alignment;
-use Dnd\Battle;
 use Dnd\Character;
 use Dnd\CombatAction;
 
@@ -59,52 +58,38 @@ class TestIteration1 extends \PHPUnit\Framework\TestCase
 
     public function test_attack_roll_1()
     {
-        $hits = $this->createMockAttackRoll(1);
+        $hits = $this->createAttackRoll(1);
         $this->assertFalse($hits);
     }
 
     public function test_attack_roll_5()
     {
-        $hits = $this->createMockAttackRoll(5);
+        $hits = $this->createAttackRoll(5);
         $this->assertFalse($hits);
     }
 
     public function test_attack_roll_10()
     {
-        $hits = $this->createMockAttackRoll(10);
+        $hits = $this->createAttackRoll(10);
         $this->assertTrue($hits);
     }
 
     public function test_attack_roll_15()
     {
-        $hits = $this->createMockAttackRoll(15);
+        $hits = $this->createAttackRoll(15);
         $this->assertTrue($hits);
     }
 
     public function test_attack_roll_20()
     {
-        $hits = $this->createMockAttackRoll(20);
+        $hits = $this->createAttackRoll(20);
         $this->assertTrue($hits);
-    }
-
-    private function createMockAttackRoll($dice, $target = null, $strength_modifier = 0)
-    {
-        $character = \Mockery::mock(Character::class);
-        $character->shouldReceive('roll')->withArgs([20])->once()->andReturn($dice);
-        $character->shouldReceive('getAbilityModifier')->withArgs(['strength'])->once()->andReturn($strength_modifier);
-
-        if (null === $target) {
-            $target = new Character();
-        }
-
-        $action = new CombatAction($character, $target);
-        return $action->attackRoll();
     }
 
     public function test_when_attack_is_successful_other_character_takes_1_point_of_damage_when_hit()
     {
         $target = new Character();
-        $this->createMockAttackRoll(15, $target, 0);
+        $this->createAttackRoll(15, $target, 0);
 
         $this->assertEquals(4, $target->getHp());
     }
@@ -112,22 +97,22 @@ class TestIteration1 extends \PHPUnit\Framework\TestCase
     public function test_when_two_attacks_are_successful_other_character_takes_2_point_of_damage_when_hit()
     {
         $target = new Character();
-        $this->createMockAttackRoll(15, $target, 0);
-        $this->createMockAttackRoll(15, $target, 0);
+        $this->createAttackRoll(15, $target, 0);
+        $this->createAttackRoll(15, $target, 0);
         $this->assertEquals(3, $target->getHp());
     }
 
     public function test_when_attack_is_unsuccessful_other_character_does_not_take_damage_when_hit()
     {
         $target = new Character();
-        $this->createMockAttackRoll(9, $target, 0);
+        $this->createAttackRoll(9, $target, 0);
         $this->assertEquals(5, $target->getHp());
     }
 
     public function test_if_a_roll_is_a_20_then_a_critical_hit_is_dealt_and_the_damage_is_doubled()
     {
         $target = new Character();
-        $this->createMockAttackRoll(20, $target, 0);
+        $this->createAttackRoll(20, $target, 0);
 
         $this->assertEquals(3, $target->getHp());
     }
@@ -162,13 +147,13 @@ class TestIteration1 extends \PHPUnit\Framework\TestCase
 
     public function test_strength_range_from_1_to_20()
     {
-        $this->character->getAbilities()->setStrength(0);
+        $this->character->setAbility('strength', 0);
         $this->assertNotEquals(0, $this->character->getAbilities()->getStrength());
-        $this->character->getAbilities()->setStrength(1);
+        $this->character->setAbility('strength', 1);
         $this->assertEquals(1, $this->character->getAbilities()->getStrength());
-        $this->character->getAbilities()->setStrength(20);
+        $this->character->setAbility('strength', 20);
         $this->assertEquals(20, $this->character->getAbilities()->getStrength());
-        $this->character->getAbilities()->setStrength(21);
+        $this->character->setAbility('strength', 21);
         $this->assertNotEquals(21, $this->character->getAbilities()->getStrength());
     }
 
@@ -198,56 +183,64 @@ class TestIteration1 extends \PHPUnit\Framework\TestCase
 
     public function test_add_strength_modifier_to_attack_roll_scenario_str3_roll13()
     {
-        $hits = $this->createMockAttackRoll(13, null, -4);
+        $this->character->setAbility('strength', 3);
+        $hits = $this->createAttackRoll(13, null);
         $this->assertFalse($hits);
     }
 
     public function test_add_strength_modifier_to_attack_roll_scenario_str3_roll14()
     {
-        $hits = $this->createMockAttackRoll(14, null, -4);
+        $this->character->setAbility('strength', 3);
+        $hits = $this->createAttackRoll(14, null);
         $this->assertTrue($hits);
     }
 
     public function test_add_strength_modifier_to_attack_roll_scenario_str17_roll6()
     {
-        $hits = $this->createMockAttackRoll(6, null, 3);
+        $this->character->setAbility('strength', 17);
+        $hits = $this->createAttackRoll(6, null);
         $this->assertFalse($hits);
     }
 
     public function test_add_strength_modifier_to_attack_roll_scenario_str17_roll7()
     {
-        $hits = $this->createMockAttackRoll(7, null, 3);
+        $this->character->setAbility('strength', 17);
+        $hits = $this->createAttackRoll(7, null);
         $this->assertTrue($hits);
     }
 
     public function test_add_strength_modifier_to_damage_scenario_str3_roll14()
     {
         $target = new Character();
-        $this->createMockAttackRoll(14, $target, -4);
+        $this->character->setAbility('strength', 3);
+        $this->createAttackRoll(14, $target);
         $this->assertEquals(4, $target->getHp());
     }
 
     public function test_add_strength_modifier_to_damage_scenario_str17_roll7()
     {
         $target = new Character();
-        $this->createMockAttackRoll(7, $target, 3);
+        $this->character->setAbility('strength', 17);
+        $this->createAttackRoll(7, $target, 3);
         $this->assertEquals(1, $target->getHp());
     }
 
     public function test_double_strength_modifier_to_critical_hits()
     {
         $target = new Character();
-        $this->createMockAttackRoll(20, $target, 1);
+        $this->character->setAbility('strength', 12);
+        $this->createAttackRoll(20, $target);
         $this->assertEquals(1, $target->getHp());
     }
 
     public function test_minimum_damage_is_always_1_even_on_a_critical_hit()
     {
         $target = new Character();
-        $this->createMockAttackRoll(20, $target, -4);
+        $this->character->setAbility('strength', 2);
+        $this->createAttackRoll(20, $target);
         $this->assertEquals(4, $target->getHp());
     }
-    
+
     public function test_add_dexterity_modifier_to_armor_class()
     {
         $this->character->setAbility('dexterity', 15);
@@ -265,4 +258,27 @@ class TestIteration1 extends \PHPUnit\Framework\TestCase
         $this->character->setAbility('constitution', 1);
         $this->assertEquals(1, $this->character->getHp());
     }
+
+    public function test_a_new_character_has_zero_xp()
+    {
+        $this->assertEquals(0, $this->character->getXp());
+    }
+
+    public function test_when_a_successful_attack_occurs_the_character_gains_10_experience_points()
+    {
+        $this->createAttackRoll(10);
+        $this->assertEquals(10, $this->character->getXp());
+        $this->assertTrue(true);
+    }
+
+    private function createAttackRoll($dice, $target = null)
+    {
+        if (null === $target) {
+            $target = new Character();
+        }
+
+        $action = new CombatAction($this->character, $target, $dice);
+        return $action->attackRoll();
+    }
+
 }
