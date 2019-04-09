@@ -45,6 +45,7 @@ class TestIteration1 extends \PHPUnit\Framework\TestCase
     public function test_hp()
     {
         $this->assertEquals(5, $this->character->getHp());
+        $this->assertEquals(5, $this->character->getMaxHp());
     }
 
     public function test_roll_dice()
@@ -92,6 +93,7 @@ class TestIteration1 extends \PHPUnit\Framework\TestCase
         $this->createAttackRoll(15, $target, 0);
 
         $this->assertEquals(4, $target->getHp());
+        $this->assertEquals(5, $target->getMaxHp());
     }
 
     public function test_when_two_attacks_are_successful_other_character_takes_2_point_of_damage_when_hit()
@@ -251,12 +253,14 @@ class TestIteration1 extends \PHPUnit\Framework\TestCase
     {
         $this->character->setAbility('constitution', 15);
         $this->assertEquals(7, $this->character->getHp());
+        $this->assertEquals(7, $this->character->getMaxHp());
     }
 
     public function test_add_constitution_modifier_to_hit_points_always_at_least_1_hp()
     {
         $this->character->setAbility('constitution', 1);
         $this->assertEquals(1, $this->character->getHp());
+        $this->assertEquals(1, $this->character->getMaxHp());
     }
 
     public function test_a_new_character_has_zero_xp()
@@ -274,6 +278,16 @@ class TestIteration1 extends \PHPUnit\Framework\TestCase
     public function test_default_level()
     {
         $this->assertEquals(1, $this->character->getLevel());
+    }
+
+    public function test_after_1000_experience_points_the_character_gains_a_level()
+    {
+        $this->character->addXp(500);
+        $this->assertEquals(1, $this->character->getLevel());
+        $this->character->addXp(500);
+        $this->assertEquals(2, $this->character->getLevel());
+        $this->character->addXp(1000);
+        $this->assertEquals(3, $this->character->getLevel());
     }
 
     private function createAttackRoll($dice, $target = null)

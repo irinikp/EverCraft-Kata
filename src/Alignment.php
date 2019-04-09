@@ -3,7 +3,7 @@
 namespace Dnd;
 
 /**
- * Class Allignment
+ * Class Alignment
  * @package Dnd
  */
 class Alignment
@@ -20,16 +20,16 @@ class Alignment
     /**
      * Allignment constructor.
      *
-     * @param string $allignment
+     * @param string $alignment
      *
      * @throws \Exception
      */
-    public function __construct($allignment)
+    public function __construct($alignment)
     {
-        if ($allignment !== self::GOOD && $allignment !== self::NEUTRAL && $allignment !== self::EVIL) {
-            throw new \Exception('Allignment value is not valid');
+        if ($alignment !== self::GOOD && $alignment !== self::NEUTRAL && $alignment !== self::EVIL) {
+            throw new \Exception('Alignment value is not valid');
         }
-        $this->value = $allignment;
+        $this->value = $alignment;
     }
 
     public function __toString()

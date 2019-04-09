@@ -8,6 +8,7 @@ namespace Dnd;
  */
 class Character
 {
+
     /**
      * @var string
      */
@@ -76,6 +77,7 @@ class Character
     public function setLevel(int $level): void
     {
         $this->level = $level;
+        $this->refreshHp();
     }
 
     /**
@@ -92,6 +94,15 @@ class Character
     public function setXp(int $xp): void
     {
         $this->xp = $xp;
+        $this->refreshLevel();
+    }
+
+    /**
+     * @param int $xp
+     */
+    public function addXp(int $xp): void
+    {
+        $this->setXp($this->getXp() + $xp);
     }
 
     /**
@@ -149,7 +160,7 @@ class Character
     /**
      *
      */
-    public function setDearOrAlive(): void
+    public function refreshDeathStatus(): void
     {
         if ($this->hp <= 0) {
             $this->setDead(true);
@@ -188,10 +199,10 @@ class Character
         $this->abilities->$function($value);
 
         if ('Dexterity' === $ability) {
-            $this->adjustAcFromDexterity();
+            $this->refreshAc();
         }
         if ('Constitution' === $ability) {
-            $this->adjustHpFromConstitution();
+            $this->refreshHp();
         }
     }
 
@@ -256,7 +267,7 @@ class Character
     public function setHp(int $hp): void
     {
         $this->hp = $hp;
-        $this->setDearOrAlive();
+        $this->refreshDeathStatus();
     }
 
     /**
@@ -272,25 +283,43 @@ class Character
     /**
      * @param int $damage
      */
-    public function damage($damage): void
+    public function takeDamage($damage): void
     {
         $this->setHp($this->getHp() - $damage);
     }
 
-    public function gainSuccessfulAttackXp()
+    /**
+     *
+     */
+    public function gainSuccessfulAttackXp(): void
     {
         $this->setXp($this->getXp() + 10);
     }
 
-    protected function adjustAcFromDexterity(): void
+    /**
+     *
+     */
+    protected function refreshAc(): void
     {
         $modifier = $this->getAbilityModifier('dexterity');
         $this->setAc($this->getAc() + $modifier);
     }
 
-    protected function adjustHpFromConstitution(): void
+    /**
+     *
+     */
+    protected function refreshHp(): void
     {
         $modifier = $this->getAbilityModifier('constitution');
-        $this->setHp(max(1, $this->getHp() + $modifier));
+        $this->setMaxHp(max(1, $this->getMaxHp() + $modifier));
+        $this->setHp($this->getMaxHp());
+    }
+
+    /**
+     *
+     */
+    protected function refreshLevel(): void
+    {
+        $this->setLevel(intval($this->getXp() / 1000) + 1);
     }
 }

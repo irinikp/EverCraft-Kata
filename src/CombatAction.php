@@ -43,7 +43,7 @@ class CombatAction
     {
         $hits = $this->hits($this->attacker->getAbilityModifier('strength'));
         if ($hits) {
-            $this->target->damage($this->calculate_damage($this->attacker->getAbilityModifier('strength')));
+            $this->target->takeDamage($this->calculate_damage($this->attacker->getAbilityModifier('strength')));
             $this->attacker->gainSuccessfulAttackXp();
         }
         return $hits;
