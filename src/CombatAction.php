@@ -56,7 +56,7 @@ class CombatAction
      */
     protected function hits($modifier): bool
     {
-        return ($this->dice + $modifier) >= $this->target->getAc();
+        return ($this->dice + $modifier + $this->attacker->getAttackRoll()) >= $this->target->getAc();
     }
 
     /**
