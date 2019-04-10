@@ -2,6 +2,8 @@
 
 namespace Dnd;
 
+use Dnd\Fighter as Fighter;
+
 /**
  * Class Character
  * @package Dnd
@@ -52,6 +54,10 @@ class Character
      * @var int
      */
     protected $attack_roll;
+    /**
+     * @var iClass
+     */
+    protected $class;
 
     /**
      * Character constructor.
@@ -66,6 +72,29 @@ class Character
         $this->xp          = 0;
         $this->level       = 1;
         $this->attack_roll = 0;
+        $this->class       = new Rogue();
+    }
+
+    /**
+     * @return iClass
+     */
+    public function getClass(): iClass
+    {
+        return $this->class;
+    }
+
+    /**
+     * @param string $class
+     */
+    public function setClass(string $class): void
+    {
+        $class = ucfirst($class);
+        if (!iClass::TYPES[$class]) {
+            return;
+        }
+        if ("Fighter" === $class) {
+            $this->class = new Fighter();
+        }
     }
 
     /**
@@ -349,8 +378,8 @@ class Character
     /**
      *
      */
-    protected function refreshAttackRoll()
+    public function refreshAttackRoll()
     {
-        $this->setAttackRoll(intval($this->getLevel() / 2) * 1);
+        $this->setAttackRoll($this->class->getAttackRoll($this->getLevel()));
     }
 }
