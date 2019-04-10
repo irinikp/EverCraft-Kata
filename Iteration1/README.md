@@ -1,4 +1,5 @@
 # EverCraft-Kata - Iteration 1 (Core)
+This is my solution on [Iteration 1](https://github.com/PuttingTheDnDInTDD/EverCraft-Kata/blob/master/README.markdown#iteration-1---core) of EverCraft-Kata
 This iteration covers core functionality for leveling, combat, and character attributes.
 
 #### Feature: Create a Character
