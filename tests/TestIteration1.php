@@ -290,6 +290,25 @@ class TestIteration1 extends \PHPUnit\Framework\TestCase
         $this->assertEquals(3, $this->character->getLevel());
     }
 
+    public function test_for_each_level_hp_increase_by_5_plus_con_modifier_con_equals_4()
+    {
+        $this->character->setAbility('constitution', 4);
+        $this->character->addXp(1000);
+        $this->assertEquals(4, $this->character->getMaxHp());
+        $this->character->addXp(1000);
+        $this->assertEquals(6, $this->character->getMaxHp());
+    }
+
+
+    public function test_for_each_level_hp_increase_by_5_plus_con_modifier_con_equals_20()
+    {
+        $this->character->setAbility('constitution', 20);
+        $this->character->addXp(1000);
+        $this->assertEquals(20, $this->character->getMaxHp());
+        $this->character->addXp(1000);
+        $this->assertEquals(30, $this->character->getMaxHp());
+    }
+
     private function createAttackRoll($dice, $target = null)
     {
         if (null === $target) {

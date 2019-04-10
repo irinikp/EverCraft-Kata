@@ -77,6 +77,7 @@ class Character
     public function setLevel(int $level): void
     {
         $this->level = $level;
+
         $this->refreshHp();
     }
 
@@ -311,7 +312,7 @@ class Character
     protected function refreshHp(): void
     {
         $modifier = $this->getAbilityModifier('constitution');
-        $this->setMaxHp(max(1, $this->getMaxHp() + $modifier));
+        $this->setMaxHp(max(1, ($this->getLevel()) * (5 + $modifier)));
         $this->setHp($this->getMaxHp());
     }
 
