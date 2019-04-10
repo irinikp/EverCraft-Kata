@@ -48,19 +48,40 @@ class Character
      * @var int
      */
     protected $level;
+    /**
+     * @var int
+     */
+    protected $attack_roll;
 
     /**
      * Character constructor.
      */
     public function __construct()
     {
-        $this->ac        = 10;
-        $this->hp        = 5;
-        $this->max_hp    = 5;
-        $this->dead      = false;
-        $this->abilities = new Abilities();
-        $this->xp        = 0;
-        $this->level     = 1;
+        $this->ac          = 10;
+        $this->hp          = 5;
+        $this->max_hp      = 5;
+        $this->dead        = false;
+        $this->abilities   = new Abilities();
+        $this->xp          = 0;
+        $this->level       = 1;
+        $this->attack_roll = 0;
+    }
+
+    /**
+     * @return int
+     */
+    public function getAttackRoll(): int
+    {
+        return $this->attack_roll;
+    }
+
+    /**
+     * @param int $attack_roll
+     */
+    public function setAttackRoll(int $attack_roll): void
+    {
+        $this->attack_roll = $attack_roll;
     }
 
     /**
@@ -79,6 +100,7 @@ class Character
         $this->level = $level;
 
         $this->refreshHp();
+        $this->refreshAttackRoll();
     }
 
     /**
@@ -322,5 +344,13 @@ class Character
     protected function refreshLevel(): void
     {
         $this->setLevel(intval($this->getXp() / 1000) + 1);
+    }
+
+    /**
+     *
+     */
+    protected function refreshAttackRoll()
+    {
+        $this->setAttackRoll(intval($this->getLevel() / 2) * 1);
     }
 }

@@ -309,6 +309,24 @@ class TestIteration1 extends \PHPUnit\Framework\TestCase
         $this->assertEquals(30, $this->character->getMaxHp());
     }
 
+    public function test_attack_roll_is_initially_zero()
+    {
+        $this->assertEquals(0, $this->character->getAttackRoll());
+    }
+
+    public function test_for_each_even_level_attack_roll_increases_by_1()
+    {
+        // Level 2
+        $this->character->addXp(1000);
+        $this->assertEquals(1, $this->character->getAttackRoll());
+        // Level 3
+        $this->character->addXp(1000);
+        $this->assertEquals(1, $this->character->getAttackRoll());
+        // Level 4
+        $this->character->addXp(1000);
+        $this->assertEquals(2, $this->character->getAttackRoll());
+    }
+
     private function createAttackRoll($dice, $target = null)
     {
         if (null === $target) {
