@@ -58,15 +58,15 @@ class Character
      */
     public function __construct()
     {
-        $this->ac          = 10;
-        $this->class       = new Priest();
-        $this->hp          = $this->class->getHpPerLevel();
-        $this->max_hp      = $this->class->getHpPerLevel();
-        $this->dead        = false;
-        $this->abilities   = new Abilities();
-        $this->xp          = 0;
-        $this->level       = 1;
-        $this->alignment   = 'Neutral';
+        $this->ac        = 10;
+        $this->class     = new Priest();
+        $this->hp        = $this->class->getHpPerLevel();
+        $this->max_hp    = $this->class->getHpPerLevel();
+        $this->dead      = false;
+        $this->abilities = new Abilities();
+        $this->xp        = 0;
+        $this->level     = 1;
+        $this->alignment = 'Neutral';
     }
 
     /**

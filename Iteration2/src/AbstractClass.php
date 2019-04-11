@@ -14,24 +14,18 @@ abstract class AbstractClass
         'Monk'    => true,
         'Paladin' => true,
     ];
-
-    public function __construct()
-    {
-        $this->attack_roll = 0;
-    }
-
-    /**
-     * @param int $attack_roll
-     */
-    public function setAttackRoll(int $attack_roll): void
-    {
-        $this->attack_roll = $attack_roll;
-    }
-
     /**
      * @var int
      */
     protected $attack_roll;
+
+    /**
+     * AbstractClass constructor.
+     */
+    public function __construct()
+    {
+        $this->attack_roll = 0;
+    }
 
     /**
      * @param string $class
@@ -53,6 +47,14 @@ abstract class AbstractClass
     public function getAttackRoll($level, $attack_roll = 0, Character $target = null): int
     {
         return intval($level / 2);
+    }
+
+    /**
+     * @param int $attack_roll
+     */
+    public function setAttackRoll(int $attack_roll): void
+    {
+        $this->attack_roll = $attack_roll;
     }
 
     /**

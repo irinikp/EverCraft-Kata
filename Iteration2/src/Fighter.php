@@ -10,9 +10,7 @@ class Fighter extends AbstractClass
 {
     /**
      * @param int            $level
-     *
      * @param int            $attack_roll
-     *
      * @param Character|null $target
      *
      * @return int
