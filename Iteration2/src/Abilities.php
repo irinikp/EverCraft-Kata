@@ -31,7 +31,7 @@ class Abilities
         19 => 4,
         20 => 5
     ];
-    const NAME     = [
+    const TYPE     = [
         'Strength'     => true,
         'Dexterity'    => true,
         'Constitution' => true,
@@ -78,9 +78,24 @@ class Abilities
         $this->charisma     = 10;
     }
 
+    /**
+     * @param string $ability
+     *
+     * @return int
+     */
     public static function getModifier($ability): int
     {
         return self::MODIFIER[$ability];
+    }
+
+    /**
+     * @param string $ability
+     *
+     * @return bool
+     */
+    public static function isAbilityType($ability): bool
+    {
+        return array_key_exists($ability, self::TYPE);
     }
 
     /**
@@ -179,6 +194,11 @@ class Abilities
         if ($this->isValidAbilitiesRange($charisma)) $this->charisma = $charisma;
     }
 
+    /**
+     * @param int $value
+     *
+     * @return bool
+     */
     private function isValidAbilitiesRange($value): bool
     {
         return $value > 0 && $value <= 20;

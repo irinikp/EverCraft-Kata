@@ -3,6 +3,7 @@
 namespace Tests;
 
 use Dnd\Character;
+use Dnd\CombatAction;
 
 require __DIR__ . '/../vendor/autoload.php';
 
@@ -57,5 +58,24 @@ class IterationTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(30, $this->character->getMaxHp());
         $this->character->addXp(1000);
         $this->assertEquals(45, $this->character->getMaxHp());
+    }
+
+    public function test_rogues_critical_hit_is_dealt_and_the_damage_is_tripled()
+    {
+        $this->character->setClass('rogue');
+        $target = new Character();
+        $this->createAttackRoll(20, $target, 0);
+
+        $this->assertEquals(2, $target->getHp());
+    }
+
+    private function createAttackRoll($dice, $target = null)
+    {
+        if (null === $target) {
+            $target = new Character();
+        }
+
+        $action = new CombatAction($this->character, $target, $dice);
+        return $action->attackRoll();
     }
 }

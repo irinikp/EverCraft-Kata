@@ -68,7 +68,7 @@ class CombatAction
     {
         $damage = 1 + $modifier;
         if ($this->dice === self::CRITICAL) {
-            $damage *= 2;
+            $damage = $this->attacker->getClass()->getCriticalDamage($damage);
         }
         return max(1, $damage);
     }

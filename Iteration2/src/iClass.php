@@ -9,15 +9,26 @@ namespace Dnd;
 abstract class iClass
 {
     const TYPES = [
-        'Fighter' => true
+        'Fighter' => true,
+        'Rogue'   => true
     ];
+
+    /**
+     * @param string $class
+     *
+     * @return bool
+     */
+    public static function isClassType(string $class): bool
+    {
+        return array_key_exists($class, self::TYPES);
+    }
 
     /**
      * @param int $level
      *
      * @return int
      */
-    public function getAttackRoll($level)
+    public function getAttackRoll($level): int
     {
         return intval($level / 2);
     }
@@ -25,8 +36,18 @@ abstract class iClass
     /**
      * @return int
      */
-    public function getHpPerLevel()
+    public function getHpPerLevel(): int
     {
         return 5;
+    }
+
+    /**
+     * @param int $damage
+     *
+     * @return int
+     */
+    public function getCriticalDamage($damage): int
+    {
+        return 2 * $damage;
     }
 }

@@ -65,7 +65,7 @@ class Character
     public function __construct()
     {
         $this->ac          = 10;
-        $this->class       = new Rogue();
+        $this->class       = new Priest();
         $this->hp          = $this->class->getHpPerLevel();
         $this->max_hp      = $this->class->getHpPerLevel();
         $this->dead        = false;
@@ -85,15 +85,20 @@ class Character
 
     /**
      * @param string $class
+     *
+     * @throws \Exception
      */
     public function setClass(string $class): void
     {
         $class = ucfirst($class);
-        if (!iClass::TYPES[$class]) {
-            return;
+        if (!iClass::isClassType($class)) {
+            throw new \Exception("Undefined class $class");
         }
         if ("Fighter" === $class) {
             $this->class = new Fighter();
+        }
+        if ("Rogue" === $class) {
+            $this->class = new Rogue();
         }
         $this->refreshHp();
     }
@@ -241,12 +246,14 @@ class Character
     /**
      * @param string $ability
      * @param int    $value
+     *
+     * @throws \Exception
      */
     public function setAbility($ability, $value): void
     {
         $ability = ucfirst($ability);
-        if (!Abilities::NAME[$ability]) {
-            return;
+        if (!Abilities::isAbilityType($ability)) {
+            throw new \Exception('Undefined Ability $ability');
         }
         $function = "set$ability";
         $this->abilities->$function($value);
@@ -267,7 +274,7 @@ class Character
     public function getAbilityModifier($ability): int
     {
         $ability = ucfirst($ability);
-        if (!Abilities::NAME[$ability]) {
+        if (!Abilities::isAbilityType($ability)) {
             return 0;
         }
         $function = "get$ability";
