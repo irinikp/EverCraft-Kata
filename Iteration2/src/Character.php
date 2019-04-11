@@ -65,14 +65,14 @@ class Character
     public function __construct()
     {
         $this->ac          = 10;
-        $this->hp          = 5;
-        $this->max_hp      = 5;
+        $this->class       = new Rogue();
+        $this->hp          = $this->class->getHpPerLevel();
+        $this->max_hp      = $this->class->getHpPerLevel();
         $this->dead        = false;
         $this->abilities   = new Abilities();
         $this->xp          = 0;
         $this->level       = 1;
         $this->attack_roll = 0;
-        $this->class       = new Rogue();
     }
 
     /**
@@ -95,6 +95,7 @@ class Character
         if ("Fighter" === $class) {
             $this->class = new Fighter();
         }
+        $this->refreshHp();
     }
 
     /**
@@ -351,6 +352,14 @@ class Character
     /**
      *
      */
+    public function refreshAttackRoll()
+    {
+        $this->setAttackRoll($this->class->getAttackRoll($this->getLevel()));
+    }
+
+    /**
+     *
+     */
     protected function refreshAc(): void
     {
         $modifier = $this->getAbilityModifier('dexterity');
@@ -363,7 +372,7 @@ class Character
     protected function refreshHp(): void
     {
         $modifier = $this->getAbilityModifier('constitution');
-        $this->setMaxHp(max(1, ($this->getLevel()) * (5 + $modifier)));
+        $this->setMaxHp(max(1, ($this->getLevel()) * ($this->class->getHpPerLevel() + $modifier)));
         $this->setHp($this->getMaxHp());
     }
 
@@ -373,13 +382,5 @@ class Character
     protected function refreshLevel(): void
     {
         $this->setLevel(intval($this->getXp() / 1000) + 1);
-    }
-
-    /**
-     *
-     */
-    public function refreshAttackRoll()
-    {
-        $this->setAttackRoll($this->class->getAttackRoll($this->getLevel()));
     }
 }
