@@ -73,7 +73,7 @@ class CombatAction
      */
     protected function calculate_damage($modifier): int
     {
-        $damage = 1 + $modifier;
+        $damage = $this->attacker->getClass()->getDamage() + $modifier;
         if ($this->dice === self::CRITICAL) {
             $damage = $this->attacker->getClass()->getCriticalDamage($damage);
         }

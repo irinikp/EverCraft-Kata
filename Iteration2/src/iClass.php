@@ -69,4 +69,12 @@ abstract class iClass
     {
         return true;
     }
+
+    /**
+     * @return int
+     */
+    public function getDamage(): int
+    {
+        return 1;
+    }
 }

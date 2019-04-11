@@ -17,4 +17,11 @@ class Monk extends iClass
         return 6;
     }
 
+    /**
+     * @return int
+     */
+    public function getDamage(): int
+    {
+        return 3;
+    }
 }

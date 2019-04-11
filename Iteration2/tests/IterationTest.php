@@ -149,6 +149,17 @@ class IterationTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(33, $this->character->getMaxHp());
     }
 
+
+    public function test_when_monk_attack_is_successful_other_character_takes_3_points_of_damage_when_hit()
+    {
+        $this->character->setClass('monk');
+        $target = new Character();
+        $this->createAttackRoll(15, $target, 0);
+
+        $this->assertEquals(2, $target->getHp());
+        $this->assertEquals(5, $target->getMaxHp());
+    }
+
     private function createAttackRoll($dice, $target = null)
     {
         if (null === $target) {
