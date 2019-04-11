@@ -160,6 +160,22 @@ class IterationTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(5, $target->getMaxHp());
     }
 
+    public function test_monk_adds_positive_wisdom_and_dexterity_modifier_to_armor_class()
+    {
+        $this->character->setClass('monk');
+        $this->character->setAbility('dexterity', 15);
+        $this->character->setAbility('wisdom', 15);
+        $this->assertEquals(14, $this->character->getAc());
+    }
+
+    public function test_monk_does_not_add_negative_wisdom_modifier_to_armor_class()
+    {
+        $this->character->setClass('monk');
+        $this->character->setAbility('dexterity', 15);
+        $this->character->setAbility('wisdom', 4);
+        $this->assertEquals(12, $this->character->getAc());
+    }
+
     private function createAttackRoll($dice, $target = null)
     {
         if (null === $target) {

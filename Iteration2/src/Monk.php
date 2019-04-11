@@ -24,4 +24,17 @@ class Monk extends iClass
     {
         return 3;
     }
+
+    /**
+     * @param Character $character
+     *
+     * @return int
+     */
+    public function getAcModifier(Character $character): int
+    {
+        $modifier        = $character->getAbilityModifier('dexterity');
+        $wisdom_modifier = $character->getAbilityModifier('wisdom');
+        if ($wisdom_modifier > 0) $modifier += $wisdom_modifier;
+        return $modifier;
+    }
 }

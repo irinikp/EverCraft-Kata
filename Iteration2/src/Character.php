@@ -94,6 +94,7 @@ class Character
         }
         $class       = '\Dnd\\' . $class;
         $this->class = new $class();
+        $this->refreshAc();
         $this->refreshHp();
     }
 
@@ -263,12 +264,8 @@ class Character
         $function = "set$ability";
         $this->abilities->$function($value);
 
-        if ('Dexterity' === $ability) {
-            $this->refreshAc();
-        }
-        if ('Constitution' === $ability) {
-            $this->refreshHp();
-        }
+        $this->refreshAc();
+        $this->refreshHp();
     }
 
     /**
@@ -382,8 +379,8 @@ class Character
      */
     protected function refreshAc(): void
     {
-        $modifier = $this->getAbilityModifier('dexterity');
-        $this->setAc($this->getAc() + $modifier);
+        $modifier = $this->getClass()->getAcModifier($this);
+        $this->setAc($this->getClass()->getBasicAc() + $modifier);
     }
 
     /**

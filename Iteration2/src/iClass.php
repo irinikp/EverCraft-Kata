@@ -77,4 +77,19 @@ abstract class iClass
     {
         return 1;
     }
+
+    /**
+     * @param Character $character
+     *
+     * @return int
+     */
+    public function getAcModifier(Character $character): int
+    {
+        return $character->getAbilityModifier('dexterity');
+    }
+
+    public function getBasicAc()
+    {
+        return 10;
+    }
 }
