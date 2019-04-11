@@ -41,7 +41,7 @@ class CombatAction
      */
     public function attackRoll(): bool
     {
-        $hits = $this->hits($this->attacker->getAbilityModifier('strength'));
+        $hits = $this->hits($this->attacker->getAttackModifier());
         if ($hits) {
             $this->target->takeDamage($this->calculate_damage($this->attacker->getAbilityModifier('strength')));
             $this->attacker->gainSuccessfulAttackXp();

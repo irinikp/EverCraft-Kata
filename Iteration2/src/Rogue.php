@@ -17,4 +17,12 @@ class Rogue extends iClass
     {
         return 3 * $damage;
     }
+
+    /**
+     * @return string
+     */
+    public function getAttackAbility(): string
+    {
+        return 'dexterity';
+    }
 }

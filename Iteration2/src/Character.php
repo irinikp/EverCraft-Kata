@@ -84,15 +84,6 @@ class Character
     }
 
     /**
-     * @return string
-     */
-    public function getClassName(): string
-    {
-        $class_name = get_class($this->getClass());
-        return substr($class_name, strrpos($class_name, '\\') + 1);
-    }
-
-    /**
      * @param string $class
      *
      * @throws \Exception
@@ -110,6 +101,15 @@ class Character
             $this->class = new Rogue();
         }
         $this->refreshHp();
+    }
+
+    /**
+     * @return string
+     */
+    public function getClassName(): string
+    {
+        $class_name = get_class($this->getClass());
+        return substr($class_name, strrpos($class_name, '\\') + 1);
     }
 
     /**
@@ -368,9 +368,17 @@ class Character
     /**
      *
      */
-    public function refreshAttackRoll()
+    public function refreshAttackRoll(): void
     {
         $this->setAttackRoll($this->class->getAttackRoll($this->getLevel()));
+    }
+
+    /**
+     * @return int
+     */
+    public function getAttackModifier(): int
+    {
+        return $this->getAbilityModifier($this->getClass()->getAttackAbility());
     }
 
     /**

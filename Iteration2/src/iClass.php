@@ -50,4 +50,12 @@ abstract class iClass
     {
         return 2 * $damage;
     }
+
+    /**
+     * @return string
+     */
+    public function getAttackAbility(): string
+    {
+        return 'strength';
+    }
 }

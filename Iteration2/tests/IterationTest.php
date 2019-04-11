@@ -69,11 +69,31 @@ class IterationTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(2, $target->getHp());
     }
 
+    public function test_rogues_strength_modifier_does_not_apply_to_attack()
+    {
+        $this->character->setAbility('strength', 2);
+        $this->character->setClass('rogue');
+        $hits = $this->createAttackRoll(9);
+        $this->assertFalse($hits);
+        $hits = $this->createAttackRoll(10);
+        $this->assertTrue($hits);
+    }
+
+    public function test_rogues_dexterity_modifier_applies_to_attack()
+    {
+        $this->character->setAbility('dexterity', 12);
+        $this->character->setClass('rogue');
+        $hits = $this->createAttackRoll(8);
+        $this->assertFalse($hits);
+        $hits = $this->createAttackRoll(9);
+        $this->assertTrue($hits);
+    }
+
     public function test_dexterity_modifier_of_target_is_ignored_if_positive_when_attacked_by_rogue()
     {
         $target = new Character();
         $target->setAbility('dexterity', 15);
-        $this->character->setAbility('strength', 2);
+        $this->character->setAbility('dexterity', 2);
         $this->character->setClass('rogue');
         $hits = $this->createAttackRoll(13, $target);
         $this->assertFalse($hits);
@@ -85,7 +105,7 @@ class IterationTest extends \PHPUnit\Framework\TestCase
     {
         $target = new Character();
         $target->setAbility('dexterity', 6);
-        $this->character->setAbility('strength', 2);
+        $this->character->setAbility('dexterity', 2);
         $this->character->setClass('rogue');
         $hits = $this->createAttackRoll(11, $target);
         $this->assertFalse($hits);
