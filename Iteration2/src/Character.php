@@ -84,6 +84,15 @@ class Character
     }
 
     /**
+     * @return string
+     */
+    public function getClassName(): string
+    {
+        $class_name = get_class($this->getClass());
+        return substr($class_name, strrpos($class_name, '\\') + 1);
+    }
+
+    /**
      * @param string $class
      *
      * @throws \Exception

@@ -56,7 +56,14 @@ class CombatAction
      */
     protected function hits($modifier): bool
     {
-        return ($this->dice + $modifier + $this->attacker->getAttackRoll()) >= $this->target->getAc();
+        $target_ac = $this->target->getAc();
+        if ('Rogue' === $this->attacker->getClassName()) {
+            $target_modifier = $this->target->getAbilityModifier('dexterity');
+            if ($target_modifier > 0) {
+                $target_ac -= $target_modifier;
+            }
+        }
+        return ($this->dice + $modifier + $this->attacker->getAttackRoll()) >= $target_ac;
     }
 
     /**

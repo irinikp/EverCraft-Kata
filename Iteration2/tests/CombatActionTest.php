@@ -168,6 +168,17 @@ class CombatActionTest extends \PHPUnit\Framework\TestCase
 
     }
 
+    public function test_add_dexterity_modifier_to_armor_class_of_target()
+    {
+        $target = new Character();
+        $target->setAbility('dexterity', 15);
+        $this->character->setAbility('strength', 2);
+        $hits = $this->createAttackRoll(15, $target);
+        $this->assertFalse($hits);
+        $hits = $this->createAttackRoll(16, $target);
+        $this->assertTrue($hits);
+    }
+
     private function createAttackRoll($dice, $target = null)
     {
         if (null === $target) {

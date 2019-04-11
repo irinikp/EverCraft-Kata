@@ -69,6 +69,30 @@ class IterationTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(2, $target->getHp());
     }
 
+    public function test_dexterity_modifier_of_target_is_ignored_if_positive_when_attacked_by_rogue()
+    {
+        $target = new Character();
+        $target->setAbility('dexterity', 15);
+        $this->character->setAbility('strength', 2);
+        $this->character->setClass('rogue');
+        $hits = $this->createAttackRoll(13, $target);
+        $this->assertFalse($hits);
+        $hits = $this->createAttackRoll(14, $target);
+        $this->assertTrue($hits);
+    }
+
+    public function test_dexterity_modifier_of_target_is_not_ignored_if_not_positive_when_attacked_by_rogue()
+    {
+        $target = new Character();
+        $target->setAbility('dexterity', 6);
+        $this->character->setAbility('strength', 2);
+        $this->character->setClass('rogue');
+        $hits = $this->createAttackRoll(11, $target);
+        $this->assertFalse($hits);
+        $hits = $this->createAttackRoll(12, $target);
+        $this->assertTrue($hits);
+    }
+
     private function createAttackRoll($dice, $target = null)
     {
         if (null === $target) {
