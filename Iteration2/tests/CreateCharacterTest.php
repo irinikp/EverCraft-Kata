@@ -72,6 +72,6 @@ class CreateCharacterTest extends \PHPUnit\Framework\TestCase
 
     public function test_attack_roll_is_initially_zero()
     {
-        $this->assertEquals(0, $this->character->getAttackRoll());
+        $this->assertEquals(0, $this->character->getClass()->getAttackRoll($this->character->getLevel()));
     }
 }

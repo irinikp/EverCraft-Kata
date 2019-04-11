@@ -50,13 +50,13 @@ class LevelTest extends \PHPUnit\Framework\TestCase
     {
         // Level 2
         $this->character->addXp(1000);
-        $this->assertEquals(1, $this->character->getAttackRoll());
+        $this->assertEquals(1, $this->character->getClass()->getAttackRoll($this->character->getLevel()));
         // Level 3
         $this->character->addXp(1000);
-        $this->assertEquals(1, $this->character->getAttackRoll());
+        $this->assertEquals(1, $this->character->getClass()->getAttackRoll($this->character->getLevel()));
         // Level 4
         $this->character->addXp(1000);
-        $this->assertEquals(2, $this->character->getAttackRoll());
+        $this->assertEquals(2, $this->character->getClass()->getAttackRoll($this->character->getLevel()));
     }
 
 }

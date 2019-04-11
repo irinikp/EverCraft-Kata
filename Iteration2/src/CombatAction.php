@@ -56,14 +56,9 @@ class CombatAction
      */
     protected function hits($modifier): bool
     {
-        $target_ac = $this->target->getAc();
-        if ('Rogue' === $this->attacker->getClassName()) {
-            $target_modifier = $this->target->getAbilityModifier('dexterity');
-            if ($target_modifier > 0) {
-                $target_ac -= $target_modifier;
-            }
-        }
-        return ($this->dice + $modifier + $this->attacker->getAttackRoll()) >= $target_ac;
+        $target_ac = $this->attacker->getClass()->getTargetsAcModifier($this->target);
+        return ($this->dice + $modifier + $this->attacker->getClass()
+                    ->getAttackRoll($this->attacker->getLevel(), 0, $this->target)) >= $target_ac;
     }
 
     /**
@@ -73,7 +68,7 @@ class CombatAction
      */
     protected function calculate_damage($modifier): int
     {
-        $damage = $this->attacker->getClass()->getDamage() + $modifier;
+        $damage = $this->attacker->getClass()->getDamage($this->target) + $modifier;
         if ($this->dice === self::CRITICAL) {
             $damage = $this->attacker->getClass()->getCriticalDamage($damage);
         }

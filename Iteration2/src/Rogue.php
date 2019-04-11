@@ -35,4 +35,19 @@ class Rogue extends AbstractClass
     {
         return ('Good' !== ucfirst($alignment));
     }
+
+    /**
+     * @param Character $target
+     *
+     * @return int
+     */
+    public function getTargetsAcModifier(Character $target): int
+    {
+        $target_ac = $target->getAc();
+        $target_modifier = $target->getAbilityModifier('dexterity');
+        if ($target_modifier > 0) {
+            $target_ac -= $target_modifier;
+        }
+        return $target_ac;
+    }
 }

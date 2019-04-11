@@ -15,6 +15,24 @@ abstract class AbstractClass
         'Paladin' => true,
     ];
 
+    public function __construct()
+    {
+        $this->attack_roll = 0;
+    }
+
+    /**
+     * @param int $attack_roll
+     */
+    public function setAttackRoll(int $attack_roll): void
+    {
+        $this->attack_roll = $attack_roll;
+    }
+
+    /**
+     * @var int
+     */
+    protected $attack_roll;
+
     /**
      * @param string $class
      *
@@ -26,13 +44,13 @@ abstract class AbstractClass
     }
 
     /**
-     * @param int $level
-     *
-     * @param int $attack_roll
+     * @param int            $level
+     * @param int            $attack_roll
+     * @param Character|null $target
      *
      * @return int
      */
-    public function getAttackRoll($level, $attack_roll = 0): int
+    public function getAttackRoll($level, $attack_roll = 0, Character $target = null): int
     {
         return intval($level / 2);
     }
@@ -74,9 +92,11 @@ abstract class AbstractClass
     }
 
     /**
+     * @param Character $target
+     *
      * @return int
      */
-    public function getDamage(): int
+    public function getDamage(Character $target): int
     {
         return 1;
     }
@@ -97,5 +117,15 @@ abstract class AbstractClass
     public function getBasicAc(): int
     {
         return 10;
+    }
+
+    /**
+     * @param Character $target
+     *
+     * @return int
+     */
+    public function getTargetsAcModifier(Character $target): int
+    {
+        return $target->getAc();
     }
 }

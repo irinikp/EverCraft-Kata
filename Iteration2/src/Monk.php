@@ -18,9 +18,11 @@ class Monk extends AbstractClass
     }
 
     /**
+     * @param Character $target
+     *
      * @return int
      */
-    public function getDamage(): int
+    public function getDamage(Character $target): int
     {
         return 3;
     }
@@ -39,18 +41,20 @@ class Monk extends AbstractClass
     }
 
     /**
-     * @param int $level
+     * @param int            $level
      *
-     * @param int $attack_roll
+     * @param int            $attack_roll
+     *
+     * @param Character|null $target
      *
      * @return int
      */
-    public function getAttackRoll($level, $attack_roll = 0): int
+    public function getAttackRoll($level, $attack_roll = 0, Character $target = null): int
     {
         if (1 === $level) return $attack_roll;
         if (0 === $level % 2 || 0 === $level % 3) {
             $attack_roll += 1;
         }
-        return $this->getAttackRoll($level - 1, $attack_roll);
+        return $this->getAttackRoll($level - 1, $attack_roll, $target);
     }
 }

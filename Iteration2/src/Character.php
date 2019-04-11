@@ -49,10 +49,6 @@ class Character
      */
     protected $level;
     /**
-     * @var int
-     */
-    protected $attack_roll;
-    /**
      * @var AbstractClass
      */
     protected $class;
@@ -70,7 +66,7 @@ class Character
         $this->abilities   = new Abilities();
         $this->xp          = 0;
         $this->level       = 1;
-        $this->attack_roll = 0;
+        $this->alignment   = 'Neutral';
     }
 
     /**
@@ -105,22 +101,6 @@ class Character
     {
         $class_name = get_class($this->getClass());
         return substr($class_name, strrpos($class_name, '\\') + 1);
-    }
-
-    /**
-     * @return int
-     */
-    public function getAttackRoll(): int
-    {
-        return $this->attack_roll;
-    }
-
-    /**
-     * @param int $attack_roll
-     */
-    public function setAttackRoll(int $attack_roll): void
-    {
-        $this->attack_roll = $attack_roll;
     }
 
     /**
@@ -363,7 +343,7 @@ class Character
      */
     public function refreshAttackRoll(): void
     {
-        $this->setAttackRoll($this->class->getAttackRoll($this->getLevel()));
+        $this->getClass()->setAttackRoll($this->class->getAttackRoll($this->getLevel()));
     }
 
     /**

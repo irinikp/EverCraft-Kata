@@ -24,13 +24,13 @@ class IterationTest extends \PHPUnit\Framework\TestCase
         $this->character->setClass('fighter');
         // Level 2
         $this->character->addXp(1000);
-        $this->assertEquals(1, $this->character->getAttackRoll());
+        $this->assertEquals(1, $this->character->getClass()->getAttackRoll($this->character->getLevel()));
         // Level 3
         $this->character->addXp(1000);
-        $this->assertEquals(2, $this->character->getAttackRoll());
+        $this->assertEquals(2, $this->character->getClass()->getAttackRoll($this->character->getLevel()));
         // Level 4
         $this->character->addXp(1000);
-        $this->assertEquals(3, $this->character->getAttackRoll());
+        $this->assertEquals(3, $this->character->getClass()->getAttackRoll($this->character->getLevel()));
     }
 
     public function test_fighter_hp_is_10_initially()
@@ -213,6 +213,34 @@ class IterationTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(36, $this->character->getMaxHp());
     }
 
+    public function test_paladin_plus_2_to_attack_when_attacking_evil_characters()
+    {
+        $this->character->setClass('paladin');
+        $target = new Character();
+        $hits = $this->createAttackRoll(9, $target);
+        $this->assertFalse($hits);
+        $hits = $this->createAttackRoll(10, $target);
+        $this->assertTrue($hits);
+
+        $target->setAlignment('evil');
+        $hits = $this->createAttackRoll(7, $target);
+        $this->assertFalse($hits);
+        $hits = $this->createAttackRoll(8, $target);
+        $this->assertTrue($hits);
+    }
+
+    public function test_paladin_plus_2_to_damage_when_attacking_evil_characters()
+    {
+        $this->character->setClass('paladin');
+        $target = new Character();
+        $this->createAttackRoll(10, $target);
+        $this->assertEquals(4, $target->getHp());
+
+        $target = new Character();
+        $target->setAlignment('evil');
+        $this->createAttackRoll(8, $target);
+        $this->assertEquals(2, $target->getHp());
+   }
 
     private function createAttackRoll($dice, $target = null)
     {

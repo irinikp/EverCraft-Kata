@@ -9,13 +9,15 @@ namespace Dnd;
 class Fighter extends AbstractClass
 {
     /**
-     * @param int $level
+     * @param int            $level
      *
-     * @param int $attack_roll
+     * @param int            $attack_roll
+     *
+     * @param Character|null $target
      *
      * @return int
      */
-    public function getAttackRoll($level, $attack_roll = 0): int
+    public function getAttackRoll($level, $attack_roll = 0, Character $target = null): int
     {
         return $level - 1;
     }
