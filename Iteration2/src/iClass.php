@@ -10,7 +10,8 @@ abstract class iClass
 {
     const TYPES = [
         'Fighter' => true,
-        'Rogue'   => true
+        'Rogue'   => true,
+        'Monk'    => true
     ];
 
     /**

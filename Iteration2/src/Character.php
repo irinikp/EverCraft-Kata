@@ -2,8 +2,6 @@
 
 namespace Dnd;
 
-use Dnd\Fighter as Fighter;
-
 /**
  * Class Character
  * @package Dnd
@@ -94,12 +92,8 @@ class Character
         if (!iClass::isClassType($class)) {
             throw new \Exception("Undefined class $class");
         }
-        if ("Fighter" === $class) {
-            $this->class = new Fighter();
-        }
-        if ("Rogue" === $class) {
-            $this->class = new Rogue();
-        }
+        $class       = '\Dnd\\' . $class;
+        $this->class = new $class();
         $this->refreshHp();
     }
 
@@ -222,7 +216,7 @@ class Character
         if ($this->getClass()->isAlignmentAllowed($alignment)) {
             $this->alignment = new Alignment($alignment);
         } else {
-            throw new InvalidAlignmentException($this->getClassName()." can't have $alignment alignment");
+            throw new InvalidAlignmentException($this->getClassName() . " can't have $alignment alignment");
         }
     }
 

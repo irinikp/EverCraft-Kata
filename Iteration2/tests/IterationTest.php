@@ -119,7 +119,34 @@ class IterationTest extends \PHPUnit\Framework\TestCase
         $this->character->setClass('rogue');
         $this->expectException(InvalidAlignmentException::class);
         $this->character->setAlignment('good');
+    }
 
+    public function test_monk_hp_is_6_initially()
+    {
+        $this->character->setClass('monk');
+        $this->assertEquals(6, $this->character->getHp());
+        $this->assertEquals(6, $this->character->getMaxHp());
+    }
+
+    public function test_monk_for_each_level_hp_increase_by_6_plus_con_modifier_equals_4()
+    {
+        $this->character->setClass('monk');
+        $this->character->setAbility('constitution', 4);
+        $this->character->addXp(1000);
+        $this->assertEquals(6, $this->character->getMaxHp());
+        $this->character->addXp(1000);
+        $this->assertEquals(9, $this->character->getMaxHp());
+    }
+
+
+    public function test_monk_for_each_level_hp_increase_by_10_plus_con_modifier_equals_20()
+    {
+        $this->character->setClass('monk');
+        $this->character->setAbility('constitution', 20);
+        $this->character->addXp(1000);
+        $this->assertEquals(22, $this->character->getMaxHp());
+        $this->character->addXp(1000);
+        $this->assertEquals(33, $this->character->getMaxHp());
     }
 
     private function createAttackRoll($dice, $target = null)
