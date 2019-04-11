@@ -6,7 +6,7 @@ namespace Dnd;
  * Class Fighter
  * @package Dnd
  */
-class Fighter extends iClass
+class Fighter extends AbstractClass
 {
     /**
      * @param int $level

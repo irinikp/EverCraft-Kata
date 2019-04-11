@@ -6,7 +6,7 @@ namespace Dnd;
  * Class Rogue
  * @package Dnd
  */
-class Rogue extends iClass
+class Rogue extends AbstractClass
 {
     /**
      * @param int $damage
@@ -26,6 +26,11 @@ class Rogue extends iClass
         return 'dexterity';
     }
 
+    /**
+     * @param string $alignment
+     *
+     * @return bool
+     */
     public function isAlignmentAllowed(string $alignment): bool
     {
         return ('Good' !== ucfirst($alignment));

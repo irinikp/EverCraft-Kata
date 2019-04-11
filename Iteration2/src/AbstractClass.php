@@ -6,12 +6,13 @@ namespace Dnd;
  * Class iClass
  * @package Dnd
  */
-abstract class iClass
+abstract class AbstractClass
 {
     const TYPES = [
         'Fighter' => true,
         'Rogue'   => true,
-        'Monk'    => true
+        'Monk'    => true,
+        'Paladin' => true,
     ];
 
     /**
@@ -90,7 +91,10 @@ abstract class iClass
         return $character->getAbilityModifier('dexterity');
     }
 
-    public function getBasicAc()
+    /**
+     * @return int
+     */
+    public function getBasicAc(): int
     {
         return 10;
     }

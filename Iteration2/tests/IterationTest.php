@@ -201,6 +201,19 @@ class IterationTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(13, $this->character->getClass()->getAttackRoll(20));
     }
 
+    public function test_paladin_has_8_hit_points_per_level_instead_of_5()
+    {
+        $this->character->setClass('paladin');
+        $this->assertEquals(8, $this->character->getMaxHp());
+        $this->character->addXp(1000);
+        $this->assertEquals(16, $this->character->getMaxHp());
+        $this->character->addXp(1000);
+        $this->assertEquals(24, $this->character->getMaxHp());
+        $this->character->setAbility('constitution', 18);
+        $this->assertEquals(36, $this->character->getMaxHp());
+    }
+
+
     private function createAttackRoll($dice, $target = null)
     {
         if (null === $target) {

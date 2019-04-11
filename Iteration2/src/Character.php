@@ -53,7 +53,7 @@ class Character
      */
     protected $attack_roll;
     /**
-     * @var iClass
+     * @var AbstractClass
      */
     protected $class;
 
@@ -74,9 +74,9 @@ class Character
     }
 
     /**
-     * @return iClass
+     * @return AbstractClass
      */
-    public function getClass(): iClass
+    public function getClass(): AbstractClass
     {
         return $this->class;
     }
@@ -89,7 +89,7 @@ class Character
     public function setClass(string $class): void
     {
         $class = ucfirst($class);
-        if (!iClass::isClassType($class)) {
+        if (!AbstractClass::isClassType($class)) {
             throw new \Exception("Undefined class $class");
         }
         $class       = '\Dnd\\' . $class;

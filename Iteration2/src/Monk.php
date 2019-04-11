@@ -6,7 +6,7 @@ namespace Dnd;
  * Class Monk
  * @package Dnd
  */
-class Monk extends iClass
+class Monk extends AbstractClass
 {
 
     /**
@@ -48,9 +48,9 @@ class Monk extends iClass
     public function getAttackRoll($level, $attack_roll = 0): int
     {
         if (1 === $level) return $attack_roll;
-        if (0 === $level%2 || 0 === $level%3) {
+        if (0 === $level % 2 || 0 === $level % 3) {
             $attack_roll += 1;
         }
-        return $this->getAttackRoll($level-1, $attack_roll);
+        return $this->getAttackRoll($level - 1, $attack_roll);
     }
 }
