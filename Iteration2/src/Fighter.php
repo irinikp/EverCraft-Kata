@@ -11,9 +11,11 @@ class Fighter extends iClass
     /**
      * @param int $level
      *
+     * @param int $attack_roll
+     *
      * @return int
      */
-    public function getAttackRoll($level): int
+    public function getAttackRoll($level, $attack_roll = 0): int
     {
         return $level - 1;
     }

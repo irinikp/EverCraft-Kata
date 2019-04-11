@@ -176,6 +176,31 @@ class IterationTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(12, $this->character->getAc());
     }
 
+    public function test_monks_attack_rolls_increases_every_2nd_and_3rd_level()
+    {
+        $this->character->setClass('monk');
+        $this->assertEquals(0, $this->character->getClass()->getAttackRoll(1));
+        $this->assertEquals(1, $this->character->getClass()->getAttackRoll(2));
+        $this->assertEquals(2, $this->character->getClass()->getAttackRoll(3));
+        $this->assertEquals(3, $this->character->getClass()->getAttackRoll(4));
+        $this->assertEquals(3, $this->character->getClass()->getAttackRoll(5));
+        $this->assertEquals(4, $this->character->getClass()->getAttackRoll(6));
+        $this->assertEquals(4, $this->character->getClass()->getAttackRoll(7));
+        $this->assertEquals(5, $this->character->getClass()->getAttackRoll(8));
+        $this->assertEquals(6, $this->character->getClass()->getAttackRoll(9));
+        $this->assertEquals(7, $this->character->getClass()->getAttackRoll(10));
+        $this->assertEquals(7, $this->character->getClass()->getAttackRoll(11));
+        $this->assertEquals(8, $this->character->getClass()->getAttackRoll(12));
+        $this->assertEquals(8, $this->character->getClass()->getAttackRoll(13));
+        $this->assertEquals(9, $this->character->getClass()->getAttackRoll(14));
+        $this->assertEquals(10, $this->character->getClass()->getAttackRoll(15));
+        $this->assertEquals(11, $this->character->getClass()->getAttackRoll(16));
+        $this->assertEquals(11, $this->character->getClass()->getAttackRoll(17));
+        $this->assertEquals(12, $this->character->getClass()->getAttackRoll(18));
+        $this->assertEquals(12, $this->character->getClass()->getAttackRoll(19));
+        $this->assertEquals(13, $this->character->getClass()->getAttackRoll(20));
+    }
+
     private function createAttackRoll($dice, $target = null)
     {
         if (null === $target) {
