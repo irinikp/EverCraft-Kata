@@ -214,13 +214,15 @@ class Character
 
     /**
      * @param string $alignment
+     *
+     * @throws InvalidAlignmentException
      */
     public function setAlignment($alignment): void
     {
-        try {
+        if ($this->getClass()->isAlignmentAllowed($alignment)) {
             $this->alignment = new Alignment($alignment);
-        } catch (\Exception $e) {
-            $this->alignment = '';
+        } else {
+            throw new InvalidAlignmentException($this->getClassName()." can't have $alignment alignment");
         }
     }
 

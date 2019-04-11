@@ -25,4 +25,9 @@ class Rogue extends iClass
     {
         return 'dexterity';
     }
+
+    public function isAlignmentAllowed(string $alignment): bool
+    {
+        return ('Good' !== ucfirst($alignment));
+    }
 }

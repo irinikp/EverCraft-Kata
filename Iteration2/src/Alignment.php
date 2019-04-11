@@ -8,9 +8,11 @@ namespace Dnd;
  */
 class Alignment
 {
-    const GOOD    = 'GOOD';
-    const NEUTRAL = 'NEUTRAL';
-    const EVIL    = 'EVIL';
+    const TYPE = [
+        'Good'    => true,
+        'Neutral' => true,
+        'Evil'    => true
+    ];
 
     /**
      * @var string
@@ -18,18 +20,24 @@ class Alignment
     protected $value;
 
     /**
-     * Allignment constructor.
+     * Alignment constructor.
      *
      * @param string $alignment
      *
-     * @throws \Exception
+     * @throws InvalidAlignmentException
      */
     public function __construct($alignment)
     {
-        if ($alignment !== self::GOOD && $alignment !== self::NEUTRAL && $alignment !== self::EVIL) {
-            throw new \Exception('Alignment value is not valid');
+        $alignment = ucfirst($alignment);
+        if (!self::isAlignmentType($alignment)) {
+            throw new InvalidAlignmentException('Undefined Alignment $alignment');
         }
         $this->value = $alignment;
+    }
+
+    public static function isAlignmentType($alignment): bool
+    {
+        return array_key_exists($alignment, self::TYPE);
     }
 
     public function __toString()

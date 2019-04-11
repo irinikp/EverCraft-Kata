@@ -1,15 +1,12 @@
-\<?php
-/**
- * Created by PhpStorm.
- * User: irinikoutaki
- * Date: 2019-04-11
- * Time: 16:56
- */
+<?php
 
 namespace Dnd;
 
-
-class InvalidAlignmentException
+/**
+ * Class InvalidAlignmentException
+ * @package Dnd
+ */
+class InvalidAlignmentException extends \Exception
 {
 
 }

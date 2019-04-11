@@ -4,6 +4,7 @@ namespace Tests;
 
 use Dnd\Character;
 use Dnd\CombatAction;
+use Dnd\InvalidAlignmentException;
 
 require __DIR__ . '/../vendor/autoload.php';
 
@@ -111,6 +112,14 @@ class IterationTest extends \PHPUnit\Framework\TestCase
         $this->assertFalse($hits);
         $hits = $this->createAttackRoll(12, $target);
         $this->assertTrue($hits);
+    }
+
+    public function test_rogue_can_not_have_alignment_good()
+    {
+        $this->character->setClass('rogue');
+        $this->expectException(InvalidAlignmentException::class);
+        $this->character->setAlignment('good');
+
     }
 
     private function createAttackRoll($dice, $target = null)

@@ -58,4 +58,14 @@ abstract class iClass
     {
         return 'strength';
     }
+
+    /**
+     * @param string $alignment
+     *
+     * @return bool
+     */
+    public function isAlignmentAllowed(string $alignment): bool
+    {
+        return true;
+    }
 }
