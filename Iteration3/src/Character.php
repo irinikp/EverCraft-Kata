@@ -96,7 +96,7 @@ class Character
     public function setRace(string $race): void
     {
         $race = ucfirst($race);
-        if (!AbstractRace::isRaceType($race)) {
+        if (!AbstractRace::belongs($race)) {
             throw new \Exception("Undefined race $race");
         }
         $race       = '\Dnd\\Races\\' . $race;
@@ -304,8 +304,8 @@ class Character
         if (!Abilities::isAbilityType($ability)) {
             return 0;
         }
-        $function = "get$ability";
-        return Abilities::MODIFIER[$this->getAbilities()->$function()];
+        $function = 'get'.$ability.'Modifier';
+        return $this->getRace()->$function($this);
     }
 
     /**
