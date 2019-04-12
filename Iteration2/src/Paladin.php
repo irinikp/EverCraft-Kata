@@ -40,7 +40,7 @@ class Paladin extends AbstractClass
      */
     public function getAttackRoll($level, $attack_roll = 0, Character $target = null): int
     {
-        $attack_roll = parent::getAttackRoll($level, $attack_roll, $target);
+        $attack_roll = $level - 1;
         if ($target && 'Evil' === $target->getAlignment()) {
             $attack_roll += 2;
         }

@@ -257,6 +257,15 @@ class IterationTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(-4, $target->getHp());
     }
 
+    public function test_paladins_attack_rolls_increases_by_1_for_every_level()
+    {
+        $this->character->setClass('paladin');
+        $this->assertEquals(0, $this->character->getClass()->getAttackRoll(1));
+        $this->assertEquals(1, $this->character->getClass()->getAttackRoll(2));
+        $this->assertEquals(6, $this->character->getClass()->getAttackRoll(7));
+        $this->assertEquals(19, $this->character->getClass()->getAttackRoll(20));
+    }
+
     private function createAttackRoll($dice, $target = null)
     {
         if (null === $target) {
