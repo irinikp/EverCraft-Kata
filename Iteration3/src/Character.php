@@ -101,6 +101,7 @@ class Character
         }
         $race       = '\Dnd\\Races\\' . $race;
         $this->race = new $race();
+        $this->refreshAc();
     }
 
     /**
@@ -400,6 +401,14 @@ class Character
     }
 
     /**
+     * @return int
+     */
+    public function getAcModifier(): int
+    {
+        return $this->getAbilityModifier(Abilities::DEX);
+    }
+
+    /**
      * @throws InvalidAlignmentException
      */
     protected function refreshAlignment(): void
@@ -414,7 +423,7 @@ class Character
      */
     protected function refreshAc(): void
     {
-        $modifier = $this->getClass()->getAcModifier($this);
+        $modifier = $this->getAcModifier() + $this->getClass()->getAcModifier($this) + $this->getRace()->getAcModifier($this);
         $this->setAc($this->getClass()->getBasicAc() + $modifier);
     }
 

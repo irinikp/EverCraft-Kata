@@ -4,6 +4,7 @@ namespace Tests;
 
 use Dnd\Abilities;
 use Dnd\Character;
+use Dnd\Classes\AbstractClass;
 use Dnd\Races\AbstractRace;
 
 require __DIR__ . '/../vendor/autoload.php';
@@ -48,6 +49,21 @@ class IterationTest extends \PHPUnit\Framework\TestCase
     public function test_orc_has_minus_1_to_charisma_modifier()
     {
         $this->create_test_for_race_ability_modifier(AbstractRace::ORC, Abilities::CHA, -1);
+    }
+
+    public function test_orc_has_plus_2_to_armor_class()
+    {
+        $this->character->setRace(AbstractRace::ORC);
+        $this->assertEquals(12, $this->character->getAc());
+    }
+
+    public function test_orc_monk_has_plus_2_to_armor_class()
+    {
+        $this->character->setRace(AbstractRace::ORC);
+        $this->character->setClass(AbstractClass::MONK);
+        $this->character->setAbility(Abilities::DEX, 15);
+        $this->character->setAbility(Abilities::WIS, 16);
+        $this->assertEquals(16, $this->character->getAc());
     }
 
     protected function create_test_for_race_ability_modifier($race, $ability, $ability_change)

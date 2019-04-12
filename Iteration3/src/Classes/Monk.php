@@ -37,7 +37,7 @@ class Monk extends AbstractClass
      */
     public function getAcModifier(Character $character): int
     {
-        $modifier        = $character->getAbilityModifier(Abilities::DEX);
+        $modifier = parent::getAcModifier($character);
         $wisdom_modifier = $character->getAbilityModifier(Abilities::WIS);
         if ($wisdom_modifier > 0) $modifier += $wisdom_modifier;
         return $modifier;

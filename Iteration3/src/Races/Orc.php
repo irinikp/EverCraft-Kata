@@ -5,6 +5,10 @@ namespace Dnd\Races;
 use Dnd\Abilities;
 use Dnd\Character;
 
+/**
+ * Class Orc
+ * @package Dnd\Races
+ */
 class Orc extends AbstractRace
 {
 
@@ -51,6 +55,17 @@ class Orc extends AbstractRace
     {
         $modifier = parent::getAbilityModifier($character, Abilities::CHA);
         return $modifier - 1;
+    }
+
+    /**
+     * @param Character $character
+     *
+     * @return int
+     */
+    public function getAcModifier(Character $character): int
+    {
+        $modifier        = parent::getAcModifier($character);
+        return $modifier + 2;
     }
 
 }

@@ -14,10 +14,10 @@ use GlobalCharacteristics;
 abstract class AbstractClass
 {
     const FIGHTER = 'Fighter';
-    const ROGUE = 'Rogue';
-    const MONK = 'Monk';
+    const ROGUE   = 'Rogue';
+    const MONK    = 'Monk';
     const PALADIN = 'Paladin';
-    const PRIEST = 'Priest';
+    const PRIEST  = 'Priest';
 
     const TYPES = [
         self::FIGHTER,
@@ -114,16 +114,6 @@ abstract class AbstractClass
     public function getDamage(Character $target): int
     {
         return 1;
-    }
-
-    /**
-     * @param Character $character
-     *
-     * @return int
-     */
-    public function getAcModifier(Character $character): int
-    {
-        return $character->getAbilityModifier(Abilities::DEX);
     }
 
     /**
