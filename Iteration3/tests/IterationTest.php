@@ -66,6 +66,16 @@ class IterationTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(16, $this->character->getAc());
     }
 
+    public function test_dwarf_has_plus_1_to_constitution_modifier()
+    {
+        $this->create_test_for_race_ability_modifier(AbstractRace::DWARF, Abilities::CON, 1);
+    }
+
+    public function test_dwarf_has_minus_1_to_charisma_modifier()
+    {
+        $this->create_test_for_race_ability_modifier(AbstractRace::DWARF, Abilities::CHA, -1);
+    }
+
     protected function create_test_for_race_ability_modifier($race, $ability, $ability_change)
     {
         $human_ability_modifier = $this->character->getAbilityModifier($ability);

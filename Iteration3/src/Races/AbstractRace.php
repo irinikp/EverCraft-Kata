@@ -13,11 +13,13 @@ use GlobalCharacteristics;
 abstract class AbstractRace
 {
     const HUMAN = 'Human';
-    const ORC = 'Orc';
+    const ORC   = 'Orc';
+    const DWARF = 'Dwarf';
 
     const TYPES = [
         self::HUMAN,
-        self::ORC
+        self::ORC,
+        self::DWARF
     ];
 
     use GlobalCharacteristics;
