@@ -7,6 +7,9 @@
     "mockery/mockery": "dev-master"
   },
   "autoload": {
+    "psr-0": {
+      "GlobalCharacteristics": "src/Traits/"
+    },
     "psr-4": {
       "Dnd\\": "src/"
     }

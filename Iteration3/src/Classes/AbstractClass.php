@@ -4,6 +4,7 @@ namespace Dnd\Classes;
 
 use Dnd\Alignment;
 use Dnd\Character;
+use GlobalCharacteristics;
 
 /**
  * Class iClass
@@ -22,22 +23,14 @@ abstract class AbstractClass
      */
     protected $attack_roll;
 
+    use GlobalCharacteristics;
+
     /**
      * AbstractClass constructor.
      */
     public function __construct()
     {
         $this->attack_roll = 0;
-    }
-
-    /**
-     * @param string $class
-     *
-     * @return bool
-     */
-    public static function isClassType(string $class): bool
-    {
-        return in_array($class, self::TYPES);
     }
 
     /**

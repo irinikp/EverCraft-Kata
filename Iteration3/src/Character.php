@@ -4,6 +4,8 @@ namespace Dnd;
 
 use Dnd\Classes\AbstractClass;
 use Dnd\Classes\Priest;
+use Dnd\Races\AbstractRace;
+use Dnd\Races\Human;
 
 /**
  * Class Character
@@ -57,6 +59,11 @@ class Character
     protected $class;
 
     /**
+     * @var AbstractRace
+     */
+    protected $race;
+
+    /**
      * Character constructor.
      */
     public function __construct()
@@ -70,6 +77,39 @@ class Character
         $this->xp        = 0;
         $this->level     = 1;
         $this->alignment = 'Neutral';
+        $this->race      = new Human();
+    }
+
+    /**
+     * @return AbstractRace
+     */
+    public function getRace(): AbstractRace
+    {
+        return $this->race;
+    }
+
+    /**
+     * @param string $race
+     *
+     * @throws \Exception
+     */
+    public function setRace(string $race): void
+    {
+        $race = ucfirst($race);
+        if (!AbstractRace::isRaceType($race)) {
+            throw new \Exception("Undefined race $race");
+        }
+        $race       = '\Dnd\\Races\\' . $race;
+        $this->race = new $race();
+    }
+
+    /**
+     * @return string
+     */
+    public function getRaceName(): string
+    {
+        $race_name = get_class($this->getRace());
+        return substr($race_name, strrpos($race_name, '\\') + 1);
     }
 
     /**
@@ -88,7 +128,7 @@ class Character
     public function setClass(string $class): void
     {
         $class = ucfirst($class);
-        if (!AbstractClass::isClassType($class)) {
+        if (!AbstractClass::belongs($class)) {
             throw new \Exception("Undefined class $class");
         }
         $class       = '\Dnd\\Classes\\' . $class;
