@@ -4,6 +4,7 @@ namespace Tests;
 
 require __DIR__ . '/../vendor/autoload.php';
 
+use Dnd\Abilities;
 use Dnd\Character;
 
 class LevelTest extends \PHPUnit\Framework\TestCase
@@ -29,7 +30,7 @@ class LevelTest extends \PHPUnit\Framework\TestCase
 
     public function test_for_each_level_hp_increase_by_5_plus_con_modifier_con_equals_4()
     {
-        $this->character->setAbility('constitution', 4);
+        $this->character->setAbility(Abilities::CON, 4);
         $this->character->addXp(1000);
         $this->assertEquals(4, $this->character->getMaxHp());
         $this->character->addXp(1000);
@@ -39,7 +40,7 @@ class LevelTest extends \PHPUnit\Framework\TestCase
 
     public function test_for_each_level_hp_increase_by_5_plus_con_modifier_con_equals_20()
     {
-        $this->character->setAbility('constitution', 20);
+        $this->character->setAbility(Abilities::CON, 20);
         $this->character->addXp(1000);
         $this->assertEquals(20, $this->character->getMaxHp());
         $this->character->addXp(1000);

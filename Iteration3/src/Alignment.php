@@ -8,10 +8,13 @@ namespace Dnd;
  */
 class Alignment
 {
-    const TYPE = [
-        'Good',
-        'Neutral',
-        'Evil'
+    const GOOD    = 'Good';
+    const NEUTRAL = 'Neutral';
+    const EVIL    = 'Evil';
+    const TYPE    = [
+        self::GOOD,
+        self::NEUTRAL,
+        self::EVIL
     ];
 
     /**

@@ -76,7 +76,7 @@ class Character
         $this->abilities = new Abilities();
         $this->xp        = 0;
         $this->level     = 1;
-        $this->alignment = 'Neutral';
+        $this->alignment = Alignment::NEUTRAL;
         $this->race      = new Human();
     }
 
@@ -304,7 +304,7 @@ class Character
         if (!Abilities::isAbilityType($ability)) {
             return 0;
         }
-        $function = 'get'.$ability.'Modifier';
+        $function = 'get' . $ability . 'Modifier';
         return $this->getRace()->$function($this);
     }
 
@@ -423,7 +423,7 @@ class Character
      */
     protected function refreshHp(): void
     {
-        $modifier = $this->getAbilityModifier('constitution');
+        $modifier = $this->getAbilityModifier(Abilities::CON);
         $this->setMaxHp(max(1, ($this->getLevel()) * ($this->class->getHpPerLevel() + $modifier)));
         $this->setHp($this->getMaxHp());
     }

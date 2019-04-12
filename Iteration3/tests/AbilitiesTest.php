@@ -30,13 +30,13 @@ class AbilitiesTest extends \PHPUnit\Framework\TestCase
 
     public function test_strength_range_from_1_to_20()
     {
-        $this->character->setAbility('strength', 0);
+        $this->character->setAbility(Abilities::STR, 0);
         $this->assertNotEquals(0, $this->character->getAbilities()->getStrength());
-        $this->character->setAbility('strength', 1);
+        $this->character->setAbility(Abilities::STR, 1);
         $this->assertEquals(1, $this->character->getAbilities()->getStrength());
-        $this->character->setAbility('strength', 20);
+        $this->character->setAbility(Abilities::STR, 20);
         $this->assertEquals(20, $this->character->getAbilities()->getStrength());
-        $this->character->setAbility('strength', 21);
+        $this->character->setAbility(Abilities::STR, 21);
         $this->assertNotEquals(21, $this->character->getAbilities()->getStrength());
     }
 
@@ -66,20 +66,20 @@ class AbilitiesTest extends \PHPUnit\Framework\TestCase
 
     public function test_add_dexterity_modifier_to_armor_class()
     {
-        $this->character->setAbility('dexterity', 15);
+        $this->character->setAbility(Abilities::DEX, 15);
         $this->assertEquals(12, $this->character->getAc());
     }
 
     public function test_add_constitution_modifier_to_hit_points()
     {
-        $this->character->setAbility('constitution', 15);
+        $this->character->setAbility(Abilities::CON, 15);
         $this->assertEquals(7, $this->character->getHp());
         $this->assertEquals(7, $this->character->getMaxHp());
     }
 
     public function test_add_constitution_modifier_to_hit_points_always_at_least_1_hp()
     {
-        $this->character->setAbility('constitution', 1);
+        $this->character->setAbility(Abilities::CON, 1);
         $this->assertEquals(1, $this->character->getHp());
         $this->assertEquals(1, $this->character->getMaxHp());
     }

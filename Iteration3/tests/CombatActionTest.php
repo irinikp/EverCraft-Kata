@@ -4,7 +4,10 @@ namespace Tests;
 
 require __DIR__ . '/../vendor/autoload.php';
 
+use Dnd\Abilities;
+use Dnd\Alignment;
 use Dnd\Character;
+use Dnd\Classes\AbstractClass;
 use Dnd\CombatAction;
 
 class CombatActionTest extends \PHPUnit\Framework\TestCase
@@ -95,28 +98,28 @@ class CombatActionTest extends \PHPUnit\Framework\TestCase
 
     public function test_add_strength_modifier_to_attack_roll_scenario_str3_roll13()
     {
-        $this->character->setAbility('strength', 3);
+        $this->character->setAbility(Abilities::STR, 3);
         $hits = $this->createAttackRoll(13, null);
         $this->assertFalse($hits);
     }
 
     public function test_add_strength_modifier_to_attack_roll_scenario_str3_roll14()
     {
-        $this->character->setAbility('strength', 3);
+        $this->character->setAbility(Abilities::STR, 3);
         $hits = $this->createAttackRoll(14, null);
         $this->assertTrue($hits);
     }
 
     public function test_add_strength_modifier_to_attack_roll_scenario_str17_roll6()
     {
-        $this->character->setAbility('strength', 17);
+        $this->character->setAbility(Abilities::STR, 17);
         $hits = $this->createAttackRoll(6, null);
         $this->assertFalse($hits);
     }
 
     public function test_add_strength_modifier_to_attack_roll_scenario_str17_roll7()
     {
-        $this->character->setAbility('strength', 17);
+        $this->character->setAbility(Abilities::STR, 17);
         $hits = $this->createAttackRoll(7, null);
         $this->assertTrue($hits);
     }
@@ -124,7 +127,7 @@ class CombatActionTest extends \PHPUnit\Framework\TestCase
     public function test_add_strength_modifier_to_damage_scenario_str3_roll14()
     {
         $target = new Character();
-        $this->character->setAbility('strength', 3);
+        $this->character->setAbility(Abilities::STR, 3);
         $this->createAttackRoll(14, $target);
         $this->assertEquals(4, $target->getHp());
     }
@@ -132,7 +135,7 @@ class CombatActionTest extends \PHPUnit\Framework\TestCase
     public function test_add_strength_modifier_to_damage_scenario_str17_roll7()
     {
         $target = new Character();
-        $this->character->setAbility('strength', 17);
+        $this->character->setAbility(Abilities::STR, 17);
         $this->createAttackRoll(7, $target, 3);
         $this->assertEquals(1, $target->getHp());
     }
@@ -140,7 +143,7 @@ class CombatActionTest extends \PHPUnit\Framework\TestCase
     public function test_double_strength_modifier_to_critical_hits()
     {
         $target = new Character();
-        $this->character->setAbility('strength', 12);
+        $this->character->setAbility(Abilities::STR, 12);
         $this->createAttackRoll(20, $target);
         $this->assertEquals(1, $target->getHp());
     }
@@ -148,7 +151,7 @@ class CombatActionTest extends \PHPUnit\Framework\TestCase
     public function test_minimum_damage_is_always_1_even_on_a_critical_hit()
     {
         $target = new Character();
-        $this->character->setAbility('strength', 2);
+        $this->character->setAbility(Abilities::STR, 2);
         $this->createAttackRoll(20, $target);
         $this->assertEquals(4, $target->getHp());
     }
@@ -171,8 +174,8 @@ class CombatActionTest extends \PHPUnit\Framework\TestCase
     public function test_add_dexterity_modifier_to_armor_class_of_target()
     {
         $target = new Character();
-        $target->setAbility('dexterity', 15);
-        $this->character->setAbility('strength', 2);
+        $target->setAbility(Abilities::DEX, 15);
+        $this->character->setAbility(Abilities::STR, 2);
         $hits = $this->createAttackRoll(15, $target);
         $this->assertFalse($hits);
         $hits = $this->createAttackRoll(16, $target);
@@ -181,7 +184,7 @@ class CombatActionTest extends \PHPUnit\Framework\TestCase
 
     public function test_rogues_critical_hit_is_dealt_and_the_damage_is_tripled()
     {
-        $this->character->setClass('rogue');
+        $this->character->setClass(AbstractClass::ROGUE);
         $target = new Character();
         $this->createAttackRoll(20, $target, 0);
 
@@ -190,8 +193,8 @@ class CombatActionTest extends \PHPUnit\Framework\TestCase
 
     public function test_rogues_strength_modifier_does_not_apply_to_attack()
     {
-        $this->character->setAbility('strength', 2);
-        $this->character->setClass('rogue');
+        $this->character->setAbility(Abilities::STR, 2);
+        $this->character->setClass(AbstractClass::ROGUE);
         $hits = $this->createAttackRoll(9);
         $this->assertFalse($hits);
         $hits = $this->createAttackRoll(10);
@@ -200,8 +203,8 @@ class CombatActionTest extends \PHPUnit\Framework\TestCase
 
     public function test_rogues_dexterity_modifier_applies_to_attack()
     {
-        $this->character->setAbility('dexterity', 12);
-        $this->character->setClass('rogue');
+        $this->character->setAbility(Abilities::DEX, 12);
+        $this->character->setClass(AbstractClass::ROGUE);
         $hits = $this->createAttackRoll(8);
         $this->assertFalse($hits);
         $hits = $this->createAttackRoll(9);
@@ -211,9 +214,9 @@ class CombatActionTest extends \PHPUnit\Framework\TestCase
     public function test_dexterity_modifier_of_target_is_ignored_if_positive_when_attacked_by_rogue()
     {
         $target = new Character();
-        $target->setAbility('dexterity', 15);
-        $this->character->setAbility('dexterity', 2);
-        $this->character->setClass('rogue');
+        $target->setAbility(Abilities::DEX, 15);
+        $this->character->setAbility(Abilities::DEX, 2);
+        $this->character->setClass(AbstractClass::ROGUE);
         $hits = $this->createAttackRoll(13, $target);
         $this->assertFalse($hits);
         $hits = $this->createAttackRoll(14, $target);
@@ -223,9 +226,9 @@ class CombatActionTest extends \PHPUnit\Framework\TestCase
     public function test_dexterity_modifier_of_target_is_not_ignored_if_not_positive_when_attacked_by_rogue()
     {
         $target = new Character();
-        $target->setAbility('dexterity', 6);
-        $this->character->setAbility('dexterity', 2);
-        $this->character->setClass('rogue');
+        $target->setAbility(Abilities::DEX, 6);
+        $this->character->setAbility(Abilities::DEX, 2);
+        $this->character->setClass(AbstractClass::ROGUE);
         $hits = $this->createAttackRoll(11, $target);
         $this->assertFalse($hits);
         $hits = $this->createAttackRoll(12, $target);
@@ -234,7 +237,7 @@ class CombatActionTest extends \PHPUnit\Framework\TestCase
 
     public function test_when_monk_attack_is_successful_other_character_takes_3_points_of_damage_when_hit()
     {
-        $this->character->setClass('monk');
+        $this->character->setClass(AbstractClass::MONK);
         $target = new Character();
         $this->createAttackRoll(15, $target, 0);
 
@@ -244,14 +247,14 @@ class CombatActionTest extends \PHPUnit\Framework\TestCase
 
     public function test_paladin_plus_2_to_attack_when_attacking_evil_characters()
     {
-        $this->character->setClass('paladin');
+        $this->character->setClass(AbstractClass::PALADIN);
         $target = new Character();
-        $hits = $this->createAttackRoll(9, $target);
+        $hits   = $this->createAttackRoll(9, $target);
         $this->assertFalse($hits);
         $hits = $this->createAttackRoll(10, $target);
         $this->assertTrue($hits);
 
-        $target->setAlignment('evil');
+        $target->setAlignment(Alignment::EVIL);
         $hits = $this->createAttackRoll(7, $target);
         $this->assertFalse($hits);
         $hits = $this->createAttackRoll(8, $target);
@@ -260,27 +263,27 @@ class CombatActionTest extends \PHPUnit\Framework\TestCase
 
     public function test_paladin_plus_2_to_damage_when_attacking_evil_characters()
     {
-        $this->character->setClass('paladin');
+        $this->character->setClass(AbstractClass::PALADIN);
         $target = new Character();
         $this->createAttackRoll(10, $target);
         $this->assertEquals(4, $target->getHp());
 
         $target = new Character();
-        $target->setAlignment('evil');
+        $target->setAlignment(Alignment::EVIL);
         $this->createAttackRoll(8, $target);
         $this->assertEquals(2, $target->getHp());
     }
 
     public function test_paladins_critical_hit_is_dealt_and_the_damage_is_tripled_when_target_is_evil()
     {
-        $this->character->setClass('paladin');
+        $this->character->setClass(AbstractClass::PALADIN);
         $target = new Character();
         $this->createAttackRoll(20, $target, 0);
 
         $this->assertEquals(3, $target->getHp());
 
         $target = new Character();
-        $target->setAlignment('evil');
+        $target->setAlignment(Alignment::EVIL);
         $this->createAttackRoll(20, $target, 0);
 
         $this->assertEquals(-4, $target->getHp());

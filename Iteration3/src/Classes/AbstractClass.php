@@ -2,6 +2,7 @@
 
 namespace Dnd\Classes;
 
+use Dnd\Abilities;
 use Dnd\Alignment;
 use Dnd\Character;
 use GlobalCharacteristics;
@@ -12,11 +13,18 @@ use GlobalCharacteristics;
  */
 abstract class AbstractClass
 {
+    const FIGHTER = 'Fighter';
+    const ROGUE = 'Rogue';
+    const MONK = 'Monk';
+    const PALADIN = 'Paladin';
+    const PRIEST = 'Priest';
+
     const TYPES = [
-        'Fighter',
-        'Rogue',
-        'Monk',
-        'Paladin',
+        self::FIGHTER,
+        self::ROGUE,
+        self::MONK,
+        self::PALADIN,
+        self::PRIEST
     ];
     /**
      * @var int
@@ -76,7 +84,7 @@ abstract class AbstractClass
      */
     public function getAttackAbility(): string
     {
-        return 'strength';
+        return Abilities::STR;
     }
 
     /**
@@ -115,7 +123,7 @@ abstract class AbstractClass
      */
     public function getAcModifier(Character $character): int
     {
-        return $character->getAbilityModifier('dexterity');
+        return $character->getAbilityModifier(Abilities::DEX);
     }
 
     /**

@@ -2,6 +2,8 @@
 
 namespace Dnd\Classes;
 
+use Dnd\Abilities;
+use Dnd\Alignment;
 use Dnd\Character;
 
 /**
@@ -25,7 +27,7 @@ class Rogue extends AbstractClass
      */
     public function getAttackAbility(): string
     {
-        return 'dexterity';
+        return Abilities::DEX;
     }
 
     /**
@@ -45,8 +47,8 @@ class Rogue extends AbstractClass
     public function getAllowedAlignments(): array
     {
         return [
-            'Neutral',
-            'Evil',
+            Alignment::NEUTRAL,
+            Alignment::EVIL,
         ];
     }
 
@@ -58,7 +60,7 @@ class Rogue extends AbstractClass
     public function getTargetsAcModifier(Character $target): int
     {
         $target_ac       = $target->getAc();
-        $target_modifier = $target->getAbilityModifier('dexterity');
+        $target_modifier = $target->getAbilityModifier(Abilities::DEX);
         if ($target_modifier > 0) {
             $target_ac -= $target_modifier;
         }

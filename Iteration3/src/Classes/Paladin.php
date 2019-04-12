@@ -2,6 +2,7 @@
 
 namespace Dnd\Classes;
 
+use Dnd\Alignment;
 use Dnd\Character;
 
 /**
@@ -27,7 +28,7 @@ class Paladin extends AbstractClass
     public function getDamage(Character $target): int
     {
         $damage = 1;
-        if ('Evil' === $target->getAlignment()) {
+        if (Alignment::EVIL === $target->getAlignment()) {
             $damage += 2;
         }
         return $damage;
@@ -43,7 +44,7 @@ class Paladin extends AbstractClass
     public function getAttackRoll($level, $attack_roll = 0, Character $target = null): int
     {
         $attack_roll = $level - 1;
-        if ($target && 'Evil' === $target->getAlignment()) {
+        if ($target && Alignment::EVIL === $target->getAlignment()) {
             $attack_roll += 2;
         }
         return $attack_roll;
@@ -57,7 +58,7 @@ class Paladin extends AbstractClass
     public function getCriticalDamageMultiplier(Character $target): int
     {
         $multiplier = 2;
-        if ('Evil' === $target->getAlignment()) {
+        if (Alignment::EVIL === $target->getAlignment()) {
             $multiplier++;
         }
         return $multiplier;
@@ -69,7 +70,7 @@ class Paladin extends AbstractClass
     public function getAllowedAlignments(): array
     {
         return [
-            'Good',
+            Alignment::GOOD,
         ];
     }
 }

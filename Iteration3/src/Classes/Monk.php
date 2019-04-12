@@ -2,6 +2,7 @@
 
 namespace Dnd\Classes;
 
+use Dnd\Abilities;
 use Dnd\Character;
 
 /**
@@ -36,8 +37,8 @@ class Monk extends AbstractClass
      */
     public function getAcModifier(Character $character): int
     {
-        $modifier        = $character->getAbilityModifier('dexterity');
-        $wisdom_modifier = $character->getAbilityModifier('wisdom');
+        $modifier        = $character->getAbilityModifier(Abilities::DEX);
+        $wisdom_modifier = $character->getAbilityModifier(Abilities::WIS);
         if ($wisdom_modifier > 0) $modifier += $wisdom_modifier;
         return $modifier;
     }

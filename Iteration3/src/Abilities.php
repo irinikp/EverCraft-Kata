@@ -31,13 +31,21 @@ class Abilities
         19 => 4,
         20 => 5
     ];
-    const TYPE     = [
-        'Strength',
-        'Dexterity',
-        'Constitution',
-        'Intelligence',
-        'Wisdom',
-        'Charisma'
+
+    const STR = 'Strength';
+    const DEX = 'Dexterity';
+    const CON = 'Constitution';
+    const INT = 'Intelligence';
+    const WIS = 'Wisdom';
+    const CHA = 'Charisma';
+
+    const TYPE = [
+        self::STR,
+        self::DEX,
+        self::CON,
+        self::INT,
+        self::WIS,
+        self::CHA
     ];
 
     /**

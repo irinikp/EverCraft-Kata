@@ -12,9 +12,12 @@ use GlobalCharacteristics;
  */
 abstract class AbstractRace
 {
+    const HUMAN = 'Human';
+    const ORC = 'Orc';
+
     const TYPES = [
-        'Human',
-        'Orc',
+        self::HUMAN,
+        self::ORC
     ];
 
     use GlobalCharacteristics;
@@ -26,7 +29,7 @@ abstract class AbstractRace
      */
     public function getStrengthModifier(Character $character): int
     {
-        return $this->getAbilityModifier($character, 'Strength');
+        return $this->getAbilityModifier($character, Abilities::STR);
     }
 
     /**
@@ -36,7 +39,7 @@ abstract class AbstractRace
      */
     public function getDexterityModifier(Character $character): int
     {
-        return $this->getAbilityModifier($character, 'Dexterity');
+        return $this->getAbilityModifier($character, Abilities::DEX);
     }
 
     /**
@@ -46,7 +49,7 @@ abstract class AbstractRace
      */
     public function getConstitutionModifier(Character $character): int
     {
-        return $this->getAbilityModifier($character, 'Constitution');
+        return $this->getAbilityModifier($character, Abilities::CON);
     }
 
     /**
@@ -56,7 +59,7 @@ abstract class AbstractRace
      */
     public function getIntelligenceModifier(Character $character): int
     {
-        return $this->getAbilityModifier($character, 'Intelligence');
+        return $this->getAbilityModifier($character, Abilities::INT);
     }
 
     /**
@@ -66,7 +69,7 @@ abstract class AbstractRace
      */
     public function getWisdomModifier(Character $character): int
     {
-        return $this->getAbilityModifier($character, 'Wisdom');
+        return $this->getAbilityModifier($character, Abilities::WIS);
     }
 
     /**
@@ -76,7 +79,7 @@ abstract class AbstractRace
      */
     public function getCharismaModifier(Character $character): int
     {
-        return $this->getAbilityModifier($character, 'Charisma');
+        return $this->getAbilityModifier($character, Abilities::CHA);
     }
 
     /**

@@ -4,6 +4,7 @@ namespace Tests;
 
 require __DIR__ . '/../vendor/autoload.php';
 
+use Dnd\Alignment;
 use Dnd\Character;
 use Dnd\InvalidAlignmentException;
 
@@ -25,8 +26,8 @@ class CreateCharacterTest extends \PHPUnit\Framework\TestCase
 
     public function test_get_set_alignment()
     {
-        $this->character->setAlignment('Good');
-        $this->assertEquals('Good', $this->character->getAlignment());
+        $this->character->setAlignment(Alignment::GOOD);
+        $this->assertEquals(Alignment::GOOD, $this->character->getAlignment());
     }
 
     public function test_alignments_default_values()
