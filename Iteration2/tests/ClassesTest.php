@@ -3,12 +3,11 @@
 namespace Tests;
 
 use Dnd\Character;
-use Dnd\CombatAction;
 use Dnd\InvalidAlignmentException;
 
 require __DIR__ . '/../vendor/autoload.php';
 
-class IterationTest extends \PHPUnit\Framework\TestCase
+class ClassesTest extends \PHPUnit\Framework\TestCase
 {
     protected $character;
 
@@ -61,59 +60,6 @@ class IterationTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(45, $this->character->getMaxHp());
     }
 
-    public function test_rogues_critical_hit_is_dealt_and_the_damage_is_tripled()
-    {
-        $this->character->setClass('rogue');
-        $target = new Character();
-        $this->createAttackRoll(20, $target, 0);
-
-        $this->assertEquals(2, $target->getHp());
-    }
-
-    public function test_rogues_strength_modifier_does_not_apply_to_attack()
-    {
-        $this->character->setAbility('strength', 2);
-        $this->character->setClass('rogue');
-        $hits = $this->createAttackRoll(9);
-        $this->assertFalse($hits);
-        $hits = $this->createAttackRoll(10);
-        $this->assertTrue($hits);
-    }
-
-    public function test_rogues_dexterity_modifier_applies_to_attack()
-    {
-        $this->character->setAbility('dexterity', 12);
-        $this->character->setClass('rogue');
-        $hits = $this->createAttackRoll(8);
-        $this->assertFalse($hits);
-        $hits = $this->createAttackRoll(9);
-        $this->assertTrue($hits);
-    }
-
-    public function test_dexterity_modifier_of_target_is_ignored_if_positive_when_attacked_by_rogue()
-    {
-        $target = new Character();
-        $target->setAbility('dexterity', 15);
-        $this->character->setAbility('dexterity', 2);
-        $this->character->setClass('rogue');
-        $hits = $this->createAttackRoll(13, $target);
-        $this->assertFalse($hits);
-        $hits = $this->createAttackRoll(14, $target);
-        $this->assertTrue($hits);
-    }
-
-    public function test_dexterity_modifier_of_target_is_not_ignored_if_not_positive_when_attacked_by_rogue()
-    {
-        $target = new Character();
-        $target->setAbility('dexterity', 6);
-        $this->character->setAbility('dexterity', 2);
-        $this->character->setClass('rogue');
-        $hits = $this->createAttackRoll(11, $target);
-        $this->assertFalse($hits);
-        $hits = $this->createAttackRoll(12, $target);
-        $this->assertTrue($hits);
-    }
-
     public function test_rogue_can_not_have_alignment_good()
     {
         $this->character->setAlignment('good');
@@ -151,16 +97,6 @@ class IterationTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(33, $this->character->getMaxHp());
     }
 
-
-    public function test_when_monk_attack_is_successful_other_character_takes_3_points_of_damage_when_hit()
-    {
-        $this->character->setClass('monk');
-        $target = new Character();
-        $this->createAttackRoll(15, $target, 0);
-
-        $this->assertEquals(2, $target->getHp());
-        $this->assertEquals(5, $target->getMaxHp());
-    }
 
     public function test_monk_adds_positive_wisdom_and_dexterity_modifier_to_armor_class()
     {
@@ -215,50 +151,6 @@ class IterationTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(36, $this->character->getMaxHp());
     }
 
-    public function test_paladin_plus_2_to_attack_when_attacking_evil_characters()
-    {
-        $this->character->setClass('paladin');
-        $target = new Character();
-        $hits = $this->createAttackRoll(9, $target);
-        $this->assertFalse($hits);
-        $hits = $this->createAttackRoll(10, $target);
-        $this->assertTrue($hits);
-
-        $target->setAlignment('evil');
-        $hits = $this->createAttackRoll(7, $target);
-        $this->assertFalse($hits);
-        $hits = $this->createAttackRoll(8, $target);
-        $this->assertTrue($hits);
-    }
-
-    public function test_paladin_plus_2_to_damage_when_attacking_evil_characters()
-    {
-        $this->character->setClass('paladin');
-        $target = new Character();
-        $this->createAttackRoll(10, $target);
-        $this->assertEquals(4, $target->getHp());
-
-        $target = new Character();
-        $target->setAlignment('evil');
-        $this->createAttackRoll(8, $target);
-        $this->assertEquals(2, $target->getHp());
-   }
-
-    public function test_paladins_critical_hit_is_dealt_and_the_damage_is_tripled_when_target_is_evil()
-    {
-        $this->character->setClass('paladin');
-        $target = new Character();
-        $this->createAttackRoll(20, $target, 0);
-
-        $this->assertEquals(3, $target->getHp());
-
-        $target = new Character();
-        $target->setAlignment('evil');
-        $this->createAttackRoll(20, $target, 0);
-
-        $this->assertEquals(-4, $target->getHp());
-    }
-
     public function test_paladins_attack_rolls_increases_by_1_for_every_level()
     {
         $this->character->setClass('paladin');
@@ -278,15 +170,5 @@ class IterationTest extends \PHPUnit\Framework\TestCase
 
         $this->expectException(InvalidAlignmentException::class);
         $this->character->setAlignment('evil');
-    }
-
-    private function createAttackRoll($dice, $target = null)
-    {
-        if (null === $target) {
-            $target = new Character();
-        }
-
-        $action = new CombatAction($this->character, $target, $dice);
-        return $action->attackRoll();
     }
 }
