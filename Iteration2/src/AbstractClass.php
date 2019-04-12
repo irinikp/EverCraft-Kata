@@ -66,13 +66,13 @@ abstract class AbstractClass
     }
 
     /**
-     * @param int $damage
+     * @param Character $target
      *
      * @return int
      */
-    public function getCriticalDamage($damage): int
+    public function getCriticalDamageMultiplier(Character $target): int
     {
-        return 2 * $damage;
+        return 2;
     }
 
     /**

@@ -46,4 +46,18 @@ class Paladin extends AbstractClass
         }
         return $attack_roll;
     }
+
+    /**
+     * @param Character $target
+     *
+     * @return int
+     */
+    public function getCriticalDamageMultiplier(Character $target): int
+    {
+        $multiplier = 2;
+        if ('Evil' === $target->getAlignment()) {
+            $multiplier++;
+        }
+        return $multiplier;
+    }
 }

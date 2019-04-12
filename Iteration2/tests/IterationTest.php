@@ -242,6 +242,21 @@ class IterationTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(2, $target->getHp());
    }
 
+    public function test_paladins_critical_hit_is_dealt_and_the_damage_is_tripled_when_target_is_evil()
+    {
+        $this->character->setClass('paladin');
+        $target = new Character();
+        $this->createAttackRoll(20, $target, 0);
+
+        $this->assertEquals(3, $target->getHp());
+
+        $target = new Character();
+        $target->setAlignment('evil');
+        $this->createAttackRoll(20, $target, 0);
+
+        $this->assertEquals(-4, $target->getHp());
+    }
+
     private function createAttackRoll($dice, $target = null)
     {
         if (null === $target) {

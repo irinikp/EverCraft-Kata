@@ -9,13 +9,13 @@ namespace Dnd;
 class Rogue extends AbstractClass
 {
     /**
-     * @param int $damage
+     * @param Character $target
      *
      * @return int
      */
-    public function getCriticalDamage($damage): int
+    public function getCriticalDamageMultiplier(Character $target): int
     {
-        return 3 * $damage;
+        return 3;
     }
 
     /**
