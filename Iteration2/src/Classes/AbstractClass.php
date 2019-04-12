@@ -1,6 +1,9 @@
 <?php
 
-namespace Dnd;
+namespace Dnd\Classes;
+
+use Dnd\Alignment;
+use Dnd\Character;
 
 /**
  * Class iClass

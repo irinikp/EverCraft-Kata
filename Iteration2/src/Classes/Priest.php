@@ -1,7 +1,6 @@
 <?php
 
-namespace Dnd;
-
+namespace Dnd\Classes;
 
 /**
  * Class Priest

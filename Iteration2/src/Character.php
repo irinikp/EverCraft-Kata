@@ -2,6 +2,9 @@
 
 namespace Dnd;
 
+use Dnd\Classes\AbstractClass;
+use Dnd\Classes\Priest;
+
 /**
  * Class Character
  * @package Dnd
@@ -88,7 +91,7 @@ class Character
         if (!AbstractClass::isClassType($class)) {
             throw new \Exception("Undefined class $class");
         }
-        $class       = '\Dnd\\' . $class;
+        $class       = '\Dnd\\Classes\\' . $class;
         $this->class = new $class();
         $this->refreshAc();
         $this->refreshHp();

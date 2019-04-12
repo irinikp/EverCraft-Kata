@@ -1,6 +1,8 @@
 <?php
 
-namespace Dnd;
+namespace Dnd\Classes;
+
+use Dnd\Character;
 
 /**
  * Class Paladin
