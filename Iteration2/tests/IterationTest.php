@@ -116,7 +116,9 @@ class IterationTest extends \PHPUnit\Framework\TestCase
 
     public function test_rogue_can_not_have_alignment_good()
     {
+        $this->character->setAlignment('good');
         $this->character->setClass('rogue');
+        $this->assertNotEquals('Good', $this->character->getAlignment());
         $this->expectException(InvalidAlignmentException::class);
         $this->character->setAlignment('good');
     }
@@ -264,6 +266,18 @@ class IterationTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(1, $this->character->getClass()->getAttackRoll(2));
         $this->assertEquals(6, $this->character->getClass()->getAttackRoll(7));
         $this->assertEquals(19, $this->character->getClass()->getAttackRoll(20));
+    }
+
+    public function test_paladin_can_only_have_good_alignment()
+    {
+        $this->character->setClass('paladin');
+        $this->assertEquals('Good', $this->character->getAlignment());
+
+        $this->expectException(InvalidAlignmentException::class);
+        $this->character->setAlignment('neutral');
+
+        $this->expectException(InvalidAlignmentException::class);
+        $this->character->setAlignment('evil');
     }
 
     private function createAttackRoll($dice, $target = null)

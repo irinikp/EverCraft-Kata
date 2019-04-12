@@ -32,12 +32,12 @@ class Abilities
         20 => 5
     ];
     const TYPE     = [
-        'Strength'     => true,
-        'Dexterity'    => true,
-        'Constitution' => true,
-        'Intelligence' => true,
-        'Wisdom'       => true,
-        'Charisma'     => true
+        'Strength',
+        'Dexterity',
+        'Constitution',
+        'Intelligence',
+        'Wisdom',
+        'Charisma'
     ];
 
     /**
@@ -95,7 +95,7 @@ class Abilities
      */
     public static function isAbilityType($ability): bool
     {
-        return array_key_exists($ability, self::TYPE);
+        return in_array($ability, self::TYPE);
     }
 
     /**

@@ -92,6 +92,7 @@ class Character
         $this->class = new $class();
         $this->refreshAc();
         $this->refreshHp();
+        $this->refreshAlignment();
     }
 
     /**
@@ -194,6 +195,7 @@ class Character
      */
     public function setAlignment($alignment): void
     {
+        $alignment = ucfirst($alignment);
         if ($this->getClass()->isAlignmentAllowed($alignment)) {
             $this->alignment = new Alignment($alignment);
         } else {
@@ -352,6 +354,16 @@ class Character
     public function getAttackModifier(): int
     {
         return $this->getAbilityModifier($this->getClass()->getAttackAbility());
+    }
+
+    /**
+     * @throws InvalidAlignmentException
+     */
+    protected function refreshAlignment(): void
+    {
+        if (!$this->getClass()->isAlignmentAllowed($this->getAlignment())) {
+            $this->setAlignment($this->getClass()->getAllowedAlignments()[0]);
+        }
     }
 
     /**

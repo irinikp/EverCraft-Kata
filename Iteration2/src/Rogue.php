@@ -33,7 +33,19 @@ class Rogue extends AbstractClass
      */
     public function isAlignmentAllowed(string $alignment): bool
     {
-        return ('Good' !== ucfirst($alignment));
+        $alignment = ucfirst($alignment);
+        return in_array($alignment, $this->getAllowedAlignments());
+    }
+
+    /**
+     * @return array<string>
+     */
+    public function getAllowedAlignments(): array
+    {
+        return [
+            'Neutral',
+            'Evil',
+        ];
     }
 
     /**

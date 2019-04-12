@@ -60,4 +60,14 @@ class Paladin extends AbstractClass
         }
         return $multiplier;
     }
+
+    /**
+     * @return array<string>
+     */
+    public function getAllowedAlignments(): array
+    {
+        return [
+            'Good',
+        ];
+    }
 }

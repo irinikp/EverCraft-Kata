@@ -9,10 +9,10 @@ namespace Dnd;
 abstract class AbstractClass
 {
     const TYPES = [
-        'Fighter' => true,
-        'Rogue'   => true,
-        'Monk'    => true,
-        'Paladin' => true,
+        'Fighter',
+        'Rogue',
+        'Monk',
+        'Paladin',
     ];
     /**
      * @var int
@@ -34,7 +34,7 @@ abstract class AbstractClass
      */
     public static function isClassType(string $class): bool
     {
-        return array_key_exists($class, self::TYPES);
+        return in_array($class, self::TYPES);
     }
 
     /**
@@ -90,7 +90,16 @@ abstract class AbstractClass
      */
     public function isAlignmentAllowed(string $alignment): bool
     {
-        return true;
+        $alignment = ucfirst($alignment);
+        return in_array($alignment, $this->getAllowedAlignments());
+    }
+
+    /**
+     * @return array<string>
+     */
+    public function getAllowedAlignments(): array
+    {
+        return Alignment::TYPE;
     }
 
     /**

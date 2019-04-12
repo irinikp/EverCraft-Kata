@@ -9,9 +9,9 @@ namespace Dnd;
 class Alignment
 {
     const TYPE = [
-        'Good'    => true,
-        'Neutral' => true,
-        'Evil'    => true
+        'Good',
+        'Neutral',
+        'Evil'
     ];
 
     /**
@@ -35,12 +35,20 @@ class Alignment
         $this->value = $alignment;
     }
 
+    /**
+     * @param string $alignment
+     *
+     * @return bool
+     */
     public static function isAlignmentType($alignment): bool
     {
-        return array_key_exists($alignment, self::TYPE);
+        return in_array($alignment, self::TYPE);
     }
 
-    public function __toString()
+    /**
+     * @return string
+     */
+    public function __toString(): string
     {
         return $this->value;
 
