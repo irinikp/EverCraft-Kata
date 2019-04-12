@@ -8,3 +8,5 @@ All code is written in PHP
 [Iteration 1 - Core](Iteration1/)
 
 [Iteration 2 - Classes](Iteration2/)
+
+[Iteration 3 - Races](Iteration3/)
