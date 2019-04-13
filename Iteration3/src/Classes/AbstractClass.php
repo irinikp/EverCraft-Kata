@@ -3,7 +3,6 @@
 namespace Dnd\Classes;
 
 use Dnd\Abilities;
-use Dnd\Alignment;
 use Dnd\Character;
 use Dnd\Properties;
 
@@ -80,25 +79,6 @@ abstract class AbstractClass extends Properties
     public function getAttackAbility(): string
     {
         return Abilities::STR;
-    }
-
-    /**
-     * @param string $alignment
-     *
-     * @return bool
-     */
-    public function isAlignmentAllowed(string $alignment): bool
-    {
-        $alignment = ucfirst($alignment);
-        return in_array($alignment, $this->getAllowedAlignments());
-    }
-
-    /**
-     * @return array<string>
-     */
-    public function getAllowedAlignments(): array
-    {
-        return Alignment::TYPE;
     }
 
     /**

@@ -72,6 +72,25 @@ abstract class Properties
     }
 
     /**
+     * @param string $alignment
+     *
+     * @return bool
+     */
+    public function isAlignmentAllowed(string $alignment): bool
+    {
+        $alignment = ucfirst($alignment);
+        return in_array($alignment, $this->getAllowedAlignments());
+    }
+
+    /**
+     * @return array<string>
+     */
+    public function getAllowedAlignments(): array
+    {
+        return Alignment::TYPE;
+    }
+
+    /**
      * @param Character|null $target
      *
      * @return int
@@ -82,7 +101,7 @@ abstract class Properties
     }
 
     /**
-     * @param int       $dice
+     * @param int $dice
      *
      * @return bool
      */

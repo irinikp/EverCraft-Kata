@@ -241,7 +241,7 @@ class Character
     public function setAlignment($alignment): void
     {
         $alignment = ucfirst($alignment);
-        if ($this->getClass()->isAlignmentAllowed($alignment)) {
+        if ($this->isAlignmentAllowed($alignment)) {
             $this->alignment = new Alignment($alignment);
         } else {
             throw new InvalidAlignmentException($this->getClassName() . " can't have $alignment alignment");
@@ -406,7 +406,18 @@ class Character
      */
     public function getAcModifier(): int
     {
-        return $this->getAbilityModifier(Abilities::DEX);
+        return $this->getAbilityModifier(Abilities::DEX) + $this->getClass()->getAcModifier($this) +
+            $this->getRace()->getAcModifier($this);
+    }
+
+    /**
+     * @param string $alignment
+     *
+     * @return bool
+     */
+    protected function isAlignmentAllowed($alignment): bool
+    {
+        return $this->getClass()->isAlignmentAllowed($alignment) && $this->getRace()->isAlignmentAllowed($alignment);
     }
 
     /**
@@ -424,7 +435,7 @@ class Character
      */
     protected function refreshAc(): void
     {
-        $modifier = $this->getAcModifier() + $this->getClass()->getAcModifier($this) + $this->getRace()->getAcModifier($this);
+        $modifier = $this->getAcModifier();
         $this->setAc($this->getClass()->getBasicAc() + $modifier);
     }
 
@@ -433,9 +444,17 @@ class Character
      */
     protected function refreshHp(): void
     {
-        $modifier = $this->getClass()->getHpModifier($this) + $this->getRace()->getHpModifier($this);
+        $modifier = $this->getHpModifier();
         $this->setMaxHp(max(1, ($this->getLevel()) * ($this->class->getHpPerLevel() + $modifier)));
         $this->setHp($this->getMaxHp());
+    }
+
+    /**
+     * @return int
+     */
+    protected function getHpModifier(): int
+    {
+        return $this->getClass()->getHpModifier($this) + $this->getRace()->getHpModifier($this);;
     }
 
     /**

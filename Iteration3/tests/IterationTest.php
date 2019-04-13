@@ -147,6 +147,8 @@ class IterationTest extends \PHPUnit\Framework\TestCase
         $this->assertTrue($this->character->getRace()->isCritical(20));
     }
 
+    // TODO isws yparxei la8os me to attack roll per level otan sundiastei me ta upoloipa. De xrisimopoiw auto pou setarw
+
     private function create_test_for_race_ability_modifier($race, $ability, $ability_change)
     {
         $human_ability_modifier = $this->character->getAbilityModifier($ability);
