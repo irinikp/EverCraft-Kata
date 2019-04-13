@@ -3,6 +3,7 @@
 namespace Tests;
 
 use EverCraft\Abilities;
+use EverCraft\Alignment;
 use EverCraft\Character;
 use EverCraft\Classes\SocialClass;
 use EverCraft\CombatAction;
@@ -165,7 +166,52 @@ class IterationTest extends \PHPUnit\Framework\TestCase
         $this->assertTrue($hits);
     }
 
-    // TODO isws yparxei la8os me to attack roll per level otan sundiastei me ta upoloipa. De xrisimopoiw auto pou setarw
+    public function test_3rd_level_paladin_dwarf_attacks_5th_level_evil_orc_monk()
+    {
+        // Set up Characters
+        $this->character->setRace(Race::DWARF);
+        $this->character->setClass(SocialClass::PALADIN);
+        $this->assertEquals(10, $this->character->getHp()); // Paladin 8 HP/level, dwarf +2 Hp/level
+//        $this->character->addXp(3000);
+//        $this->assertEquals(40, $this->character->getHp());
+
+        $target = new Character();
+        $target->setRace(Race::ORC);
+        $target->setClass(SocialClass::MONK);
+        $target->setAlignment(Alignment::EVIL);
+        $this->assertEquals(6, $target->getHp()); // Monk 6 HP/level
+
+        // Battle round 1
+        $hits = $this->createAttackRoll(7, $target);
+        $this->assertFalse($hits);
+        $hits = $this->createAttackRoll(8, $target); // Dwarf +2 to attack Orc, Paladin +2 to attack Evil, Orc +2 on AC
+        $this->assertTrue($hits);
+        $this->assertEquals(1, $target->getHp()); // 1 + Dwarf +2 damage VS Orc, Paladin +2 damage VS Evil
+
+
+        $hits = $this->createCounterAttackRoll(7, $target);
+        $this->assertFalse($hits);
+        $hits = $this->createCounterAttackRoll(8, $target); // +2 to attack modifier from STR because of ORC
+        $this->assertTrue($hits);
+        $this->assertEquals(5, $this->character->getHp()); // Monk 3 damage + 2 from Orc's STR modifier
+
+        $this->assertEquals(10, $this->character->getXp());
+        $this->assertEquals(10, $target->getXp());
+
+        // Level up
+        $this->character->addXp(990);
+        $this->assertEquals(2, $this->character->getLevel());
+        $this->assertEquals(15, $this->character->getHp());
+        $target->addXp(990);
+        $this->assertEquals(2, $target->getLevel());
+        $this->assertEquals(7, $target->getHp());
+
+        
+
+//        $target->addXp(5000);
+//        $this->assertEquals(36, $target->getHp());
+
+    }
 
     private function create_test_for_race_ability_modifier($race, $ability, $ability_change)
     {
@@ -182,6 +228,12 @@ class IterationTest extends \PHPUnit\Framework\TestCase
         }
 
         $action = new CombatAction($this->character, $target, $dice);
+        return $action->attackRoll();
+    }
+
+    private function createCounterAttackRoll($dice, $target)
+    {
+        $action = new CombatAction($target, $this->character, $dice);
         return $action->attackRoll();
     }
 }

@@ -42,7 +42,7 @@ class CombatAction
     {
         $hits = $this->hits($this->attacker->getAttackModifier());
         if ($hits) {
-            $this->target->takeDamage($this->calculate_damage($this->attacker->getAbilityModifier(Abilities::STR)));
+            $this->target->takeDamage($this->calculate_damage());
             $this->attacker->gainSuccessfulAttackXp();
         }
         return $hits;
@@ -63,14 +63,21 @@ class CombatAction
     }
 
     /**
-     * @param int $modifier
-     *
      * @return int
      */
-    protected function calculate_damage($modifier): int
+    protected function getDamage(): int
     {
-        $damage = $this->attacker->getClass()->getDamage($this->target)
-            + $this->attacker->getRace()->getDamage($this->target) + $modifier;
+        $ability_modifier = $this->attacker->getAbilityModifier(Abilities::STR);
+        return $this->attacker->getClass()->getDamage($this->target)
+        + $this->attacker->getRace()->getDamage($this->target) + $ability_modifier;
+    }
+
+    /**
+     * @return int
+     */
+    protected function calculate_damage(): int
+    {
+        $damage = $this->getDamage();
         if ($this->attacker->getRace()->isCritical($this->dice)) {
             $damage *= $this->attacker->getClass()->getCriticalDamageMultiplier($this->target);
         }

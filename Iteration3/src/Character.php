@@ -457,8 +457,9 @@ class Character
     protected function refreshHp(): void
     {
         $modifier = $this->getHpModifier();
+        $damage = $this->getMaxHp() - $this->getHp();
         $this->setMaxHp(max(1, ($this->getLevel()) * ($this->class->getHpPerLevel() + $modifier)));
-        $this->setHp($this->getMaxHp());
+        $this->setHp($this->getMaxHp() - $damage);
     }
 
     /**
