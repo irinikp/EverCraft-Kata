@@ -51,9 +51,9 @@ class Dwarf extends AbstractRace
      *
      * @return int
      */
-    public function getAttackRoll(Character $target = null): int
+    public function getAttackRoll($level, $attack_roll = 0, Character $target = null): int
     {
-        $attack_roll = parent::getAttackRoll($target);
+        $attack_roll = parent::getAttackRoll($level, $attack_roll, $target);
         if ($target && AbstractRace::ORC === $target->getRaceName()) {
             $attack_roll += 2;
         }

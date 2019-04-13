@@ -59,7 +59,8 @@ class CombatAction
         $target_ac = $this->attacker->getClass()->getTargetsAcModifier($this->target);
         return ($this->dice + $modifier + $this->attacker->getClass()
                     ->getAttackRoll($this->attacker->getLevel(), 0, $this->target)
-                + $this->attacker->getRace()->getAttackRoll($this->target)) >= $target_ac;
+                + $this->attacker->getRace()->getAttackRoll($this->attacker->getLevel(), 0, $this->target))
+            >= $target_ac;
     }
 
     /**

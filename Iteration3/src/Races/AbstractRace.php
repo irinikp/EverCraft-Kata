@@ -4,27 +4,24 @@ namespace Dnd\Races;
 
 use Dnd\Abilities;
 use Dnd\Character;
-use GlobalCharacteristics;
+use Dnd\Properties;
 
 /**
  * Class AbstractRace
  * @package Dnd\Races
  */
-abstract class AbstractRace
+abstract class AbstractRace extends Properties
 {
-    const HUMAN = 'Human';
-    const ORC   = 'Orc';
-    const DWARF = 'Dwarf';
-    const ELF   = 'Elf';
 
-    const TYPES = [
-        self::HUMAN,
-        self::ORC,
-        self::DWARF,
-        self::ELF
-    ];
-
-    use GlobalCharacteristics;
+    /**
+     * @param string $type
+     *
+     * @return bool
+     */
+    public static function belongs(string $type): bool
+    {
+        return in_array($type, self::RACE_TYPES);
+    }
 
     /**
      * @param Character $character
@@ -92,26 +89,6 @@ abstract class AbstractRace
     public function getHpModifier(Character $character): int
     {
         return $this->getConstitutionModifier($character);
-    }
-
-    /**
-     * @param Character|null $target
-     *
-     * @return int
-     */
-    public function getAttackRoll(Character $target = null): int
-    {
-        return 0;
-    }
-
-    /**
-     * @param Character $target
-     *
-     * @return int
-     */
-    public function getDamage(Character $target): int
-    {
-        return 0;
     }
 
     /**

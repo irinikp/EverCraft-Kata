@@ -5,33 +5,18 @@ namespace Dnd\Classes;
 use Dnd\Abilities;
 use Dnd\Alignment;
 use Dnd\Character;
-use GlobalCharacteristics;
+use Dnd\Properties;
 
 /**
  * Class iClass
  * @package Dnd
  */
-abstract class AbstractClass
+abstract class AbstractClass extends Properties
 {
-    const FIGHTER = 'Fighter';
-    const ROGUE   = 'Rogue';
-    const MONK    = 'Monk';
-    const PALADIN = 'Paladin';
-    const PRIEST  = 'Priest';
-
-    const TYPES = [
-        self::FIGHTER,
-        self::ROGUE,
-        self::MONK,
-        self::PALADIN,
-        self::PRIEST
-    ];
     /**
      * @var int
      */
     protected $attack_roll;
-
-    use GlobalCharacteristics;
 
     /**
      * AbstractClass constructor.
@@ -39,6 +24,16 @@ abstract class AbstractClass
     public function __construct()
     {
         $this->attack_roll = 0;
+    }
+
+    /**
+     * @param string $type
+     *
+     * @return bool
+     */
+    public static function belongs(string $type): bool
+    {
+        return in_array($type, self::CLASS_TYPES);
     }
 
     /**
@@ -132,13 +127,5 @@ abstract class AbstractClass
     public function getTargetsAcModifier(Character $target): int
     {
         return $target->getAc();
-    }
-
-    /**
-     * @return int
-     */
-    public function getHpModifier(): int
-    {
-        return 0;
     }
 }
