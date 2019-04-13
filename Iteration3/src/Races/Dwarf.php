@@ -1,13 +1,13 @@
 <?php
 
-namespace Dnd\Races;
+namespace EverCraft\Races;
 
-use Dnd\Abilities;
-use Dnd\Character;
+use EverCraft\Abilities;
+use EverCraft\Character;
 
 /**
  * Class Dwarf
- * @package Dnd\Races
+ * @package EverCraft\Races
  */
 class Dwarf extends Race
 {

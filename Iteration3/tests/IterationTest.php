@@ -2,11 +2,11 @@
 
 namespace Tests;
 
-use Dnd\Abilities;
-use Dnd\Character;
-use Dnd\Classes\AbstractClass;
-use Dnd\CombatAction;
-use Dnd\Races\Race;
+use EverCraft\Abilities;
+use EverCraft\Character;
+use EverCraft\Classes\SocialClass;
+use EverCraft\CombatAction;
+use EverCraft\Races\Race;
 
 require __DIR__ . '/../vendor/autoload.php';
 
@@ -61,7 +61,7 @@ class IterationTest extends \PHPUnit\Framework\TestCase
     public function test_orc_monk_has_plus_2_to_armor_class()
     {
         $this->character->setRace(Race::ORC);
-        $this->character->setClass(AbstractClass::MONK);
+        $this->character->setClass(SocialClass::MONK);
         $this->character->setAbility(Abilities::DEX, 15);
         $this->character->setAbility(Abilities::WIS, 16);
         $this->assertEquals(16, $this->character->getAc());

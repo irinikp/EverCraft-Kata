@@ -1,15 +1,15 @@
 <?php
 
-namespace Dnd\Classes;
+namespace EverCraft\Classes;
 
-use Dnd\Abilities;
-use Dnd\Character;
+use EverCraft\Abilities;
+use EverCraft\Character;
 
 /**
  * Class Monk
- * @package Dnd
+ * @package EverCraft
  */
-class Monk extends AbstractClass
+class Monk extends SocialClass
 {
 
     /**

@@ -1,10 +1,10 @@
 <?php
 
-namespace Dnd;
+namespace EverCraft;
 
 /**
  * Class Alignment
- * @package Dnd
+ * @package EverCraft
  */
 class Alignment
 {

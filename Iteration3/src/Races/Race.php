@@ -1,16 +1,16 @@
 <?php
 
-namespace Dnd\Races;
+namespace EverCraft\Races;
 
-use Dnd\Abilities;
-use Dnd\Character;
-use Dnd\Properties;
+use EverCraft\Abilities;
+use EverCraft\Character;
+use EverCraft\CoreBuild;
 
 /**
  * Class Race
- * @package Dnd\Races
+ * @package EverCraft\Races
  */
-abstract class Race extends Properties
+abstract class Race extends CoreBuild
 {
 
     /**

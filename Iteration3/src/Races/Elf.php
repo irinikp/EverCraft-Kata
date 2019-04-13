@@ -1,9 +1,9 @@
 <?php
 
-namespace Dnd\Races;
+namespace EverCraft\Races;
 
-use Dnd\Abilities;
-use Dnd\Character;
+use EverCraft\Abilities;
+use EverCraft\Character;
 
 class Elf extends Race
 {

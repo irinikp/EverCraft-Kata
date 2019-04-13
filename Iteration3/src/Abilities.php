@@ -1,11 +1,11 @@
 <?php
 
-namespace Dnd;
+namespace EverCraft;
 
 
 /**
  * Class Abilities
- * @package Dnd
+ * @package EverCraft
  */
 class Abilities
 {

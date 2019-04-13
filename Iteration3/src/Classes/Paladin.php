@@ -1,15 +1,15 @@
 <?php
 
-namespace Dnd\Classes;
+namespace EverCraft\Classes;
 
-use Dnd\Alignment;
-use Dnd\Character;
+use EverCraft\Alignment;
+use EverCraft\Character;
 
 /**
  * Class Paladin
- * @package Dnd
+ * @package EverCraft
  */
-class Paladin extends AbstractClass
+class Paladin extends SocialClass
 {
 
     /**

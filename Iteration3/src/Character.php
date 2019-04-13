@@ -1,15 +1,15 @@
 <?php
 
-namespace Dnd;
+namespace EverCraft;
 
-use Dnd\Classes\AbstractClass;
-use Dnd\Classes\Priest;
-use Dnd\Races\Human;
-use Dnd\Races\Race;
+use EverCraft\Classes\SocialClass;
+use EverCraft\Classes\Priest;
+use EverCraft\Races\Human;
+use EverCraft\Races\Race;
 
 /**
  * Class Character
- * @package Dnd
+ * @package EverCraft
  */
 class Character
 {
@@ -54,7 +54,7 @@ class Character
      */
     protected $level;
     /**
-     * @var AbstractClass
+     * @var SocialClass
      */
     protected $class;
 
@@ -99,7 +99,7 @@ class Character
         if (!Race::belongs($race)) {
             throw new \Exception("Undefined race $race");
         }
-        $race       = '\Dnd\\Races\\' . $race;
+        $race       = '\EverCraft\\Races\\' . $race;
         $this->race = new $race();
         $this->refreshAc();
         $this->refreshHp();
@@ -115,9 +115,9 @@ class Character
     }
 
     /**
-     * @return AbstractClass
+     * @return SocialClass
      */
-    public function getClass(): AbstractClass
+    public function getClass(): SocialClass
     {
         return $this->class;
     }
@@ -130,10 +130,10 @@ class Character
     public function setClass(string $class): void
     {
         $class = ucfirst($class);
-        if (!AbstractClass::belongs($class)) {
+        if (!SocialClass::belongs($class)) {
             throw new \Exception("Undefined class $class");
         }
-        $class       = '\Dnd\\Classes\\' . $class;
+        $class       = '\EverCraft\\Classes\\' . $class;
         $this->class = new $class();
         $this->refreshAc();
         $this->refreshHp();

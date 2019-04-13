@@ -1,10 +1,10 @@
 <?php
 
-namespace Dnd;
+namespace EverCraft;
 
 /**
  * Class CombatAction
- * @package Dnd
+ * @package EverCraft
  */
 class CombatAction
 {

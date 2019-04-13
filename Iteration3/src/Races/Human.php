@@ -1,6 +1,6 @@
 <?php
 
-namespace Dnd\Races;
+namespace EverCraft\Races;
 
 class Human extends Race
 {

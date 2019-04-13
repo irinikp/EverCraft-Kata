@@ -4,8 +4,8 @@ namespace Tests;
 
 require __DIR__ . '/../vendor/autoload.php';
 
-use Dnd\Abilities;
-use Dnd\Character;
+use EverCraft\Abilities;
+use EverCraft\Character;
 
 class LevelTest extends \PHPUnit\Framework\TestCase
 {

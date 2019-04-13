@@ -1,14 +1,14 @@
 <?php
 
-namespace Dnd\Classes;
+namespace EverCraft\Classes;
 
-use Dnd\Character;
+use EverCraft\Character;
 
 /**
  * Class Fighter
- * @package Dnd
+ * @package EverCraft
  */
-class Fighter extends AbstractClass
+class Fighter extends SocialClass
 {
     /**
      * @param int            $level

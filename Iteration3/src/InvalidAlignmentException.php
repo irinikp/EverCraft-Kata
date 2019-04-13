@@ -1,10 +1,10 @@
 <?php
 
-namespace Dnd;
+namespace EverCraft;
 
 /**
  * Class InvalidAlignmentException
- * @package Dnd
+ * @package EverCraft
  */
 class InvalidAlignmentException extends \Exception
 {

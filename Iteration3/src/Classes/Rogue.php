@@ -1,16 +1,16 @@
 <?php
 
-namespace Dnd\Classes;
+namespace EverCraft\Classes;
 
-use Dnd\Abilities;
-use Dnd\Alignment;
-use Dnd\Character;
+use EverCraft\Abilities;
+use EverCraft\Alignment;
+use EverCraft\Character;
 
 /**
  * Class Rogue
- * @package Dnd
+ * @package EverCraft
  */
-class Rogue extends AbstractClass
+class Rogue extends SocialClass
 {
     /**
      * @param Character $target

@@ -1,12 +1,12 @@
 <?php
 
-namespace Dnd\Classes;
+namespace EverCraft\Classes;
 
 /**
  * Class Priest
- * @package Dnd
+ * @package EverCraft
  */
-class Priest extends AbstractClass
+class Priest extends SocialClass
 {
 
 }

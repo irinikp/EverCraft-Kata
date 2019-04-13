@@ -2,11 +2,11 @@
 
 namespace Tests;
 
-use Dnd\Abilities;
-use Dnd\Alignment;
-use Dnd\Character;
-use Dnd\Classes\AbstractClass;
-use Dnd\InvalidAlignmentException;
+use EverCraft\Abilities;
+use EverCraft\Alignment;
+use EverCraft\Character;
+use EverCraft\Classes\SocialClass;
+use EverCraft\InvalidAlignmentException;
 
 require __DIR__ . '/../vendor/autoload.php';
 
@@ -23,7 +23,7 @@ class ClassesTest extends \PHPUnit\Framework\TestCase
 
     public function test_fighter_attack_roll_increases_by_1_in_every_level()
     {
-        $this->character->setClass(AbstractClass::FIGHTER);
+        $this->character->setClass(SocialClass::FIGHTER);
         // Level 2
         $this->character->addXp(1000);
         $this->assertEquals(1, $this->character->getClass()->getAttackRoll($this->character->getLevel()));
@@ -37,14 +37,14 @@ class ClassesTest extends \PHPUnit\Framework\TestCase
 
     public function test_fighter_hp_is_10_initially()
     {
-        $this->character->setClass(AbstractClass::FIGHTER);
+        $this->character->setClass(SocialClass::FIGHTER);
         $this->assertEquals(10, $this->character->getHp());
         $this->assertEquals(10, $this->character->getMaxHp());
     }
 
     public function test_fighter_for_each_level_hp_increase_by_10_plus_con_modifier_equals_4()
     {
-        $this->character->setClass(AbstractClass::FIGHTER);
+        $this->character->setClass(SocialClass::FIGHTER);
         $this->character->setAbility(Abilities::CON, 4);
         $this->character->addXp(1000);
         $this->assertEquals(14, $this->character->getMaxHp());
@@ -55,7 +55,7 @@ class ClassesTest extends \PHPUnit\Framework\TestCase
 
     public function test_fighter_for_each_level_hp_increase_by_10_plus_con_modifier_equals_20()
     {
-        $this->character->setClass(AbstractClass::FIGHTER);
+        $this->character->setClass(SocialClass::FIGHTER);
         $this->character->setAbility(Abilities::CON, 20);
         $this->character->addXp(1000);
         $this->assertEquals(30, $this->character->getMaxHp());
@@ -66,7 +66,7 @@ class ClassesTest extends \PHPUnit\Framework\TestCase
     public function test_rogue_can_not_have_alignment_good()
     {
         $this->character->setAlignment(Alignment::GOOD);
-        $this->character->setClass(AbstractClass::ROGUE);
+        $this->character->setClass(SocialClass::ROGUE);
         $this->assertNotEquals(Alignment::GOOD, $this->character->getAlignment());
         $this->expectException(InvalidAlignmentException::class);
         $this->character->setAlignment(Alignment::GOOD);
@@ -74,14 +74,14 @@ class ClassesTest extends \PHPUnit\Framework\TestCase
 
     public function test_monk_hp_is_6_initially()
     {
-        $this->character->setClass(AbstractClass::MONK);
+        $this->character->setClass(SocialClass::MONK);
         $this->assertEquals(6, $this->character->getHp());
         $this->assertEquals(6, $this->character->getMaxHp());
     }
 
     public function test_monk_for_each_level_hp_increase_by_6_plus_con_modifier_equals_4()
     {
-        $this->character->setClass(AbstractClass::MONK);
+        $this->character->setClass(SocialClass::MONK);
         $this->character->setAbility(Abilities::CON, 4);
         $this->character->addXp(1000);
         $this->assertEquals(6, $this->character->getMaxHp());
@@ -92,7 +92,7 @@ class ClassesTest extends \PHPUnit\Framework\TestCase
 
     public function test_monk_for_each_level_hp_increase_by_10_plus_con_modifier_equals_20()
     {
-        $this->character->setClass(AbstractClass::MONK);
+        $this->character->setClass(SocialClass::MONK);
         $this->character->setAbility(Abilities::CON, 20);
         $this->character->addXp(1000);
         $this->assertEquals(22, $this->character->getMaxHp());
@@ -103,7 +103,7 @@ class ClassesTest extends \PHPUnit\Framework\TestCase
 
     public function test_monk_adds_positive_wisdom_and_dexterity_modifier_to_armor_class()
     {
-        $this->character->setClass(AbstractClass::MONK);
+        $this->character->setClass(SocialClass::MONK);
         $this->character->setAbility(Abilities::DEX, 15);
         $this->character->setAbility(Abilities::WIS, 15);
         $this->assertEquals(14, $this->character->getAc());
@@ -111,7 +111,7 @@ class ClassesTest extends \PHPUnit\Framework\TestCase
 
     public function test_monk_does_not_add_negative_wisdom_modifier_to_armor_class()
     {
-        $this->character->setClass(AbstractClass::MONK);
+        $this->character->setClass(SocialClass::MONK);
         $this->character->setAbility(Abilities::DEX, 15);
         $this->character->setAbility(Abilities::WIS, 4);
         $this->assertEquals(12, $this->character->getAc());
@@ -119,7 +119,7 @@ class ClassesTest extends \PHPUnit\Framework\TestCase
 
     public function test_monks_attack_rolls_increases_every_2nd_and_3rd_level()
     {
-        $this->character->setClass(AbstractClass::MONK);
+        $this->character->setClass(SocialClass::MONK);
         $this->assertEquals(0, $this->character->getClass()->getAttackRoll(1));
         $this->assertEquals(1, $this->character->getClass()->getAttackRoll(2));
         $this->assertEquals(2, $this->character->getClass()->getAttackRoll(3));
@@ -144,7 +144,7 @@ class ClassesTest extends \PHPUnit\Framework\TestCase
 
     public function test_paladin_has_8_hit_points_per_level_instead_of_5()
     {
-        $this->character->setClass(AbstractClass::PALADIN);
+        $this->character->setClass(SocialClass::PALADIN);
         $this->assertEquals(8, $this->character->getMaxHp());
         $this->character->addXp(1000);
         $this->assertEquals(16, $this->character->getMaxHp());
@@ -156,7 +156,7 @@ class ClassesTest extends \PHPUnit\Framework\TestCase
 
     public function test_paladins_attack_rolls_increases_by_1_for_every_level()
     {
-        $this->character->setClass(AbstractClass::PALADIN);
+        $this->character->setClass(SocialClass::PALADIN);
         $this->assertEquals(0, $this->character->getClass()->getAttackRoll(1));
         $this->assertEquals(1, $this->character->getClass()->getAttackRoll(2));
         $this->assertEquals(6, $this->character->getClass()->getAttackRoll(7));
@@ -165,7 +165,7 @@ class ClassesTest extends \PHPUnit\Framework\TestCase
 
     public function test_paladin_can_only_have_good_alignment()
     {
-        $this->character->setClass(AbstractClass::PALADIN);
+        $this->character->setClass(SocialClass::PALADIN);
         $this->assertEquals(Alignment::GOOD, $this->character->getAlignment());
 
         $this->expectException(InvalidAlignmentException::class);

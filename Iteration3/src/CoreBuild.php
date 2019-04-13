@@ -1,12 +1,12 @@
 <?php
 
-namespace Dnd;
+namespace EverCraft;
 
 /**
- * Class Properties
- * @package Dnd
+ * Class CoreBuild
+ * @package EverCraft
  */
-abstract class Properties
+abstract class CoreBuild
 {
     const HUMAN = 'Human';
     const ORC   = 'Orc';

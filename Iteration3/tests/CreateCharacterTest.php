@@ -4,9 +4,9 @@ namespace Tests;
 
 require __DIR__ . '/../vendor/autoload.php';
 
-use Dnd\Alignment;
-use Dnd\Character;
-use Dnd\InvalidAlignmentException;
+use EverCraft\Alignment;
+use EverCraft\Character;
+use EverCraft\InvalidAlignmentException;
 
 class CreateCharacterTest extends \PHPUnit\Framework\TestCase
 {

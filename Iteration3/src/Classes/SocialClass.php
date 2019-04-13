@@ -1,16 +1,16 @@
 <?php
 
-namespace Dnd\Classes;
+namespace EverCraft\Classes;
 
-use Dnd\Abilities;
-use Dnd\Character;
-use Dnd\Properties;
+use EverCraft\Abilities;
+use EverCraft\Character;
+use EverCraft\CoreBuild;
 
 /**
  * Class iClass
- * @package Dnd
+ * @package EverCraft
  */
-abstract class AbstractClass extends Properties
+abstract class SocialClass extends CoreBuild
 {
     /**
      * @var int
@@ -18,7 +18,7 @@ abstract class AbstractClass extends Properties
     protected $attack_roll;
 
     /**
-     * AbstractClass constructor.
+     * SocialClass constructor.
      */
     public function __construct()
     {

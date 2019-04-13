@@ -11,7 +11,7 @@
       "GlobalCharacteristics": "src/Traits/"
     },
     "psr-4": {
-      "Dnd\\": "src/"
+      "EverCraft\\": "src/"
     }
   },
   "autoload-dev": {

@@ -4,11 +4,11 @@ namespace Tests;
 
 require __DIR__ . '/../vendor/autoload.php';
 
-use Dnd\Abilities;
-use Dnd\Alignment;
-use Dnd\Character;
-use Dnd\Classes\AbstractClass;
-use Dnd\CombatAction;
+use EverCraft\Abilities;
+use EverCraft\Alignment;
+use EverCraft\Character;
+use EverCraft\Classes\SocialClass;
+use EverCraft\CombatAction;
 
 class CombatActionTest extends \PHPUnit\Framework\TestCase
 {
@@ -184,7 +184,7 @@ class CombatActionTest extends \PHPUnit\Framework\TestCase
 
     public function test_rogues_critical_hit_is_dealt_and_the_damage_is_tripled()
     {
-        $this->character->setClass(AbstractClass::ROGUE);
+        $this->character->setClass(SocialClass::ROGUE);
         $target = new Character();
         $this->createAttackRoll(20, $target, 0);
 
@@ -194,7 +194,7 @@ class CombatActionTest extends \PHPUnit\Framework\TestCase
     public function test_rogues_strength_modifier_does_not_apply_to_attack()
     {
         $this->character->setAbility(Abilities::STR, 2);
-        $this->character->setClass(AbstractClass::ROGUE);
+        $this->character->setClass(SocialClass::ROGUE);
         $hits = $this->createAttackRoll(9);
         $this->assertFalse($hits);
         $hits = $this->createAttackRoll(10);
@@ -204,7 +204,7 @@ class CombatActionTest extends \PHPUnit\Framework\TestCase
     public function test_rogues_dexterity_modifier_applies_to_attack()
     {
         $this->character->setAbility(Abilities::DEX, 12);
-        $this->character->setClass(AbstractClass::ROGUE);
+        $this->character->setClass(SocialClass::ROGUE);
         $hits = $this->createAttackRoll(8);
         $this->assertFalse($hits);
         $hits = $this->createAttackRoll(9);
@@ -216,7 +216,7 @@ class CombatActionTest extends \PHPUnit\Framework\TestCase
         $target = new Character();
         $target->setAbility(Abilities::DEX, 15);
         $this->character->setAbility(Abilities::DEX, 2);
-        $this->character->setClass(AbstractClass::ROGUE);
+        $this->character->setClass(SocialClass::ROGUE);
         $hits = $this->createAttackRoll(13, $target);
         $this->assertFalse($hits);
         $hits = $this->createAttackRoll(14, $target);
@@ -228,7 +228,7 @@ class CombatActionTest extends \PHPUnit\Framework\TestCase
         $target = new Character();
         $target->setAbility(Abilities::DEX, 6);
         $this->character->setAbility(Abilities::DEX, 2);
-        $this->character->setClass(AbstractClass::ROGUE);
+        $this->character->setClass(SocialClass::ROGUE);
         $hits = $this->createAttackRoll(11, $target);
         $this->assertFalse($hits);
         $hits = $this->createAttackRoll(12, $target);
@@ -237,7 +237,7 @@ class CombatActionTest extends \PHPUnit\Framework\TestCase
 
     public function test_when_monk_attack_is_successful_other_character_takes_3_points_of_damage_when_hit()
     {
-        $this->character->setClass(AbstractClass::MONK);
+        $this->character->setClass(SocialClass::MONK);
         $target = new Character();
         $this->createAttackRoll(15, $target, 0);
 
@@ -247,7 +247,7 @@ class CombatActionTest extends \PHPUnit\Framework\TestCase
 
     public function test_paladin_plus_2_to_attack_when_attacking_evil_characters()
     {
-        $this->character->setClass(AbstractClass::PALADIN);
+        $this->character->setClass(SocialClass::PALADIN);
         $target = new Character();
         $hits   = $this->createAttackRoll(9, $target);
         $this->assertFalse($hits);
@@ -263,7 +263,7 @@ class CombatActionTest extends \PHPUnit\Framework\TestCase
 
     public function test_paladin_plus_2_to_damage_when_attacking_evil_characters()
     {
-        $this->character->setClass(AbstractClass::PALADIN);
+        $this->character->setClass(SocialClass::PALADIN);
         $target = new Character();
         $this->createAttackRoll(10, $target);
         $this->assertEquals(4, $target->getHp());
@@ -276,7 +276,7 @@ class CombatActionTest extends \PHPUnit\Framework\TestCase
 
     public function test_paladins_critical_hit_is_dealt_and_the_damage_is_tripled_when_target_is_evil()
     {
-        $this->character->setClass(AbstractClass::PALADIN);
+        $this->character->setClass(SocialClass::PALADIN);
         $target = new Character();
         $this->createAttackRoll(20, $target, 0);
 
