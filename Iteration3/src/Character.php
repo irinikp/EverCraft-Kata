@@ -411,6 +411,18 @@ class Character
     }
 
     /**
+     * @param Character $attacker
+     * @param Character $target
+     *
+     * @return int
+     */
+    public function getTargetsAcModifier(Character $attacker, Character $target): int
+    {
+        return $attacker->getClass()->getTargetsAcModifier($attacker, $target)
+            + $attacker->getRace()->getTargetsAcModifier($attacker, $target);
+    }
+
+    /**
      * @param string $alignment
      *
      * @return bool

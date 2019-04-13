@@ -53,11 +53,12 @@ class Rogue extends AbstractClass
     }
 
     /**
+     * @param Character $attacker
      * @param Character $target
      *
      * @return int
      */
-    public function getTargetsAcModifier(Character $target): int
+    public function getTargetsAcModifier(Character $attacker, Character $target): int
     {
         $target_ac       = $target->getAc();
         $target_modifier = $target->getAbilityModifier(Abilities::DEX);

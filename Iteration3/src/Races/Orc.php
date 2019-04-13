@@ -64,8 +64,23 @@ class Orc extends Race
      */
     public function getAcModifier(Character $character): int
     {
-        $modifier        = parent::getAcModifier($character);
+        $modifier = parent::getAcModifier($character);
         return $modifier + 2;
+    }
+
+    /**
+     * @param Character $attacker
+     * @param Character $target
+     *
+     * @return int
+     */
+    public function getTargetsAcModifier(Character $attacker, Character $target): int
+    {
+        $ac = parent::getTargetsAcModifier($attacker, $target);
+        if (Race::ELF === $target->getRaceName()) {
+            $ac += 2;
+        }
+        return $ac;
     }
 
 }

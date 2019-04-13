@@ -100,11 +100,12 @@ abstract class AbstractClass extends Properties
     }
 
     /**
+     * @param Character $attacker
      * @param Character $target
      *
      * @return int
      */
-    public function getTargetsAcModifier(Character $target): int
+    public function getTargetsAcModifier(Character $attacker, Character $target): int
     {
         return $target->getAc();
     }

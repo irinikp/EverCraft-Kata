@@ -55,7 +55,7 @@ class CombatAction
      */
     protected function hits($modifier): bool
     {
-        $target_ac = $this->attacker->getClass()->getTargetsAcModifier($this->target);
+        $target_ac = $this->attacker->getTargetsAcModifier($this->attacker, $this->target);
         return ($this->dice + $modifier + $this->attacker->getClass()
                     ->getAttackRoll($this->attacker->getLevel(), 0, $this->target)
                 + $this->attacker->getRace()->getAttackRoll($this->attacker->getLevel(), 0, $this->target))

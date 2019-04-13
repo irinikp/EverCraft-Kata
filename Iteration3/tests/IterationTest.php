@@ -147,6 +147,24 @@ class IterationTest extends \PHPUnit\Framework\TestCase
         $this->assertTrue($this->character->getRace()->isCritical(20));
     }
 
+    public function test_elf_plus_two_to_ac_when_being_attacked_by_orcs()
+    {
+        $target = new Character();
+        $this->character->setRace(Race::ORC);
+        $hits = $this->createAttackRoll(7, $target);
+        $this->assertFalse($hits);
+        $hits = $this->createAttackRoll(8, $target);
+        $this->assertTrue($hits);
+
+        $target->setRace(Race::ELF);
+        $hits = $this->createAttackRoll(9, $target);
+        $this->assertFalse($hits);
+        $hits = $this->createAttackRoll(10, $target);
+        $this->assertFalse($hits);
+        $hits = $this->createAttackRoll(11, $target);
+        $this->assertTrue($hits);
+    }
+
     // TODO isws yparxei la8os me to attack roll per level otan sundiastei me ta upoloipa. De xrisimopoiw auto pou setarw
 
     private function create_test_for_race_ability_modifier($race, $ability, $ability_change)

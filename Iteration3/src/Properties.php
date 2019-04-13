@@ -110,4 +110,14 @@ abstract class Properties
         return ($dice === self::CRITICAL);
     }
 
+    /**
+     * @param Character $attacker
+     * @param Character $target
+     *
+     * @return int
+     */
+    public function getTargetsAcModifier(Character $attacker, Character $target): int
+    {
+        return 0;
+    }
 }
