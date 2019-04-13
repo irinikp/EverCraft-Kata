@@ -129,7 +129,17 @@ class IterationTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(2, $target->getHp());
     }
 
-    protected function create_test_for_race_ability_modifier($race, $ability, $ability_change)
+    public function test_elf_has_plus_1_to_dexterity_modifier()
+    {
+        $this->create_test_for_race_ability_modifier(AbstractRace::ELF, Abilities::DEX, 1);
+    }
+
+    public function test_elf_has_minus_1_to_constitution_modifier()
+    {
+        $this->create_test_for_race_ability_modifier(AbstractRace::ELF, Abilities::CON, -1);
+    }
+
+    private function create_test_for_race_ability_modifier($race, $ability, $ability_change)
     {
         $human_ability_modifier = $this->character->getAbilityModifier($ability);
         $this->character->setRace($race);
