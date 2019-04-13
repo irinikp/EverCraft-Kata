@@ -58,7 +58,8 @@ class CombatAction
     {
         $target_ac = $this->attacker->getClass()->getTargetsAcModifier($this->target);
         return ($this->dice + $modifier + $this->attacker->getClass()
-                    ->getAttackRoll($this->attacker->getLevel(), 0, $this->target)) >= $target_ac;
+                    ->getAttackRoll($this->attacker->getLevel(), 0, $this->target)
+                + $this->attacker->getRace()->getAttackRoll($this->target)) >= $target_ac;
     }
 
     /**
@@ -68,7 +69,8 @@ class CombatAction
      */
     protected function calculate_damage($modifier): int
     {
-        $damage = $this->attacker->getClass()->getDamage($this->target) + $modifier;
+        $damage = $this->attacker->getClass()->getDamage($this->target)
+            + $this->attacker->getRace()->getDamage($this->target) + $modifier;
         if ($this->dice === self::CRITICAL) {
             $damage *= $this->attacker->getClass()->getCriticalDamageMultiplier($this->target);
         }

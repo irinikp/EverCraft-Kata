@@ -5,6 +5,7 @@ namespace Tests;
 use Dnd\Abilities;
 use Dnd\Character;
 use Dnd\Classes\AbstractClass;
+use Dnd\CombatAction;
 use Dnd\Races\AbstractRace;
 
 require __DIR__ . '/../vendor/autoload.php';
@@ -99,6 +100,34 @@ class IterationTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(9, $this->character->getMaxHp());
     }
 
+    public function test_dwarf_plus_2_to_attack_when_attacking_orcs()
+    {
+        $this->character->setRace(AbstractRace::DWARF);
+        $target = new Character();
+        $hits   = $this->createAttackRoll(9, $target);
+        $this->assertFalse($hits);
+        $hits = $this->createAttackRoll(10, $target);
+        $this->assertTrue($hits);
+
+        $target->setRace(AbstractRace::ORC);
+        $hits = $this->createAttackRoll(8, $target);
+        $this->assertFalse($hits);
+        $hits = $this->createAttackRoll(10, $target);
+        $this->assertTrue($hits);
+    }
+
+    public function test_dwarf_plus_2_to_damage_when_attacking_orcs()
+    {
+        $this->character->setRace(AbstractRace::DWARF);
+        $target = new Character();
+        $this->createAttackRoll(10, $target);
+        $this->assertEquals(4, $target->getHp());
+
+        $target = new Character();
+        $target->setRace(AbstractRace::ORC);
+        $this->createAttackRoll(10, $target);
+        $this->assertEquals(2, $target->getHp());
+    }
 
     protected function create_test_for_race_ability_modifier($race, $ability, $ability_change)
     {
@@ -106,5 +135,15 @@ class IterationTest extends \PHPUnit\Framework\TestCase
         $this->character->setRace($race);
         $race_ability_modifier = $this->character->getAbilityModifier($ability);
         $this->assertEquals(($human_ability_modifier + $ability_change), $race_ability_modifier);
+    }
+
+    private function createAttackRoll($dice, $target = null)
+    {
+        if (null === $target) {
+            $target = new Character();
+        }
+
+        $action = new CombatAction($this->character, $target, $dice);
+        return $action->attackRoll();
     }
 }

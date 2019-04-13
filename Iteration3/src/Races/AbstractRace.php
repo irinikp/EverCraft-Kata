@@ -93,6 +93,26 @@ abstract class AbstractRace
     }
 
     /**
+     * @param Character|null $target
+     *
+     * @return int
+     */
+    public function getAttackRoll(Character $target = null): int
+    {
+        return 0;
+    }
+
+    /**
+     * @param Character $target
+     *
+     * @return int
+     */
+    public function getDamage(Character $target): int
+    {
+        return 0;
+    }
+
+    /**
      * @param Character $character
      * @param string    $ability
      *

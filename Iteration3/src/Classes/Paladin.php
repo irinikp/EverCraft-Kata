@@ -27,8 +27,8 @@ class Paladin extends AbstractClass
      */
     public function getDamage(Character $target): int
     {
-        $damage = 1;
-        if (Alignment::EVIL === $target->getAlignment()) {
+        $damage = parent::getDamage($target);
+        if ($target && Alignment::EVIL === $target->getAlignment()) {
             $damage += 2;
         }
         return $damage;

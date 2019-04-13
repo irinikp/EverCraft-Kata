@@ -46,4 +46,32 @@ class Dwarf extends AbstractRace
         return $con_modifier;
     }
 
+    /**
+     * @param Character|null $target
+     *
+     * @return int
+     */
+    public function getAttackRoll(Character $target = null): int
+    {
+        $attack_roll = parent::getAttackRoll($target);
+        if ($target && AbstractRace::ORC === $target->getRaceName()) {
+            $attack_roll += 2;
+        }
+        return $attack_roll;
+    }
+
+
+    /**
+     * @param Character $target
+     *
+     * @return int
+     */
+    public function getDamage(Character $target): int
+    {
+        $damage = parent::getDamage($target);
+        if ($target && AbstractRace::ORC === $target->getRaceName()) {
+            $damage += 2;
+        }
+        return $damage;
+    }
 }
