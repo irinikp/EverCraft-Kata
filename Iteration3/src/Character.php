@@ -4,8 +4,8 @@ namespace Dnd;
 
 use Dnd\Classes\AbstractClass;
 use Dnd\Classes\Priest;
-use Dnd\Races\AbstractRace;
 use Dnd\Races\Human;
+use Dnd\Races\Race;
 
 /**
  * Class Character
@@ -59,7 +59,7 @@ class Character
     protected $class;
 
     /**
-     * @var AbstractRace
+     * @var Race
      */
     protected $race;
 
@@ -81,9 +81,9 @@ class Character
     }
 
     /**
-     * @return AbstractRace
+     * @return Race
      */
-    public function getRace(): AbstractRace
+    public function getRace(): Race
     {
         return $this->race;
     }
@@ -96,7 +96,7 @@ class Character
     public function setRace(string $race): void
     {
         $race = ucfirst($race);
-        if (!AbstractRace::belongs($race)) {
+        if (!Race::belongs($race)) {
             throw new \Exception("Undefined race $race");
         }
         $race       = '\Dnd\\Races\\' . $race;

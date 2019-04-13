@@ -9,7 +9,7 @@ use Dnd\Character;
  * Class Dwarf
  * @package Dnd\Races
  */
-class Dwarf extends AbstractRace
+class Dwarf extends Race
 {
 
     /**
@@ -54,7 +54,7 @@ class Dwarf extends AbstractRace
     public function getAttackRoll($level, $attack_roll = 0, Character $target = null): int
     {
         $attack_roll = parent::getAttackRoll($level, $attack_roll, $target);
-        if ($target && AbstractRace::ORC === $target->getRaceName()) {
+        if ($target && Race::ORC === $target->getRaceName()) {
             $attack_roll += 2;
         }
         return $attack_roll;
@@ -69,7 +69,7 @@ class Dwarf extends AbstractRace
     public function getDamage(Character $target): int
     {
         $damage = parent::getDamage($target);
-        if ($target && AbstractRace::ORC === $target->getRaceName()) {
+        if ($target && Race::ORC === $target->getRaceName()) {
             $damage += 2;
         }
         return $damage;

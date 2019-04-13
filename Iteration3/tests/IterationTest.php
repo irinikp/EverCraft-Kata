@@ -6,7 +6,7 @@ use Dnd\Abilities;
 use Dnd\Character;
 use Dnd\Classes\AbstractClass;
 use Dnd\CombatAction;
-use Dnd\Races\AbstractRace;
+use Dnd\Races\Race;
 
 require __DIR__ . '/../vendor/autoload.php';
 
@@ -23,44 +23,44 @@ class IterationTest extends \PHPUnit\Framework\TestCase
 
     public function test_default_race_is_human()
     {
-        $this->assertEquals(AbstractRace::HUMAN, $this->character->getRaceName());
+        $this->assertEquals(Race::HUMAN, $this->character->getRaceName());
     }
 
     public function test_orc_is_a_valid_race()
     {
-        $this->character->setRace(AbstractRace::ORC);
-        $this->assertEquals(AbstractRace::ORC, $this->character->getRaceName());
+        $this->character->setRace(Race::ORC);
+        $this->assertEquals(Race::ORC, $this->character->getRaceName());
     }
 
     public function test_orc_has_plus_2_to_strength_modifier()
     {
-        $this->create_test_for_race_ability_modifier(AbstractRace::ORC, Abilities::STR, +2);
+        $this->create_test_for_race_ability_modifier(Race::ORC, Abilities::STR, +2);
     }
 
     public function test_orc_has_minus_1_to_intelligence_modifier()
     {
-        $this->create_test_for_race_ability_modifier(AbstractRace::ORC, Abilities::INT, -1);
+        $this->create_test_for_race_ability_modifier(Race::ORC, Abilities::INT, -1);
     }
 
     public function test_orc_has_minus_1_to_wisdom_modifier()
     {
-        $this->create_test_for_race_ability_modifier(AbstractRace::ORC, Abilities::WIS, -1);
+        $this->create_test_for_race_ability_modifier(Race::ORC, Abilities::WIS, -1);
     }
 
     public function test_orc_has_minus_1_to_charisma_modifier()
     {
-        $this->create_test_for_race_ability_modifier(AbstractRace::ORC, Abilities::CHA, -1);
+        $this->create_test_for_race_ability_modifier(Race::ORC, Abilities::CHA, -1);
     }
 
     public function test_orc_has_plus_2_to_armor_class()
     {
-        $this->character->setRace(AbstractRace::ORC);
+        $this->character->setRace(Race::ORC);
         $this->assertEquals(12, $this->character->getAc());
     }
 
     public function test_orc_monk_has_plus_2_to_armor_class()
     {
-        $this->character->setRace(AbstractRace::ORC);
+        $this->character->setRace(Race::ORC);
         $this->character->setClass(AbstractClass::MONK);
         $this->character->setAbility(Abilities::DEX, 15);
         $this->character->setAbility(Abilities::WIS, 16);
@@ -69,17 +69,17 @@ class IterationTest extends \PHPUnit\Framework\TestCase
 
     public function test_dwarf_has_plus_1_to_constitution_modifier()
     {
-        $this->create_test_for_race_ability_modifier(AbstractRace::DWARF, Abilities::CON, 1);
+        $this->create_test_for_race_ability_modifier(Race::DWARF, Abilities::CON, 1);
     }
 
     public function test_dwarf_has_minus_1_to_charisma_modifier()
     {
-        $this->create_test_for_race_ability_modifier(AbstractRace::DWARF, Abilities::CHA, -1);
+        $this->create_test_for_race_ability_modifier(Race::DWARF, Abilities::CHA, -1);
     }
 
     public function test_dwarf_doubles_con_modifier_when_adding_to_hit_points_per_level_if_positive()
     {
-        $this->character->setRace(AbstractRace::DWARF);
+        $this->character->setRace(Race::DWARF);
         $this->assertEquals(7, $this->character->getMaxHp());
         $this->character->setAbility(Abilities::CON, 17); // modifier 4
         $this->assertEquals(13, $this->character->getMaxHp());
@@ -91,7 +91,7 @@ class IterationTest extends \PHPUnit\Framework\TestCase
 
     public function test_dwarf_not_doubles_con_modifier_when_adding_to_hit_points_per_level_if_negative()
     {
-        $this->character->setRace(AbstractRace::DWARF);
+        $this->character->setRace(Race::DWARF);
         $this->character->setAbility(Abilities::CON, 4); // modifier -2
         $this->assertEquals(3, $this->character->getMaxHp());
         $this->character->addXp(1000);
@@ -102,14 +102,14 @@ class IterationTest extends \PHPUnit\Framework\TestCase
 
     public function test_dwarf_plus_2_to_attack_when_attacking_orcs()
     {
-        $this->character->setRace(AbstractRace::DWARF);
+        $this->character->setRace(Race::DWARF);
         $target = new Character();
         $hits   = $this->createAttackRoll(9, $target);
         $this->assertFalse($hits);
         $hits = $this->createAttackRoll(10, $target);
         $this->assertTrue($hits);
 
-        $target->setRace(AbstractRace::ORC);
+        $target->setRace(Race::ORC);
         $hits = $this->createAttackRoll(8, $target);
         $this->assertFalse($hits);
         $hits = $this->createAttackRoll(10, $target);
@@ -118,25 +118,33 @@ class IterationTest extends \PHPUnit\Framework\TestCase
 
     public function test_dwarf_plus_2_to_damage_when_attacking_orcs()
     {
-        $this->character->setRace(AbstractRace::DWARF);
+        $this->character->setRace(Race::DWARF);
         $target = new Character();
         $this->createAttackRoll(10, $target);
         $this->assertEquals(4, $target->getHp());
 
         $target = new Character();
-        $target->setRace(AbstractRace::ORC);
+        $target->setRace(Race::ORC);
         $this->createAttackRoll(10, $target);
         $this->assertEquals(2, $target->getHp());
     }
 
     public function test_elf_has_plus_1_to_dexterity_modifier()
     {
-        $this->create_test_for_race_ability_modifier(AbstractRace::ELF, Abilities::DEX, 1);
+        $this->create_test_for_race_ability_modifier(Race::ELF, Abilities::DEX, 1);
     }
 
     public function test_elf_has_minus_1_to_constitution_modifier()
     {
-        $this->create_test_for_race_ability_modifier(AbstractRace::ELF, Abilities::CON, -1);
+        $this->create_test_for_race_ability_modifier(Race::ELF, Abilities::CON, -1);
+    }
+
+    public function test_elf_does_critical_hit_on_19_and_20()
+    {
+        $this->character->setRace(Race::ELF);
+        $this->assertFalse($this->character->getRace()->isCritical(18));
+        $this->assertTrue($this->character->getRace()->isCritical(19));
+        $this->assertTrue($this->character->getRace()->isCritical(20));
     }
 
     private function create_test_for_race_ability_modifier($race, $ability, $ability_change)

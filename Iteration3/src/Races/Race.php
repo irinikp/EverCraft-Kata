@@ -7,10 +7,10 @@ use Dnd\Character;
 use Dnd\Properties;
 
 /**
- * Class AbstractRace
+ * Class Race
  * @package Dnd\Races
  */
-abstract class AbstractRace extends Properties
+abstract class Race extends Properties
 {
 
     /**

@@ -5,7 +5,7 @@ namespace Dnd\Races;
 use Dnd\Abilities;
 use Dnd\Character;
 
-class Elf extends AbstractRace
+class Elf extends Race
 {
 
     /**
@@ -28,6 +28,16 @@ class Elf extends AbstractRace
     {
         $modifier = parent::getAbilityModifier($character, Abilities::CON);
         return $modifier - 1;
+    }
+
+    /**
+     * @param int $dice
+     *
+     * @return bool
+     */
+    public function isCritical($dice): bool
+    {
+        return ($dice >= (self::CRITICAL - 1));
     }
 
 }

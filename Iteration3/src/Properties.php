@@ -2,6 +2,10 @@
 
 namespace Dnd;
 
+/**
+ * Class Properties
+ * @package Dnd
+ */
 abstract class Properties
 {
     const HUMAN = 'Human';
@@ -29,6 +33,8 @@ abstract class Properties
         self::DWARF,
         self::ELF
     ];
+
+    const CRITICAL = 20;
 
     /**
      * @param string $type
@@ -73,6 +79,16 @@ abstract class Properties
     public function getAttackRoll($level, $attack_roll = 0, Character $target = null): int
     {
         return 0;
+    }
+
+    /**
+     * @param int       $dice
+     *
+     * @return bool
+     */
+    public function isCritical($dice): bool
+    {
+        return ($dice === self::CRITICAL);
     }
 
 }

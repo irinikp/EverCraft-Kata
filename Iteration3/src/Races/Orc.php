@@ -9,7 +9,7 @@ use Dnd\Character;
  * Class Orc
  * @package Dnd\Races
  */
-class Orc extends AbstractRace
+class Orc extends Race
 {
 
     /**

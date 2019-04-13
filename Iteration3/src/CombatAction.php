@@ -8,7 +8,6 @@ namespace Dnd;
  */
 class CombatAction
 {
-    const CRITICAL = 20;
     /**
      * @var Character
      */
@@ -72,7 +71,7 @@ class CombatAction
     {
         $damage = $this->attacker->getClass()->getDamage($this->target)
             + $this->attacker->getRace()->getDamage($this->target) + $modifier;
-        if ($this->dice === self::CRITICAL) {
+        if ($this->attacker->getRace()->isCritical($this->dice)) {
             $damage *= $this->attacker->getClass()->getCriticalDamageMultiplier($this->target);
         }
         return max(1, $damage);

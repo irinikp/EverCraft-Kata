@@ -2,7 +2,7 @@
 
 namespace Dnd\Races;
 
-class Human extends AbstractRace
+class Human extends Race
 {
 
 }
