@@ -5,6 +5,10 @@ namespace Dnd\Races;
 use Dnd\Abilities;
 use Dnd\Character;
 
+/**
+ * Class Dwarf
+ * @package Dnd\Races
+ */
 class Dwarf extends AbstractRace
 {
 
@@ -28,6 +32,18 @@ class Dwarf extends AbstractRace
     {
         $modifier = parent::getAbilityModifier($character, Abilities::CHA);
         return $modifier - 1;
+    }
+
+    /**
+     * @return int
+     */
+    public function getHpModifier(Character $character): int
+    {
+        $con_modifier = parent::getHpModifier($character);
+        if ($con_modifier > 0) {
+            $con_modifier *= 2;
+        }
+        return $con_modifier;
     }
 
 }

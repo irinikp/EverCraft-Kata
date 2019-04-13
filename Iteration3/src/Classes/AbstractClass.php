@@ -133,4 +133,12 @@ abstract class AbstractClass
     {
         return $target->getAc();
     }
+
+    /**
+     * @return int
+     */
+    public function getHpModifier(): int
+    {
+        return 0;
+    }
 }

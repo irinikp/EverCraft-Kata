@@ -85,6 +85,14 @@ abstract class AbstractRace
     }
 
     /**
+     * @return int
+     */
+    public function getHpModifier(Character $character): int
+    {
+        return $this->getConstitutionModifier($character);
+    }
+
+    /**
      * @param Character $character
      * @param string    $ability
      *

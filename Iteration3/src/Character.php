@@ -102,6 +102,7 @@ class Character
         $race       = '\Dnd\\Races\\' . $race;
         $this->race = new $race();
         $this->refreshAc();
+        $this->refreshHp();
     }
 
     /**
@@ -432,7 +433,7 @@ class Character
      */
     protected function refreshHp(): void
     {
-        $modifier = $this->getAbilityModifier(Abilities::CON);
+        $modifier = $this->getClass()->getHpModifier() + $this->getRace()->getHpModifier($this);
         $this->setMaxHp(max(1, ($this->getLevel()) * ($this->class->getHpPerLevel() + $modifier)));
         $this->setHp($this->getMaxHp());
     }
@@ -443,5 +444,13 @@ class Character
     protected function refreshLevel(): void
     {
         $this->setLevel(intval($this->getXp() / 1000) + 1);
+    }
+
+    /**
+     * @return int
+     */
+    protected function getHpModifier(): int
+    {
+        return $this->getAbilityModifier(Abilities::CON);
     }
 }

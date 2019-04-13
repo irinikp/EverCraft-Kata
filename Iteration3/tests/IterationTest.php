@@ -76,6 +76,30 @@ class IterationTest extends \PHPUnit\Framework\TestCase
         $this->create_test_for_race_ability_modifier(AbstractRace::DWARF, Abilities::CHA, -1);
     }
 
+    public function test_dwarf_doubles_con_modifier_when_adding_to_hit_points_per_level_if_positive()
+    {
+        $this->character->setRace(AbstractRace::DWARF);
+        $this->assertEquals(7, $this->character->getMaxHp());
+        $this->character->setAbility(Abilities::CON, 17); // modifier 4
+        $this->assertEquals(13, $this->character->getMaxHp());
+        $this->character->addXp(1000);
+        $this->assertEquals(26, $this->character->getMaxHp());
+        $this->character->addXp(1000);
+        $this->assertEquals(39, $this->character->getMaxHp());
+    }
+
+    public function test_dwarf_not_doubles_con_modifier_when_adding_to_hit_points_per_level_if_negative()
+    {
+        $this->character->setRace(AbstractRace::DWARF);
+        $this->character->setAbility(Abilities::CON, 4); // modifier -2
+        $this->assertEquals(3, $this->character->getMaxHp());
+        $this->character->addXp(1000);
+        $this->assertEquals(6, $this->character->getMaxHp());
+        $this->character->addXp(1000);
+        $this->assertEquals(9, $this->character->getMaxHp());
+    }
+
+
     protected function create_test_for_race_ability_modifier($race, $ability, $ability_change)
     {
         $human_ability_modifier = $this->character->getAbilityModifier($ability);
