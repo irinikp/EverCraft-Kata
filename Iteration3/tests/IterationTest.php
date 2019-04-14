@@ -105,16 +105,10 @@ class IterationTest extends \PHPUnit\Framework\TestCase
     {
         $this->character->setRace(Race::DWARF);
         $target = new Character();
-        $hits   = $this->createAttackRoll(9, $target);
-        $this->assertFalse($hits);
-        $hits = $this->createAttackRoll(10, $target);
-        $this->assertTrue($hits);
+        $this->assert_attacker_hits_with_roll(10, $target);
 
         $target->setRace(Race::ORC);
-        $hits = $this->createAttackRoll(8, $target);
-        $this->assertFalse($hits);
-        $hits = $this->createAttackRoll(10, $target);
-        $this->assertTrue($hits);
+        $this->assert_attacker_hits_with_roll(10, $target);
     }
 
     public function test_dwarf_plus_2_to_damage_when_attacking_orcs()
@@ -152,18 +146,10 @@ class IterationTest extends \PHPUnit\Framework\TestCase
     {
         $target = new Character();
         $this->character->setRace(Race::ORC);
-        $hits = $this->createAttackRoll(7, $target);
-        $this->assertFalse($hits);
-        $hits = $this->createAttackRoll(8, $target);
-        $this->assertTrue($hits);
+        $this->assert_attacker_hits_with_roll(8, $target);
 
         $target->setRace(Race::ELF);
-        $hits = $this->createAttackRoll(9, $target);
-        $this->assertFalse($hits);
-        $hits = $this->createAttackRoll(10, $target);
-        $this->assertFalse($hits);
-        $hits = $this->createAttackRoll(11, $target);
-        $this->assertTrue($hits);
+        $this->assert_attacker_hits_with_roll(11, $target);
     }
 
     public function test_3rd_level_paladin_dwarf_attacks_5th_level_evil_orc_monk()
@@ -172,28 +158,27 @@ class IterationTest extends \PHPUnit\Framework\TestCase
         $this->character->setRace(Race::DWARF);
         $this->character->setClass(SocialClass::PALADIN);
         $this->assertEquals(10, $this->character->getHp()); // Paladin 8 HP/level, dwarf +2 Hp/level
-//        $this->character->addXp(3000);
-//        $this->assertEquals(40, $this->character->getHp());
 
         $target = new Character();
         $target->setRace(Race::ORC);
         $target->setClass(SocialClass::MONK);
         $target->setAlignment(Alignment::EVIL);
-        $this->assertEquals(6, $target->getHp()); // Monk 6 HP/level
+
+        // Monk 6 HP/level
+        $this->assert_has_remaining_hp(6, $target);
+
 
         // Battle round 1
-        $hits = $this->createAttackRoll(7, $target);
-        $this->assertFalse($hits);
-        $hits = $this->createAttackRoll(8, $target); // Dwarf +2 to attack Orc, Paladin +2 to attack Evil, Orc +2 on AC
-        $this->assertTrue($hits);
-        $this->assertEquals(1, $target->getHp()); // 1 + Dwarf +2 damage VS Orc, Paladin +2 damage VS Evil
+        // Dwarf +2 to attack Orc, Paladin +2 to attack Evil, Orc +2 on AC
+        $this->assert_attacker_hits_with_roll(8, $target);
+        // 1 + Dwarf +2 damage VS Orc, Paladin +2 damage VS Evil
+        $this->assert_has_remaining_hp(1, $target);
 
 
-        $hits = $this->createCounterAttackRoll(7, $target);
-        $this->assertFalse($hits);
-        $hits = $this->createCounterAttackRoll(8, $target); // +2 to attack modifier from STR because of ORC
-        $this->assertTrue($hits);
-        $this->assertEquals(5, $this->character->getHp()); // Monk 3 damage + 2 from Orc's STR modifier
+        // +2 to attack modifier from STR because of ORC
+        $this->assert_defender_hits_with_roll(8, $target);
+        // Monk 3 damage + 2 from Orc's STR modifier
+        $this->assert_has_remaining_hp(5, $this->character);
 
         $this->assertEquals(10, $this->character->getXp());
         $this->assertEquals(10, $target->getXp());
@@ -201,19 +186,83 @@ class IterationTest extends \PHPUnit\Framework\TestCase
         // Level up
         $this->character->addXp(990);
         $this->assertEquals(2, $this->character->getLevel());
-        $this->assertEquals(15, $this->character->getHp());
         $target->addXp(990);
         $this->assertEquals(2, $target->getLevel());
-        $this->assertEquals(7, $target->getHp());
 
-        
+        $this->assert_has_remaining_hp(15, $this->character);
+        $this->assert_has_remaining_hp(7, $target);
 
-//        $target->addXp(5000);
-//        $this->assertEquals(36, $target->getHp());
+        // Dwarf +2 to attack Orc, Paladin +2 to attack Evil, +1 attack logo paladin level, Orc +2 on AC
+        $this->assert_attacker_hits_with_roll(7, $target);
+        // +2 to attack modifier from STR because of ORC + 1 apo monk level up
+        $this->assert_defender_hits_with_roll(7, $target);
+        // 1 + Dwarf +2 damage VS Orc, Paladin +2 damage VS Evil
+        $this->assert_has_remaining_hp(2, $target);
+        // Monk 3 damage + 2 from Orc's STR modifier
+        $this->assert_has_remaining_hp(10, $this->character);
 
+        $this->assertEquals(1010, $this->character->getXp());
+        $this->assertEquals(1010, $target->getXp());
+
+        // Level up
+        $this->character->addXp(990);
+        $this->assertEquals(3, $this->character->getLevel());
+        $target->addXp(990);
+        $this->assertEquals(3, $target->getLevel());
+
+        $this->assert_has_remaining_hp(20, $this->character);
+        $this->assert_has_remaining_hp(8, $target);
+
+        // Dwarf +2 to attack Orc, Paladin +2 to attack Evil, +2 attack logo paladin level, Orc +2 on AC
+        $this->assert_attacker_hits_with_roll(6, $target);
+        // +2 to attack modifier from STR because of ORC + 2 apo monk level up
+        $this->assert_defender_hits_with_roll(6, $target);
+
+        // 1 + Dwarf +2 damage VS Orc, Paladin +2 damage VS Evil
+        $this->assert_has_remaining_hp(3, $target);
+        // Monk 3 damage + 2 from Orc's STR modifier
+        $this->assert_has_remaining_hp(15, $this->character);
     }
 
-    private function create_test_for_race_ability_modifier($race, $ability, $ability_change)
+    /**
+     * @param int       $dice
+     * @param Character $defender
+     */
+    private function assert_defender_hits_with_roll($dice, $defender): void
+    {
+        $hits = $this->createCounterAttackRoll($dice - 1, $defender);
+        $this->assertFalse($hits);
+        $hits = $this->createCounterAttackRoll($dice, $defender);
+        $this->assertTrue($hits);
+    }
+
+    /**
+     * @param int       $hp
+     * @param Character $character
+     */
+    private function assert_has_remaining_hp($hp, $character): void
+    {
+        $this->assertEquals($hp, $character->getHp());
+    }
+
+    /**
+     * @param int       $dice
+     * @param Character $target
+     */
+    private function assert_attacker_hits_with_roll($dice, $target): void
+    {
+        $hits = $this->createAttackRoll($dice - 1, $target);
+        $this->assertFalse($hits);
+        $hits = $this->createAttackRoll($dice, $target); // Dwarf +2 to attack Orc, Paladin +2 to attack Evil, Orc +2 on AC
+        $this->assertTrue($hits);
+    }
+
+    /**
+     * @param string $race
+     * @param string $ability
+     * @param int    $ability_change
+     */
+    private function create_test_for_race_ability_modifier($race, $ability, $ability_change): void
     {
         $human_ability_modifier = $this->character->getAbilityModifier($ability);
         $this->character->setRace($race);
@@ -221,7 +270,13 @@ class IterationTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(($human_ability_modifier + $ability_change), $race_ability_modifier);
     }
 
-    private function createAttackRoll($dice, $target = null)
+    /**
+     * @param int            $dice
+     * @param Character|null $target
+     *
+     * @return bool
+     */
+    private function createAttackRoll($dice, $target = null): bool
     {
         if (null === $target) {
             $target = new Character();
@@ -231,7 +286,13 @@ class IterationTest extends \PHPUnit\Framework\TestCase
         return $action->attackRoll();
     }
 
-    private function createCounterAttackRoll($dice, $target)
+    /**
+     * @param int       $dice
+     * @param Character $target
+     *
+     * @return bool
+     */
+    private function createCounterAttackRoll($dice, $target): bool
     {
         $action = new CombatAction($target, $this->character, $dice);
         return $action->attackRoll();
