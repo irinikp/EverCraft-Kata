@@ -8,32 +8,6 @@ namespace EverCraft;
  */
 abstract class CoreBuild
 {
-    const HUMAN = 'Human';
-    const ORC   = 'Orc';
-    const DWARF = 'Dwarf';
-    const ELF   = 'Elf';
-
-    const FIGHTER = 'Fighter';
-    const ROGUE   = 'Rogue';
-    const MONK    = 'Monk';
-    const PALADIN = 'Paladin';
-    const PRIEST  = 'Priest';
-
-    const CLASS_TYPES = [
-        self::FIGHTER,
-        self::ROGUE,
-        self::MONK,
-        self::PALADIN,
-        self::PRIEST
-    ];
-
-    const RACE_TYPES = [
-        self::HUMAN,
-        self::ORC,
-        self::DWARF,
-        self::ELF
-    ];
-
     const CRITICAL = 20;
 
     /**

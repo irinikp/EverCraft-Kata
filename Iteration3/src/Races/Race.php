@@ -12,6 +12,17 @@ use EverCraft\CoreBuild;
  */
 abstract class Race extends CoreBuild
 {
+    const HUMAN = 'Human';
+    const ORC   = 'Orc';
+    const DWARF = 'Dwarf';
+    const ELF   = 'Elf';
+
+    const RACE_TYPES = [
+        self::HUMAN,
+        self::ORC,
+        self::DWARF,
+        self::ELF
+    ];
 
     /**
      * @param string $type

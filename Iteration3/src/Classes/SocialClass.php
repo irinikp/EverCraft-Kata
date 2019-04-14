@@ -12,6 +12,20 @@ use EverCraft\CoreBuild;
  */
 abstract class SocialClass extends CoreBuild
 {
+    const FIGHTER = 'Fighter';
+    const ROGUE   = 'Rogue';
+    const MONK    = 'Monk';
+    const PALADIN = 'Paladin';
+    const PRIEST  = 'Priest';
+
+    const CLASS_TYPES = [
+        self::FIGHTER,
+        self::ROGUE,
+        self::MONK,
+        self::PALADIN,
+        self::PRIEST
+    ];
+
     /**
      * @var int
      */
