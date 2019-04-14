@@ -152,6 +152,16 @@ class IterationTest extends \PHPUnit\Framework\TestCase
         $this->assert_attacker_hits_with_roll(11, $target);
     }
 
+    public function test_halfling_has_plus_1_to_dexterity_modifier()
+    {
+        $this->create_test_for_race_ability_modifier(Race::HALFLING, Abilities::DEX, 1);
+    }
+
+    public function test_halfling_has_minus_1_to_strength_modifier()
+    {
+        $this->create_test_for_race_ability_modifier(Race::HALFLING, Abilities::STR, -1);
+    }
+
     public function test_3rd_level_paladin_dwarf_attacks_5th_level_evil_orc_monk()
     {
         // Set up Characters

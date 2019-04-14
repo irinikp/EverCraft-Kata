@@ -16,12 +16,14 @@ abstract class Race extends CoreBuild
     const ORC   = 'Orc';
     const DWARF = 'Dwarf';
     const ELF   = 'Elf';
+    const HALFLING = 'Halfling';
 
     const RACE_TYPES = [
         self::HUMAN,
         self::ORC,
         self::DWARF,
-        self::ELF
+        self::ELF,
+        self::HALFLING,
     ];
 
     /**
