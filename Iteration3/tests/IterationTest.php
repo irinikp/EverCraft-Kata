@@ -7,6 +7,7 @@ use EverCraft\Alignment;
 use EverCraft\Character;
 use EverCraft\Classes\SocialClass;
 use EverCraft\CombatAction;
+use EverCraft\InvalidAlignmentException;
 use EverCraft\Races\Race;
 
 require __DIR__ . '/../vendor/autoload.php';
@@ -217,6 +218,13 @@ class IterationTest extends \PHPUnit\Framework\TestCase
         // Halfling has +1 to AC from DEX
         $target->setRace(Race::HALFLING);
         $this->assert_attacker_hits_with_roll(12, $target);
+    }
+
+    public function test_halfling_cannot_be_evil()
+    {
+        $this->character->setRace(Race::HALFLING);
+        $this->expectException(InvalidAlignmentException::class);
+        $this->character->setAlignment('Evil');
     }
 
     public function test_3rd_level_paladin_dwarf_attacks_5th_level_evil_orc_monk()

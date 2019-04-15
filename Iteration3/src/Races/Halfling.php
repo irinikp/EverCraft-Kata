@@ -3,6 +3,7 @@
 namespace EverCraft\Races;
 
 use EverCraft\Abilities;
+use EverCraft\Alignment;
 use EverCraft\Character;
 
 class Halfling extends Race
@@ -38,5 +39,16 @@ class Halfling extends Race
     public function getDamage(Character $character): int
     {
         return $this->getStrengthModifier($character);
+    }
+
+    /**
+     * @return array<string>
+     */
+    public function getAllowedAlignments(): array
+    {
+        return [
+            Alignment::GOOD,
+            Alignment::NEUTRAL,
+        ];
     }
 }
