@@ -303,7 +303,7 @@ class Character
     /**
      *
      */
-    public function refreshDeathStatus(): void
+    public function recalculateDeathStatus(): void
     {
         if ($this->hp <= 0) {
             $this->setDead(true);
@@ -414,7 +414,7 @@ class Character
     public function setHp(int $hp): void
     {
         $this->hp = $hp;
-        $this->refreshDeathStatus();
+        $this->recalculateDeathStatus();
     }
 
     /**
@@ -441,14 +441,6 @@ class Character
     public function gainSuccessfulAttackXp(): void
     {
         $this->setXp($this->getXp() + 10);
-    }
-
-    /**
-     *
-     */
-    public function refreshAttackRoll(): void
-    {
-        $this->getClass()->setAttackRoll($this->class->getAttackRoll($this->getLevel()));
     }
 
     /**
