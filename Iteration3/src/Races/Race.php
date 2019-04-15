@@ -12,10 +12,10 @@ use EverCraft\CoreBuild;
  */
 abstract class Race extends CoreBuild
 {
-    const HUMAN = 'Human';
-    const ORC   = 'Orc';
-    const DWARF = 'Dwarf';
-    const ELF   = 'Elf';
+    const HUMAN    = 'Human';
+    const ORC      = 'Orc';
+    const DWARF    = 'Dwarf';
+    const ELF      = 'Elf';
     const HALFLING = 'Halfling';
 
     const RACE_TYPES = [
@@ -42,6 +42,16 @@ abstract class Race extends CoreBuild
      * @return int
      */
     public function getStrengthModifier(Character $character): int
+    {
+        return $this->getAbilityModifier($character, Abilities::STR);
+    }
+
+    /**
+     * @param Character $character
+     *
+     * @return int
+     */
+    public function getDamage(Character $character): int
     {
         return $this->getAbilityModifier($character, Abilities::STR);
     }
@@ -102,6 +112,21 @@ abstract class Race extends CoreBuild
     public function getHpModifier(Character $character): int
     {
         return $this->getConstitutionModifier($character);
+    }
+
+    /**
+     * @param Character $character
+     * @param Character $attacker
+     *
+     * @return int
+     */
+    public function getAcModifierWhenUnderAttack(Character $character, Character $attacker): int
+    {
+        $ac = parent::getAcModifierWhenUnderAttack($character, $attacker);
+        if (Race::ELF === $character->getRaceName() && Race::ORC === $attacker->getRaceName()) {
+            $ac += 2;
+        }
+        return $ac;
     }
 
     /**

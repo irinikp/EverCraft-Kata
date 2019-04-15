@@ -21,11 +21,11 @@ class Monk extends SocialClass
     }
 
     /**
-     * @param Character $target
+     * @param Character $character
      *
      * @return int
      */
-    public function getDamage(Character $target): int
+    public function getDamage(Character $character): int
     {
         return 3;
     }
@@ -37,7 +37,7 @@ class Monk extends SocialClass
      */
     public function getAcModifier(Character $character): int
     {
-        $modifier = parent::getAcModifier($character);
+        $modifier        = parent::getAcModifier($character);
         $wisdom_modifier = $character->getAbilityModifier(Abilities::WIS);
         if ($wisdom_modifier > 0) $modifier += $wisdom_modifier;
         return $modifier;

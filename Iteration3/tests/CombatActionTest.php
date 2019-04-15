@@ -293,7 +293,7 @@ class CombatActionTest extends \PHPUnit\Framework\TestCase
     {
         $hits = $this->createAttackRoll($dice - 1, $target);
         $this->assertFalse($hits);
-        $hits = $this->createAttackRoll($dice, $target); // Dwarf +2 to attack Orc, Paladin +2 to attack Evil, Orc +2 on AC
+        $hits = $this->createAttackRoll($dice, $target);
         $this->assertTrue($hits);
     }
 

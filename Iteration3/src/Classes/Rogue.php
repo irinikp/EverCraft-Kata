@@ -51,20 +51,4 @@ class Rogue extends SocialClass
             Alignment::EVIL,
         ];
     }
-
-    /**
-     * @param Character $attacker
-     * @param Character $target
-     *
-     * @return int
-     */
-    public function getTargetsAcModifier(Character $attacker, Character $target): int
-    {
-        $target_ac       = $target->getAc();
-        $target_modifier = $target->getAbilityModifier(Abilities::DEX);
-        if ($target_modifier > 0) {
-            $target_ac -= $target_modifier;
-        }
-        return $target_ac;
-    }
 }

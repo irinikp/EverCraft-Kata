@@ -35,6 +35,8 @@ class Dwarf extends Race
     }
 
     /**
+     * @param Character $character
+     *
      * @return int
      */
     public function getHpModifier(Character $character): int
@@ -47,6 +49,8 @@ class Dwarf extends Race
     }
 
     /**
+     * @param                $level
+     * @param int            $attack_roll
      * @param Character|null $target
      *
      * @return int
@@ -60,16 +64,15 @@ class Dwarf extends Race
         return $attack_roll;
     }
 
-
     /**
      * @param Character $target
      *
      * @return int
      */
-    public function getDamage(Character $target): int
+    public function getDamageModifierWhenAttacking(Character $target): int
     {
-        $damage = parent::getDamage($target);
-        if ($target && Race::ORC === $target->getRaceName()) {
+        $damage = parent::getDamageModifierWhenAttacking($target);
+        if (Race::ORC === $target->getRaceName()) {
             $damage += 2;
         }
         return $damage;

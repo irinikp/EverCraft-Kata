@@ -30,4 +30,13 @@ class Halfling extends Race
         return 1 + $modifier;
     }
 
+    /**
+     * @param Character $character
+     *
+     * @return int
+     */
+    public function getDamage(Character $character): int
+    {
+        return $this->getStrengthModifier($character);
+    }
 }

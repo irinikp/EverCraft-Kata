@@ -96,11 +96,11 @@ abstract class SocialClass extends CoreBuild
     }
 
     /**
-     * @param Character $target
+     * @param Character $character
      *
      * @return int
      */
-    public function getDamage(Character $target): int
+    public function getDamage(Character $character): int
     {
         return 1;
     }
@@ -114,13 +114,30 @@ abstract class SocialClass extends CoreBuild
     }
 
     /**
-     * @param Character $attacker
-     * @param Character $target
+     * @param Character $character
      *
      * @return int
      */
-    public function getTargetsAcModifier(Character $attacker, Character $target): int
+    public function getAcModifier(Character $character): int
     {
-        return $target->getAc();
+        return parent::getAcModifier($character);
+    }
+
+    /**
+     * @param Character $character
+     * @param Character $attacker
+     *
+     * @return int
+     */
+    public function getAcModifierWhenUnderAttack(Character $character, Character $attacker): int
+    {
+        $ac = parent::getAcModifierWhenUnderAttack($character, $attacker);
+        if (SocialClass::ROGUE === $attacker->getClassName()) {
+            $dex_modifier = $character->getAbilityModifier(Abilities::DEX);
+            if ($dex_modifier > 0) {
+                $ac -= $dex_modifier;
+            }
+        }
+        return $ac;
     }
 }

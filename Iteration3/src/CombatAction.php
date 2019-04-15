@@ -40,7 +40,7 @@ class CombatAction
      */
     public function attackRoll(): bool
     {
-        $hits = $this->hits($this->attacker->getAttackModifier());
+        $hits = $this->hits($this->attacker->getAttackBonus($this->target));
         if ($hits) {
             $this->target->takeDamage($this->calculate_damage());
             $this->attacker->gainSuccessfulAttackXp();
@@ -55,11 +55,7 @@ class CombatAction
      */
     protected function hits($modifier): bool
     {
-        $target_ac = $this->attacker->getTargetsAcModifier($this->attacker, $this->target);
-        return ($this->dice + $modifier + $this->attacker->getClass()
-                    ->getAttackRoll($this->attacker->getLevel(), 0, $this->target)
-                + $this->attacker->getRace()->getAttackRoll($this->attacker->getLevel(), 0, $this->target))
-            >= $target_ac;
+        return ($this->dice + $modifier) >= $this->target->getAc($this->attacker);
     }
 
     /**
@@ -67,9 +63,7 @@ class CombatAction
      */
     protected function getDamage(): int
     {
-        $ability_modifier = $this->attacker->getAbilityModifier(Abilities::STR);
-        return $this->attacker->getClass()->getDamage($this->target)
-        + $this->attacker->getRace()->getDamage($this->target) + $ability_modifier;
+        return $this->attacker->getDamage($this->target);
     }
 
     /**
@@ -78,8 +72,8 @@ class CombatAction
     protected function calculate_damage(): int
     {
         $damage = $this->getDamage();
-        if ($this->attacker->getRace()->isCritical($this->dice)) {
-            $damage *= $this->attacker->getClass()->getCriticalDamageMultiplier($this->target);
+        if ($this->attacker->isCritical($this->dice)) {
+            $damage *= $this->attacker->getCriticalDamageMultiplier($this->target);
         }
         return max(1, $damage);
     }

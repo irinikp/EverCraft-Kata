@@ -25,10 +25,10 @@ class Paladin extends SocialClass
      *
      * @return int
      */
-    public function getDamage(Character $target): int
+    public function getDamageModifierWhenAttacking(Character $target): int
     {
-        $damage = parent::getDamage($target);
-        if ($target && Alignment::EVIL === $target->getAlignment()) {
+        $damage = parent::getDamageModifierWhenAttacking($target);
+        if (Alignment::EVIL === $target->getAlignment()) {
             $damage += 2;
         }
         return $damage;

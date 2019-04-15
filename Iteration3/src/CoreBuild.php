@@ -26,11 +26,21 @@ abstract class CoreBuild
     }
 
     /**
+     * @param Character $character
+     *
+     * @return int
+     */
+    public function getDamage(Character $character): int
+    {
+        return 0;
+    }
+
+    /**
      * @param Character $target
      *
      * @return int
      */
-    public function getDamage(Character $target): int
+    public function getDamageModifierWhenAttacking(Character $target): int
     {
         return 0;
     }
@@ -41,6 +51,17 @@ abstract class CoreBuild
      * @return int
      */
     public function getAcModifier(Character $character): int
+    {
+        return 0;
+    }
+
+    /**
+     * @param Character $character
+     * @param Character $attacker
+     *
+     * @return int
+     */
+    public function getAcModifierWhenUnderAttack(Character $character, Character $attacker): int
     {
         return 0;
     }
@@ -82,16 +103,5 @@ abstract class CoreBuild
     public function isCritical($dice): bool
     {
         return ($dice === self::CRITICAL);
-    }
-
-    /**
-     * @param Character $attacker
-     * @param Character $target
-     *
-     * @return int
-     */
-    public function getTargetsAcModifier(Character $attacker, Character $target): int
-    {
-        return 0;
     }
 }

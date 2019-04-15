@@ -28,6 +28,16 @@ class Orc extends Race
      *
      * @return int
      */
+    public function getDamage(Character $character): int
+    {
+        return $this->getStrengthModifier($character);
+    }
+
+    /**
+     * @param Character $character
+     *
+     * @return int
+     */
     public function getIntelligenceModifier(Character $character): int
     {
         $modifier = parent::getAbilityModifier($character, Abilities::INT);
@@ -64,23 +74,6 @@ class Orc extends Race
      */
     public function getAcModifier(Character $character): int
     {
-        $modifier = parent::getAcModifier($character);
-        return $modifier + 2;
+        return parent::getAcModifier($character) + 2;
     }
-
-    /**
-     * @param Character $attacker
-     * @param Character $target
-     *
-     * @return int
-     */
-    public function getTargetsAcModifier(Character $attacker, Character $target): int
-    {
-        $ac = parent::getTargetsAcModifier($attacker, $target);
-        if (Race::ELF === $target->getRaceName()) {
-            $ac += 2;
-        }
-        return $ac;
-    }
-
 }

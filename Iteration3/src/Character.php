@@ -2,8 +2,8 @@
 
 namespace EverCraft;
 
-use EverCraft\Classes\SocialClass;
 use EverCraft\Classes\Priest;
+use EverCraft\Classes\SocialClass;
 use EverCraft\Races\Human;
 use EverCraft\Races\Race;
 
@@ -57,7 +57,14 @@ class Character
      * @var SocialClass
      */
     protected $class;
-
+    /**
+     * @var int
+     */
+    protected $attack_bonus;
+    /**
+     * @var int
+     */
+    protected $damage;
     /**
      * @var Race
      */
@@ -78,6 +85,53 @@ class Character
         $this->level     = 1;
         $this->alignment = Alignment::NEUTRAL;
         $this->race      = new Human();
+        $this->recalculateStats();
+    }
+
+    /**
+     * @param Character|null $target
+     *
+     * @return int
+     */
+    public function getAttackBonus(Character $target = null): int
+    {
+        $attack_bonus_on_this_target = 0;
+        if (null !== $target) {
+            $attack_bonus_on_this_target += $this->getClass()->getAttackRoll($this->getLevel(), 0, $target)
+                + $this->getRace()->getAttackRoll($this->getLevel(), 0, $target);
+        }
+        return $attack_bonus_on_this_target + $this->attack_bonus;
+    }
+
+    /**
+     * @param int $attack_bonus
+     */
+    public function setAttackBonus(int $attack_bonus): void
+    {
+        $this->attack_bonus = $attack_bonus;
+    }
+
+    /**
+     * @param Character|null $target
+     *
+     * @return int
+     */
+    public function getDamage(Character $target = null): int
+    {
+        $damage = $this->damage;
+        if (null !== $target) {
+            $damage += $this->getClass()->getDamageModifierWhenAttacking($target) +
+                $this->getRace()->getDamageModifierWhenAttacking($target);
+        }
+        return $damage;
+    }
+
+    /**
+     * @param int $damage
+     */
+    public function setDamage(int $damage): void
+    {
+        $this->damage = $damage;
     }
 
     /**
@@ -101,8 +155,7 @@ class Character
         }
         $race       = '\EverCraft\\Races\\' . $race;
         $this->race = new $race();
-        $this->refreshAc();
-        $this->refreshHp();
+        $this->recalculateStats();
     }
 
     /**
@@ -135,9 +188,7 @@ class Character
         }
         $class       = '\EverCraft\\Classes\\' . $class;
         $this->class = new $class();
-        $this->refreshAc();
-        $this->refreshHp();
-        $this->refreshAlignment();
+        $this->recalculateStats();
     }
 
     /**
@@ -159,13 +210,14 @@ class Character
 
     /**
      * @param int $level
+     *
+     * @throws InvalidAlignmentException
      */
     public function setLevel(int $level): void
     {
         $this->level = $level;
 
-        $this->refreshHp();
-        $this->refreshAttackRoll();
+        $this->recalculateStats();
     }
 
     /**
@@ -182,7 +234,7 @@ class Character
     public function setXp(int $xp): void
     {
         $this->xp = $xp;
-        $this->refreshLevel();
+        $this->recalculateLevel();
     }
 
     /**
@@ -291,8 +343,7 @@ class Character
         $function = "set$ability";
         $this->abilities->$function($value);
 
-        $this->refreshAc();
-        $this->refreshHp();
+        $this->recalculateStats();
     }
 
     /**
@@ -327,11 +378,18 @@ class Character
     }
 
     /**
+     * @param Character|null $attacker
+     *
      * @return int
      */
-    public function getAc(): int
+    public function getAc(Character $attacker = null): int
     {
-        return $this->ac;
+        $ac = $this->ac;
+        if (null !== $attacker) {
+            $ac += $this->getClass()->getAcModifierWhenUnderAttack($this, $attacker) +
+                $this->getRace()->getAcModifierWhenUnderAttack($this, $attacker);
+        }
+        return $ac;
     }
 
     /**
@@ -394,32 +452,44 @@ class Character
     }
 
     /**
-     * @return int
+     * @param $dice
+     *
+     * @return bool
      */
-    public function getAttackModifier(): int
+    public function isCritical($dice): bool
     {
-        return $this->getAbilityModifier($this->getClass()->getAttackAbility());
+        return $this->getRace()->isCritical($dice);
     }
 
     /**
-     * @return int
-     */
-    public function getAcModifier(): int
-    {
-        return $this->getAbilityModifier(Abilities::DEX) + $this->getClass()->getAcModifier($this) +
-            $this->getRace()->getAcModifier($this);
-    }
-
-    /**
-     * @param Character $attacker
      * @param Character $target
      *
      * @return int
      */
-    public function getTargetsAcModifier(Character $attacker, Character $target): int
+    public function getCriticalDamageMultiplier(Character $target): int
     {
-        return $attacker->getClass()->getTargetsAcModifier($attacker, $target)
-            + $attacker->getRace()->getTargetsAcModifier($attacker, $target);
+        return $this->getClass()->getCriticalDamageMultiplier($target);
+    }
+
+    /**
+     *
+     */
+    protected function recalculateAttackBonus()
+    {
+        $this->setAttackBonus($this->getAbilityModifier($this->getClass()->getAttackAbility()));
+    }
+
+    /**
+     * @throws InvalidAlignmentException
+     */
+    protected function recalculateStats(): void
+    {
+        $this->recalculateAc();
+        $this->recalculateHp();
+        $this->recalculateAlignment();
+        $this->recalculateAttackBonus();
+        $this->recalculateDamage();
+
     }
 
     /**
@@ -435,7 +505,7 @@ class Character
     /**
      * @throws InvalidAlignmentException
      */
-    protected function refreshAlignment(): void
+    protected function recalculateAlignment(): void
     {
         if (!$this->getClass()->isAlignmentAllowed($this->getAlignment())) {
             $this->setAlignment($this->getClass()->getAllowedAlignments()[0]);
@@ -445,19 +515,23 @@ class Character
     /**
      *
      */
-    protected function refreshAc(): void
+    protected function recalculateAc(): void
     {
-        $modifier = $this->getAcModifier();
-        $this->setAc($this->getClass()->getBasicAc() + $modifier);
+        $this->setAc(
+            $this->getClass()->getBasicAc() +
+            $this->getAbilityModifier(Abilities::DEX) +
+            $this->getClass()->getAcModifier($this) +
+            $this->getRace()->getAcModifier($this)
+        );
     }
 
     /**
      *
      */
-    protected function refreshHp(): void
+    protected function recalculateHp(): void
     {
         $modifier = $this->getHpModifier();
-        $damage = $this->getMaxHp() - $this->getHp();
+        $damage   = $this->getMaxHp() - $this->getHp();
         $this->setMaxHp(max(1, ($this->getLevel()) * ($this->class->getHpPerLevel() + $modifier)));
         $this->setHp($this->getMaxHp() - $damage);
     }
@@ -473,8 +547,16 @@ class Character
     /**
      *
      */
-    protected function refreshLevel(): void
+    protected function recalculateLevel(): void
     {
         $this->setLevel(intval($this->getXp() / 1000) + 1);
+    }
+
+    /**
+     *
+     */
+    protected function recalculateDamage(): void
+    {
+        $this->setDamage($this->getClass()->getDamage($this) + $this->getRace()->getDamage($this));
     }
 }
