@@ -105,7 +105,7 @@ class IterationTest extends \PHPUnit\Framework\TestCase
     {
         $this->character->setRace(Race::DWARF);
         $target = new Character();
-//        $this->assert_attacker_hits_with_roll(10, $target);
+        $this->assert_attacker_hits_with_roll(10, $target);
 
         $target->setRace(Race::ORC);
         $this->assert_attacker_hits_with_roll(10, $target);
@@ -160,6 +160,63 @@ class IterationTest extends \PHPUnit\Framework\TestCase
     public function test_halfling_has_minus_1_to_strength_modifier()
     {
         $this->create_test_for_race_ability_modifier(Race::HALFLING, Abilities::STR, -1);
+    }
+
+    public function test_halfling_plus_two_to_ac_when_being_attacked_by_orcs()
+    {
+        $target = new Character();
+        $this->character->setRace(Race::ORC);
+        // Orc hits with +2 from STR
+        $this->assert_attacker_hits_with_roll(8, $target);
+
+        // Halfling has +1 to AC from DEX plus 2 from this test
+        $target->setRace(Race::HALFLING);
+        $this->assert_attacker_hits_with_roll(11, $target);
+    }
+
+    public function test_halfling_plus_two_to_ac_when_being_attacked_by_dwarves()
+    {
+        $target = new Character();
+        $this->character->setRace(Race::DWARF);
+        $this->assert_attacker_hits_with_roll(10, $target);
+
+        // Halfling has +1 to AC from DEX plus 2 from this test
+        $target->setRace(Race::HALFLING);
+        $this->assert_attacker_hits_with_roll(13, $target);
+    }
+
+    public function test_halfling_plus_two_to_ac_when_being_attacked_by_elf()
+    {
+        $target = new Character();
+        $this->character->setRace(Race::ELF);
+        $this->assert_attacker_hits_with_roll(10, $target);
+
+        // Halfling has +1 to AC from DEX plus 2 from this test
+        $target->setRace(Race::HALFLING);
+        $this->assert_attacker_hits_with_roll(13, $target);
+    }
+
+    public function test_halfling_plus_two_to_ac_when_being_attacked_by_human()
+    {
+        $target = new Character();
+        $this->character->setRace(Race::HUMAN);
+        $this->assert_attacker_hits_with_roll(10, $target);
+
+        // Halfling has +1 to AC from DEX plus 2 from this test
+        $target->setRace(Race::HALFLING);
+        $this->assert_attacker_hits_with_roll(13, $target);
+    }
+
+    public function test_halfling_non_plus_two_to_ac_when_being_attacked_by_halfling()
+    {
+        $target = new Character();
+        $this->character->setRace(Race::HALFLING);
+        // Has -1 to attack from STR
+        $this->assert_attacker_hits_with_roll(11, $target);
+
+        // Halfling has +1 to AC from DEX
+        $target->setRace(Race::HALFLING);
+        $this->assert_attacker_hits_with_roll(12, $target);
     }
 
     public function test_3rd_level_paladin_dwarf_attacks_5th_level_evil_orc_monk()
@@ -262,8 +319,8 @@ class IterationTest extends \PHPUnit\Framework\TestCase
      */
     private function assert_attacker_hits_with_roll($dice, $target): void
     {
-//        $hits = $this->createAttackRoll($dice - 1, $target);
-//        $this->assertFalse($hits);
+        $hits = $this->createAttackRoll($dice - 1, $target);
+        $this->assertFalse($hits);
         $hits = $this->createAttackRoll($dice, $target);
         $this->assertTrue($hits);
     }

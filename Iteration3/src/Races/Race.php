@@ -126,6 +126,9 @@ abstract class Race extends CoreBuild
         if (Race::ELF === $character->getRaceName() && Race::ORC === $attacker->getRaceName()) {
             $ac += 2;
         }
+         if (Race::HALFLING === $character->getRaceName() && Race::HALFLING !== $attacker->getRaceName()) {
+            $ac += 2;
+        }
         return $ac;
     }
 
