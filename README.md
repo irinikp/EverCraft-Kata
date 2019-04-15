@@ -10,3 +10,5 @@ All code is written in PHP
 [Iteration 2 - Classes](Iteration2/)
 
 [Iteration 3 - Races](Iteration3/)
+
+[Iteration 4 - Weapons, Armor & Items](Iteration4/)
