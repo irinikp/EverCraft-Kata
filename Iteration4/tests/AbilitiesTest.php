@@ -6,6 +6,7 @@ require __DIR__ . '/../vendor/autoload.php';
 
 use EverCraft\Abilities;
 use EverCraft\Character;
+use EverCraft\Races\Race;
 
 class AbilitiesTest extends \PHPUnit\Framework\TestCase
 {
@@ -82,6 +83,92 @@ class AbilitiesTest extends \PHPUnit\Framework\TestCase
         $this->character->setAbility(Abilities::CON, 1);
         $this->assertEquals(1, $this->character->getHp());
         $this->assertEquals(1, $this->character->getMaxHp());
+    }
+
+    public function test_orc_has_plus_2_to_strength_modifier()
+    {
+        $this->create_test_for_race_ability_modifier(Race::ORC, Abilities::STR, +2);
+    }
+
+    public function test_orc_has_minus_1_to_intelligence_modifier()
+    {
+        $this->create_test_for_race_ability_modifier(Race::ORC, Abilities::INT, -1);
+    }
+
+    public function test_orc_has_minus_1_to_wisdom_modifier()
+    {
+        $this->create_test_for_race_ability_modifier(Race::ORC, Abilities::WIS, -1);
+    }
+
+    public function test_orc_has_minus_1_to_charisma_modifier()
+    {
+        $this->create_test_for_race_ability_modifier(Race::ORC, Abilities::CHA, -1);
+    }
+
+    public function test_dwarf_has_plus_1_to_constitution_modifier()
+    {
+        $this->create_test_for_race_ability_modifier(Race::DWARF, Abilities::CON, 1);
+    }
+
+    public function test_dwarf_has_minus_1_to_charisma_modifier()
+    {
+        $this->create_test_for_race_ability_modifier(Race::DWARF, Abilities::CHA, -1);
+    }
+
+    public function test_dwarf_doubles_con_modifier_when_adding_to_hit_points_per_level_if_positive()
+    {
+        $this->character->setRace(Race::DWARF);
+        $this->assertEquals(7, $this->character->getMaxHp());
+        $this->character->setAbility(Abilities::CON, 17); // modifier 4
+        $this->assertEquals(13, $this->character->getMaxHp());
+        $this->character->addXp(1000);
+        $this->assertEquals(26, $this->character->getMaxHp());
+        $this->character->addXp(1000);
+        $this->assertEquals(39, $this->character->getMaxHp());
+    }
+
+    public function test_dwarf_not_doubles_con_modifier_when_adding_to_hit_points_per_level_if_negative()
+    {
+        $this->character->setRace(Race::DWARF);
+        $this->character->setAbility(Abilities::CON, 4); // modifier -2
+        $this->assertEquals(3, $this->character->getMaxHp());
+        $this->character->addXp(1000);
+        $this->assertEquals(6, $this->character->getMaxHp());
+        $this->character->addXp(1000);
+        $this->assertEquals(9, $this->character->getMaxHp());
+    }
+
+    public function test_elf_has_plus_1_to_dexterity_modifier()
+    {
+        $this->create_test_for_race_ability_modifier(Race::ELF, Abilities::DEX, 1);
+    }
+
+    public function test_elf_has_minus_1_to_constitution_modifier()
+    {
+        $this->create_test_for_race_ability_modifier(Race::ELF, Abilities::CON, -1);
+    }
+
+    public function test_halfling_has_plus_1_to_dexterity_modifier()
+    {
+        $this->create_test_for_race_ability_modifier(Race::HALFLING, Abilities::DEX, 1);
+    }
+
+    public function test_halfling_has_minus_1_to_strength_modifier()
+    {
+        $this->create_test_for_race_ability_modifier(Race::HALFLING, Abilities::STR, -1);
+    }
+
+    /**
+     * @param string $race
+     * @param string $ability
+     * @param int    $ability_change
+     */
+    private function create_test_for_race_ability_modifier($race, $ability, $ability_change): void
+    {
+        $human_ability_modifier = $this->character->getAbilityModifier($ability);
+        $this->character->setRace($race);
+        $race_ability_modifier = $this->character->getAbilityModifier($ability);
+        $this->assertEquals(($human_ability_modifier + $ability_change), $race_ability_modifier);
     }
 
 }

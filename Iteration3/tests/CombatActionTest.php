@@ -9,6 +9,7 @@ use EverCraft\Alignment;
 use EverCraft\Character;
 use EverCraft\Classes\SocialClass;
 use EverCraft\CombatAction;
+use EverCraft\Races\Race;
 
 class CombatActionTest extends \PHPUnit\Framework\TestCase
 {
@@ -262,6 +263,169 @@ class CombatActionTest extends \PHPUnit\Framework\TestCase
         $this->createAttackRoll(20, $target, 0);
         $this->assert_has_remaining_hp(-4, $target);
         $this->assertTrue($target->isDead());
+    }
+
+    public function test_dwarf_plus_2_to_damage_when_attacking_orcs()
+    {
+        $this->character->setRace(Race::DWARF);
+        $target = new Character();
+        $this->createAttackRoll(10, $target);
+        $this->assertEquals(4, $target->getHp());
+
+        $target = new Character();
+        $target->setRace(Race::ORC);
+        $this->createAttackRoll(10, $target);
+        $this->assertEquals(2, $target->getHp());
+    }
+
+    public function test_dwarf_plus_2_to_attack_when_attacking_orcs()
+    {
+        $this->character->setRace(Race::DWARF);
+        $target = new Character();
+        $this->assert_attacker_hits_with_roll(10, $target);
+
+        $target->setRace(Race::ORC);
+        $this->assert_attacker_hits_with_roll(10, $target);
+    }
+
+    public function test_elf_plus_two_to_ac_when_being_attacked_by_orcs()
+    {
+        $target = new Character();
+        $this->character->setRace(Race::ORC);
+        $this->assert_attacker_hits_with_roll(8, $target);
+
+        $target->setRace(Race::ELF);
+        $this->assert_attacker_hits_with_roll(11, $target);
+    }
+
+    public function test_halfling_plus_two_to_ac_when_being_attacked_by_orcs()
+    {
+        $target = new Character();
+        $this->character->setRace(Race::ORC);
+        // Orc hits with +2 from STR
+        $this->assert_attacker_hits_with_roll(8, $target);
+
+        // Halfling has +1 to AC from DEX plus 2 from this test
+        $target->setRace(Race::HALFLING);
+        $this->assert_attacker_hits_with_roll(11, $target);
+    }
+
+    public function test_halfling_plus_two_to_ac_when_being_attacked_by_dwarves()
+    {
+        $target = new Character();
+        $this->character->setRace(Race::DWARF);
+        $this->assert_attacker_hits_with_roll(10, $target);
+
+        // Halfling has +1 to AC from DEX plus 2 from this test
+        $target->setRace(Race::HALFLING);
+        $this->assert_attacker_hits_with_roll(13, $target);
+    }
+
+    public function test_halfling_plus_two_to_ac_when_being_attacked_by_elf()
+    {
+        $target = new Character();
+        $this->character->setRace(Race::ELF);
+        $this->assert_attacker_hits_with_roll(10, $target);
+
+        // Halfling has +1 to AC from DEX plus 2 from this test
+        $target->setRace(Race::HALFLING);
+        $this->assert_attacker_hits_with_roll(13, $target);
+    }
+
+    public function test_halfling_plus_two_to_ac_when_being_attacked_by_human()
+    {
+        $target = new Character();
+        $this->character->setRace(Race::HUMAN);
+        $this->assert_attacker_hits_with_roll(10, $target);
+
+        // Halfling has +1 to AC from DEX plus 2 from this test
+        $target->setRace(Race::HALFLING);
+        $this->assert_attacker_hits_with_roll(13, $target);
+    }
+
+    public function test_halfling_non_plus_two_to_ac_when_being_attacked_by_halfling()
+    {
+        $target = new Character();
+        $this->character->setRace(Race::HALFLING);
+        // Has -1 to attack from STR
+        $this->assert_attacker_hits_with_roll(11, $target);
+
+        // Halfling has +1 to AC from DEX
+        $target->setRace(Race::HALFLING);
+        $this->assert_attacker_hits_with_roll(12, $target);
+    }
+
+    public function test_3rd_level_paladin_dwarf_attacks_5th_level_evil_orc_monk()
+    {
+        // Set up Characters
+        $this->character->setRace(Race::DWARF);
+        $this->character->setClass(SocialClass::PALADIN);
+        // Paladin 8 HP/level, dwarf +2 Hp/level
+        $this->assert_has_remaining_hp(10, $this->character);
+
+        $target = new Character();
+        $target->setRace(Race::ORC);
+        $target->setClass(SocialClass::MONK);
+        $target->setAlignment(Alignment::EVIL);
+
+        // Monk 6 HP/level
+        $this->assert_has_remaining_hp(6, $target);
+
+
+        // Battle round 1
+        // Dwarf +2 to attack Orc, Paladin +2 to attack Evil, Orc +2 on AC
+        $this->assert_attacker_hits_with_roll(8, $target);
+        // 1 + Dwarf +2 damage VS Orc, Paladin +2 damage VS Evil
+        $this->assert_has_remaining_hp(1, $target);
+
+
+        // +2 to attack modifier from STR because of ORC
+        $this->assert_defender_hits_with_roll(8, $target);
+        // Monk 3 damage + 2 from Orc's STR modifier
+        $this->assert_has_remaining_hp(5, $this->character);
+
+        $this->assertEquals(10, $this->character->getXp());
+        $this->assertEquals(10, $target->getXp());
+
+        // Level up
+        $this->character->addXp(990);
+        $this->assertEquals(2, $this->character->getLevel());
+        $target->addXp(990);
+        $this->assertEquals(2, $target->getLevel());
+
+        $this->assert_has_remaining_hp(15, $this->character);
+        $this->assert_has_remaining_hp(7, $target);
+
+        // Dwarf +2 to attack Orc, Paladin +2 to attack Evil, +1 attack logo paladin level, Orc +2 on AC
+        $this->assert_attacker_hits_with_roll(7, $target);
+        // +2 to attack modifier from STR because of ORC + 1 apo monk level up
+        $this->assert_defender_hits_with_roll(7, $target);
+        // 1 + Dwarf +2 damage VS Orc, Paladin +2 damage VS Evil
+        $this->assert_has_remaining_hp(2, $target);
+        // Monk 3 damage + 2 from Orc's STR modifier
+        $this->assert_has_remaining_hp(10, $this->character);
+
+        $this->assertEquals(1010, $this->character->getXp());
+        $this->assertEquals(1010, $target->getXp());
+
+        // Level up
+        $this->character->addXp(990);
+        $this->assertEquals(3, $this->character->getLevel());
+        $target->addXp(990);
+        $this->assertEquals(3, $target->getLevel());
+
+        $this->assert_has_remaining_hp(20, $this->character);
+        $this->assert_has_remaining_hp(8, $target);
+
+        // Dwarf +2 to attack Orc, Paladin +2 to attack Evil, +2 attack logo paladin level, Orc +2 on AC
+        $this->assert_attacker_hits_with_roll(6, $target);
+        // +2 to attack modifier from STR because of ORC + 2 apo monk level up
+        $this->assert_defender_hits_with_roll(6, $target);
+
+        // 1 + Dwarf +2 damage VS Orc, Paladin +2 damage VS Evil
+        $this->assert_has_remaining_hp(3, $target);
+        // Monk 3 damage + 2 from Orc's STR modifier
+        $this->assert_has_remaining_hp(15, $this->character);
     }
 
     /**
