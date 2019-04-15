@@ -4,6 +4,7 @@ namespace EverCraft;
 
 use EverCraft\Classes\Priest;
 use EverCraft\Classes\SocialClass;
+use EverCraft\Items\Weapons\Weapon;
 use EverCraft\Races\Human;
 use EverCraft\Races\Race;
 
@@ -69,6 +70,10 @@ class Character
      * @var Race
      */
     protected $race;
+    /**
+     * @var Weapon
+     */
+    protected $weapon;
 
     /**
      * Character constructor.
@@ -85,7 +90,46 @@ class Character
         $this->level     = 1;
         $this->alignment = Alignment::NEUTRAL;
         $this->race      = new Human();
+        $this->weapon    = null;
         $this->recalculateStats();
+    }
+
+    /**
+     * @return Weapon
+     */
+    public function getWeapon(): Weapon
+    {
+        return $this->weapon;
+    }
+
+    /**
+     * @return string
+     */
+    public function getWeaponName(): string
+    {
+        if ($this->weapon) {
+            return $this->getObjectClassNameWithoutNamespace($this->weapon);
+        }
+    }
+
+    /**
+     * @param Weapon $weapon
+     */
+    public function wield(Weapon $weapon): void
+    {
+        $this->weapon = $weapon;
+    }
+
+    /**
+     * @return string
+     */
+    public function getWieldingWeaponName(): string
+    {
+        $name = '';
+        if ($this->weapon) {
+            $name = $this->getObjectClassNameWithoutNamespace($this->weapon);
+        }
+        return $name;
     }
 
     /**
@@ -163,8 +207,7 @@ class Character
      */
     public function getRaceName(): string
     {
-        $race_name = get_class($this->getRace());
-        return substr($race_name, strrpos($race_name, '\\') + 1);
+        return $this->getObjectClassNameWithoutNamespace($this->getRace());
     }
 
     /**
@@ -196,8 +239,7 @@ class Character
      */
     public function getClassName(): string
     {
-        $class_name = get_class($this->getClass());
-        return substr($class_name, strrpos($class_name, '\\') + 1);
+        return $this->getObjectClassNameWithoutNamespace($this->getClass());
     }
 
     /**
@@ -466,7 +508,7 @@ class Character
     /**
      *
      */
-    protected function recalculateAttackBonus()
+    protected function recalculateAttackBonus(): void
     {
         $this->setAttackBonus($this->getAbilityModifier($this->getClass()->getAttackAbility()));
     }
@@ -550,5 +592,16 @@ class Character
     protected function recalculateDamage(): void
     {
         $this->setDamage($this->getClass()->getDamage($this) + $this->getRace()->getDamage($this));
+    }
+
+    /**
+     * @param object $object
+     *
+     * @return string
+     */
+    private function getObjectClassNameWithoutNamespace($object): string
+    {
+        $class_name = get_class($object);
+        return substr($class_name, strrpos($class_name, '\\') + 1);
     }
 }

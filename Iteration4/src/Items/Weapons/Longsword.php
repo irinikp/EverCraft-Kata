@@ -3,10 +3,10 @@
 namespace EverCraft\Items\Weapons;
 
 /**
- * Class Weapon
+ * Class Longsword
  * @package EverCraft\Items\Weapons
  */
-class Weapon
+class Longsword extends Weapon
 {
 
 }

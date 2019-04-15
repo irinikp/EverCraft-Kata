@@ -2,11 +2,12 @@
 
 namespace EverCraft\Items\Weapons;
 
+
 /**
- * Class Weapon
+ * Class Waraxe
  * @package EverCraft\Items\Weapons
  */
-class Weapon
+class Waraxe extends Weapon
 {
 
 }
