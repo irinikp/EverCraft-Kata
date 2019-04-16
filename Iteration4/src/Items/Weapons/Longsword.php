@@ -18,7 +18,7 @@ class Longsword extends Weapon
      */
     public function getDamage(Character $character): int
     {
-        return 5;
+        return parent::getDamage($character) + 5;
     }
 
 }

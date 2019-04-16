@@ -2,6 +2,7 @@
 
 namespace EverCraft\Items\Weapons;
 
+use EverCraft\Character;
 use EverCraft\CoreBuild;
 
 /**
@@ -17,6 +18,27 @@ abstract class Weapon extends CoreBuild
         self::LONGSWORD,
         self::WARAXE,
     ];
+
+    /**
+     * @var int
+     */
+    protected $magical;
+
+    public function __construct($magical = 0)
+    {
+        $this->magical = $magical;
+    }
+
+    /**
+     * @param Character $character
+     *
+     * @return int
+     */
+    public function getDamage(Character $character): int
+    {
+        return $this->magical;
+    }
+
 
     /**
      * @param string $type
