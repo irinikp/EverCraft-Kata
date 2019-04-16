@@ -107,7 +107,7 @@ class Character
      */
     public function getWeaponName(): string
     {
-        if ($this->weapon) {
+        if ($this->wieldsWeapon()) {
             return $this->getObjectClassNameWithoutNamespace($this->weapon);
         }
     }
@@ -127,7 +127,7 @@ class Character
     public function getWieldingWeaponName(): string
     {
         $name = '';
-        if ($this->weapon) {
+        if ($this->wieldsWeapon()) {
             $name = $this->getObjectClassNameWithoutNamespace($this->weapon);
         }
         return $name;
@@ -503,7 +503,11 @@ class Character
      */
     public function getCriticalDamageMultiplier(Character $target): int
     {
-        return $this->getClass()->getCriticalDamageMultiplier($target);
+        $multiplier = $this->getClass()->getCriticalDamageMultiplier($target) + $this->getRace()->getCriticalDamageMultiplier($target);
+        if ($this->wieldsWeapon()) {
+            $multiplier += $this->getWeapon()->getCriticalDamageMultiplier($target);
+        }
+        return $multiplier;
     }
 
     /**
@@ -512,10 +516,15 @@ class Character
     protected function recalculateAttackBonus(): void
     {
         $attack_bonus = $this->getAbilityModifier($this->getClass()->getAttackAbility());
-        if (null !== $this->weapon) {
+        if ($this->wieldsWeapon()) {
             $attack_bonus += $this->weapon->getAttackRoll($this->getLevel());
         }
         $this->setAttackBonus($attack_bonus);
+    }
+
+    protected function wieldsWeapon(): bool
+    {
+        return null !== $this->weapon;
     }
 
     /**
@@ -596,7 +605,7 @@ class Character
      */
     protected function recalculateDamage(): void
     {
-        if (null !== $this->weapon) {
+        if ($this->wieldsWeapon()) {
             $this->setDamage($this->getWeapon()->getDamage($this));
         } else {
             $this->setDamage($this->getClass()->getDamage($this) + $this->getRace()->getDamage($this));

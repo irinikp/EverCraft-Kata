@@ -3,6 +3,7 @@
 namespace Tests;
 
 use EverCraft\Character;
+use EverCraft\Classes\SocialClass;
 use EverCraft\CombatAction;
 use EverCraft\Items\Weapons\Longsword;
 use EverCraft\Items\Weapons\Waraxe;
@@ -48,6 +49,23 @@ class IterationTest extends \PHPUnit\Framework\TestCase
         $this->character->wield(new Waraxe(2));
         $target = new Character();
         $this->assert_attacker_hits_with_roll(8, $target);
+    }
+
+    public function test_plus_2_weapon_triples_damage_on_critical()
+    {
+        $this->character->wield(new Waraxe(2));
+        $target = new Character();
+        $this->createAttackRoll(20, $target, 0);
+        $this->assert_has_remaining_hp(-19, $target);
+    }
+
+    public function test_rogues__with_plus_2_weapon_does_quadruple_critical_hit()
+    {
+        $this->character->setClass(SocialClass::ROGUE);
+        $this->character->wield(new Waraxe(2));
+        $target = new Character();
+        $this->createAttackRoll(20, $target, 0);
+        $this->assert_has_remaining_hp(-27, $target);
     }
 
     /**

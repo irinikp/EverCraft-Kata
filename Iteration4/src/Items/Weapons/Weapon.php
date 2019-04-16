@@ -59,4 +59,9 @@ abstract class Weapon extends CoreBuild
         return in_array($type, self::CLASS_TYPES);
     }
 
+    public function getCriticalDamageMultiplier(Character $target): int
+    {
+        return intval($this->magical / 2);
+    }
+
 }

@@ -46,6 +46,16 @@ abstract class CoreBuild
     }
 
     /**
+     * @param Character $target
+     *
+     * @return int
+     */
+    public function getCriticalDamageMultiplier(Character $target): int
+    {
+        return 0;
+    }
+
+    /**
      * @param Character $character
      *
      * @return int

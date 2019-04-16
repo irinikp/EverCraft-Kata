@@ -55,7 +55,7 @@ class CombatActionTest extends \PHPUnit\Framework\TestCase
     public function test_when_attack_is_successful_other_character_takes_1_point_of_damage_when_hit()
     {
         $target = new Character();
-        $this->createAttackRoll(15, $target, 0);
+        $this->createAttackRoll(15, $target);
 
         $this->assert_has_remaining_hp(4, $target);
         $this->assertEquals(5, $target->getMaxHp());
@@ -64,22 +64,22 @@ class CombatActionTest extends \PHPUnit\Framework\TestCase
     public function test_when_two_attacks_are_successful_other_character_takes_2_point_of_damage_when_hit()
     {
         $target = new Character();
-        $this->createAttackRoll(15, $target, 0);
-        $this->createAttackRoll(15, $target, 0);
+        $this->createAttackRoll(15, $target);
+        $this->createAttackRoll(15, $target);
         $this->assert_has_remaining_hp(3, $target);
     }
 
     public function test_when_attack_is_unsuccessful_other_character_does_not_take_damage_when_hit()
     {
         $target = new Character();
-        $this->createAttackRoll(9, $target, 0);
+        $this->createAttackRoll(9, $target);
         $this->assert_has_remaining_hp(5, $target);
     }
 
     public function test_if_a_roll_is_a_20_then_a_critical_hit_is_dealt_and_the_damage_is_doubled()
     {
         $target = new Character();
-        $this->createAttackRoll(20, $target, 0);
+        $this->createAttackRoll(20, $target);
         $this->assert_has_remaining_hp(3, $target);
     }
 
@@ -136,7 +136,7 @@ class CombatActionTest extends \PHPUnit\Framework\TestCase
     {
         $target = new Character();
         $this->character->setAbility(Abilities::STR, 17);
-        $this->createAttackRoll(7, $target, 3);
+        $this->createAttackRoll(7, $target);
         $this->assert_has_remaining_hp(1, $target);
     }
 
@@ -183,7 +183,7 @@ class CombatActionTest extends \PHPUnit\Framework\TestCase
     {
         $this->character->setClass(SocialClass::ROGUE);
         $target = new Character();
-        $this->createAttackRoll(20, $target, 0);
+        $this->createAttackRoll(20, $target);
         $this->assert_has_remaining_hp(2, $target);
     }
 
@@ -223,7 +223,7 @@ class CombatActionTest extends \PHPUnit\Framework\TestCase
     {
         $this->character->setClass(SocialClass::MONK);
         $target = new Character();
-        $this->createAttackRoll(15, $target, 0);
+        $this->createAttackRoll(15, $target);
         $this->assert_has_remaining_hp(2, $target);
         $this->assertEquals(5, $target->getMaxHp());
     }
@@ -255,12 +255,12 @@ class CombatActionTest extends \PHPUnit\Framework\TestCase
     {
         $this->character->setClass(SocialClass::PALADIN);
         $target = new Character();
-        $this->createAttackRoll(20, $target, 0);
+        $this->createAttackRoll(20, $target);
         $this->assert_has_remaining_hp(3, $target);
 
         $target = new Character();
         $target->setAlignment(Alignment::EVIL);
-        $this->createAttackRoll(20, $target, 0);
+        $this->createAttackRoll(20, $target);
         $this->assert_has_remaining_hp(-4, $target);
         $this->assertTrue($target->isDead());
     }
