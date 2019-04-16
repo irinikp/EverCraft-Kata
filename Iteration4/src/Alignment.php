@@ -32,20 +32,10 @@ class Alignment
     public function __construct($alignment)
     {
         $alignment = ucfirst($alignment);
-        if (!self::isAlignmentType($alignment)) {
+        if (!in_array($alignment, self::TYPE)) {
             throw new InvalidAlignmentException('Undefined Alignment $alignment');
         }
         $this->value = $alignment;
-    }
-
-    /**
-     * @param string $alignment
-     *
-     * @return bool
-     */
-    public static function isAlignmentType($alignment): bool
-    {
-        return in_array($alignment, self::TYPE);
     }
 
     /**
