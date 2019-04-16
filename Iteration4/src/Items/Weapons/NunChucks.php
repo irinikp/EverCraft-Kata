@@ -5,6 +5,10 @@ namespace EverCraft\Items\Weapons;
 use EverCraft\Character;
 use EverCraft\Classes\SocialClass;
 
+/**
+ * Class NunChucks
+ * @package EverCraft\Items\Weapons
+ */
 class NunChucks extends Weapon
 {
     /**
@@ -18,7 +22,7 @@ class NunChucks extends Weapon
     }
 
     /**
-     * @param                $level
+     * @param int            $level
      * @param int            $attack_roll
      * @param Character      $attacker
      * @param Character|null $target

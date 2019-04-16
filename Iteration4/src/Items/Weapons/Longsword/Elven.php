@@ -6,8 +6,17 @@ use EverCraft\Character;
 use EverCraft\Items\Weapons\Longsword;
 use EverCraft\Races\Race;
 
+/**
+ * Class Elven
+ * @package EverCraft\Items\Weapons\Longsword
+ */
 class Elven extends Longsword
 {
+    /**
+     * Elven constructor.
+     *
+     * @param int $magical
+     */
     public function __construct(int $magical = 0)
     {
         parent::__construct($magical);
@@ -54,6 +63,12 @@ class Elven extends Longsword
         return $attack_roll;
     }
 
+    /**
+     * @param Character $attacker
+     * @param Character $target
+     *
+     * @return int
+     */
     public function getDamageModifierWhenAttacking(Character $attacker, Character $target): int
     {
         $damage = parent::getDamageModifierWhenAttacking($attacker, $target);

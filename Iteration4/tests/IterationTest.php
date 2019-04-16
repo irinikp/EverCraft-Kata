@@ -5,13 +5,11 @@ namespace Tests;
 use EverCraft\Character;
 use EverCraft\Classes\SocialClass;
 use EverCraft\CombatAction;
-use EverCraft\Items\Elven;
 use EverCraft\Items\Weapons\Longsword;
 use EverCraft\Items\Weapons\NunChucks;
 use EverCraft\Items\Weapons\Waraxe;
 use EverCraft\Items\Weapons\Weapon;
 use EverCraft\Races\Race;
-use function GuzzleHttp\choose_handler;
 
 require __DIR__ . '/../vendor/autoload.php';
 
