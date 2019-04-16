@@ -95,7 +95,7 @@ class Character
     }
 
     /**
-     * @return Weapon
+     * @return Weapon|null
      */
     public function getWeapon(): Weapon
     {
@@ -118,6 +118,7 @@ class Character
     public function wield(Weapon $weapon): void
     {
         $this->weapon = $weapon;
+        $this->recalculateStats();
     }
 
     /**
@@ -591,7 +592,11 @@ class Character
      */
     protected function recalculateDamage(): void
     {
-        $this->setDamage($this->getClass()->getDamage($this) + $this->getRace()->getDamage($this));
+        if (null !== $this->weapon) {
+            $this->setDamage($this->getWeapon()->getDamage($this));
+        } else {
+            $this->setDamage($this->getClass()->getDamage($this) + $this->getRace()->getDamage($this));
+        }
     }
 
     /**
