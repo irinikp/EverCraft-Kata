@@ -511,7 +511,11 @@ class Character
      */
     protected function recalculateAttackBonus(): void
     {
-        $this->setAttackBonus($this->getAbilityModifier($this->getClass()->getAttackAbility()));
+        $attack_bonus = $this->getAbilityModifier($this->getClass()->getAttackAbility());
+        if (null !== $this->weapon) {
+            $attack_bonus += $this->weapon->getAttackRoll($this->getLevel());
+        }
+        $this->setAttackBonus($attack_bonus);
     }
 
     /**

@@ -39,6 +39,15 @@ abstract class Weapon extends CoreBuild
         return $this->magical;
     }
 
+    /**
+     * @param Character|null $target
+     *
+     * @return int
+     */
+    public function getAttackRoll($level, $attack_roll = 0, Character $target = null): int
+    {
+        return $this->magical;
+    }
 
     /**
      * @param string $type

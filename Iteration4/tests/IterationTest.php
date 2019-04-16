@@ -43,6 +43,25 @@ class IterationTest extends \PHPUnit\Framework\TestCase
         $this->assert_damage_of_weapon(Weapon::WARAXE, 8, 2);
     }
 
+    public function test_waraxe_plus_2_has_plus_2_attack_bonus()
+    {
+        $this->character->wield(new Waraxe(2));
+        $target = new Character();
+        $this->assert_attacker_hits_with_roll(8, $target);
+    }
+
+    /**
+     * @param int       $dice
+     * @param Character $target
+     */
+    private function assert_attacker_hits_with_roll($dice, $target): void
+    {
+        $hits = $this->createAttackRoll($dice - 1, $target);
+        $this->assertFalse($hits);
+        $hits = $this->createAttackRoll($dice, $target);
+        $this->assertTrue($hits);
+    }
+
     private function assert_damage_of_weapon($weapon, $damage, $magical)
     {
         $weapon_class = '\\EverCraft\\Items\\Weapons\\'.$weapon;
