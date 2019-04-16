@@ -7,9 +7,11 @@ use EverCraft\Classes\SocialClass;
 use EverCraft\CombatAction;
 use EverCraft\Items\Elven;
 use EverCraft\Items\Weapons\Longsword;
+use EverCraft\Items\Weapons\NunChucks;
 use EverCraft\Items\Weapons\Waraxe;
 use EverCraft\Items\Weapons\Weapon;
 use EverCraft\Races\Race;
+use function GuzzleHttp\choose_handler;
 
 require __DIR__ . '/../vendor/autoload.php';
 
@@ -33,17 +35,17 @@ class IterationTest extends \PHPUnit\Framework\TestCase
 
     public function test_longsword_does_5_points_of_damage()
     {
-        $this->assert_damage_of_weapon(Weapon::LONGSWORD, 5, 0);
+        $this->assert_damage_of_weapon(Weapon::LONGSWORD, 5, 0, $this->character);
     }
 
     public function test_waraxe_does_6_points_of_damage()
     {
-        $this->assert_damage_of_weapon(Weapon::WARAXE, 6, 0);
+        $this->assert_damage_of_weapon(Weapon::WARAXE, 6, 0, $this->character);
     }
 
     public function test_waraxe_plus_2_does_8_points_of_damage()
     {
-        $this->assert_damage_of_weapon(Weapon::WARAXE, 8, 2);
+        $this->assert_damage_of_weapon(Weapon::WARAXE, 8, 2, $this->character);
     }
 
     public function test_waraxe_plus_2_has_plus_2_attack_bonus()
@@ -72,7 +74,7 @@ class IterationTest extends \PHPUnit\Framework\TestCase
 
     public function test_elven_longsword_does_6_points_of_damage()
     {
-        $this->assert_damage_of_weapon(Weapon::ELVEN_LONGSWORD, 6, 0);
+        $this->assert_damage_of_weapon(Weapon::ELVEN_LONGSWORD, 6, 0, $this->character);
     }
 
     public function test_elven_longsword_has_plus_1_to_attack()
@@ -109,6 +111,20 @@ class IterationTest extends \PHPUnit\Framework\TestCase
         $this->assert_attacker_hits_with_roll(7, $target);
     }
 
+    public function test_monk_does_6_damage_with_nunchunks()
+    {
+        $this->character->setClass(SocialClass::MONK);
+        $this->assert_damage_of_weapon(Weapon::NUNCHUCKS, 6, 0, $this->character);
+    }
+
+    public function test_non_monk_has_minus_4_penalty_to_attack_with_nunchunks()
+    {
+        $this->character->wield(new NunChucks());
+        $target = new Character();
+        $this->assert_attacker_hits_with_roll(14, $target);
+        $this->assert_damage_of_weapon(Weapon::NUNCHUCKS, 6, 0, $this->character, 14);
+    }
+
     /**
      * @param int       $dice
      * @param Character $target
@@ -121,12 +137,19 @@ class IterationTest extends \PHPUnit\Framework\TestCase
         $this->assertTrue($hits);
     }
 
-    private function assert_damage_of_weapon($weapon, $damage, $magical)
+    /**
+     * @param string    $weapon
+     * @param int       $damage
+     * @param int       $magical
+     * @param Character $attacker
+     * @param int       $dice
+     */
+    private function assert_damage_of_weapon($weapon, $damage, $magical, $attacker, $dice = 10)
     {
         $weapon_class = '\\EverCraft\\Items\\Weapons\\' . $weapon;
         $this->character->wield(new $weapon_class($magical));
         $target = new Character();
-        $this->createAttackRoll(10, $target);
+        $this->createAttackRoll($dice, $target);
         $this->assert_has_remaining_hp(5 - $damage, $target);
     }
 

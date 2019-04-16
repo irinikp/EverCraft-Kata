@@ -14,6 +14,7 @@ abstract class Weapon extends CoreBuild
     const LONGSWORD = 'Longsword';
     const WARAXE    = 'Waraxe';
     const ELVEN_LONGSWORD = 'Longsword\\Elven';
+    const NUNCHUCKS = 'NunChucks';
 
     const CLASS_TYPES = [
         self::LONGSWORD,
