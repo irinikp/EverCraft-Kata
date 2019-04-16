@@ -51,13 +51,14 @@ class Dwarf extends Race
     /**
      * @param                $level
      * @param int            $attack_roll
+     * @param Character      $attacker
      * @param Character|null $target
      *
      * @return int
      */
-    public function getAttackRoll($level, $attack_roll = 0, Character $target = null): int
+    public function getAttackRoll($level, $attack_roll = 0, Character $attacker, Character $target = null): int
     {
-        $attack_roll = parent::getAttackRoll($level, $attack_roll, $target);
+        $attack_roll = parent::getAttackRoll($level, $attack_roll, $attacker, $target);
         if ($target && Race::ORC === $target->getRaceName()) {
             $attack_roll += 2;
         }
@@ -65,13 +66,14 @@ class Dwarf extends Race
     }
 
     /**
+     * @param Character $attacker
      * @param Character $target
      *
      * @return int
      */
-    public function getDamageModifierWhenAttacking(Character $target): int
+    public function getDamageModifierWhenAttacking(Character $attacker, Character $target): int
     {
-        $damage = parent::getDamageModifierWhenAttacking($target);
+        $damage = parent::getDamageModifierWhenAttacking($attacker, $target);
         if (Race::ORC === $target->getRaceName()) {
             $damage += 2;
         }

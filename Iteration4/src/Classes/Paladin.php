@@ -21,13 +21,14 @@ class Paladin extends SocialClass
     }
 
     /**
+     * @param Character $attacker
      * @param Character $target
      *
      * @return int
      */
-    public function getDamageModifierWhenAttacking(Character $target): int
+    public function getDamageModifierWhenAttacking(Character $attacker, Character $target): int
     {
-        $damage = parent::getDamageModifierWhenAttacking($target);
+        $damage = parent::getDamageModifierWhenAttacking($attacker, $target);
         if (Alignment::EVIL === $target->getAlignment()) {
             $damage += 2;
         }
@@ -37,11 +38,12 @@ class Paladin extends SocialClass
     /**
      * @param int            $level
      * @param int            $attack_roll
+     * @param Character      $attacker
      * @param Character|null $target
      *
      * @return int
      */
-    public function getAttackRoll($level, $attack_roll = 0, Character $target = null): int
+    public function getAttackRoll($level, $attack_roll = 0, Character $attacker, Character $target = null): int
     {
         $attack_roll = $level - 1;
         if ($target && Alignment::EVIL === $target->getAlignment()) {

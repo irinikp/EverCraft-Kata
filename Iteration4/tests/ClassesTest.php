@@ -26,13 +26,13 @@ class ClassesTest extends \PHPUnit\Framework\TestCase
         $this->character->setClass(SocialClass::FIGHTER);
         // Level 2
         $this->character->addXp(1000);
-        $this->assertEquals(1, $this->character->getClass()->getAttackRoll($this->character->getLevel()));
+        $this->assertEquals(1, $this->character->getClass()->getAttackRoll($this->character->getLevel(), 0, $this->character));
         // Level 3
         $this->character->addXp(1000);
-        $this->assertEquals(2, $this->character->getClass()->getAttackRoll($this->character->getLevel()));
+        $this->assertEquals(2, $this->character->getClass()->getAttackRoll($this->character->getLevel(), 0, $this->character));
         // Level 4
         $this->character->addXp(1000);
-        $this->assertEquals(3, $this->character->getClass()->getAttackRoll($this->character->getLevel()));
+        $this->assertEquals(3, $this->character->getClass()->getAttackRoll($this->character->getLevel(), 0, $this->character));
     }
 
     public function test_fighter_hp_is_10_initially()
@@ -120,26 +120,26 @@ class ClassesTest extends \PHPUnit\Framework\TestCase
     public function test_monks_attack_rolls_increases_every_2nd_and_3rd_level()
     {
         $this->character->setClass(SocialClass::MONK);
-        $this->assertEquals(0, $this->character->getClass()->getAttackRoll(1));
-        $this->assertEquals(1, $this->character->getClass()->getAttackRoll(2));
-        $this->assertEquals(2, $this->character->getClass()->getAttackRoll(3));
-        $this->assertEquals(3, $this->character->getClass()->getAttackRoll(4));
-        $this->assertEquals(3, $this->character->getClass()->getAttackRoll(5));
-        $this->assertEquals(4, $this->character->getClass()->getAttackRoll(6));
-        $this->assertEquals(4, $this->character->getClass()->getAttackRoll(7));
-        $this->assertEquals(5, $this->character->getClass()->getAttackRoll(8));
-        $this->assertEquals(6, $this->character->getClass()->getAttackRoll(9));
-        $this->assertEquals(7, $this->character->getClass()->getAttackRoll(10));
-        $this->assertEquals(7, $this->character->getClass()->getAttackRoll(11));
-        $this->assertEquals(8, $this->character->getClass()->getAttackRoll(12));
-        $this->assertEquals(8, $this->character->getClass()->getAttackRoll(13));
-        $this->assertEquals(9, $this->character->getClass()->getAttackRoll(14));
-        $this->assertEquals(10, $this->character->getClass()->getAttackRoll(15));
-        $this->assertEquals(11, $this->character->getClass()->getAttackRoll(16));
-        $this->assertEquals(11, $this->character->getClass()->getAttackRoll(17));
-        $this->assertEquals(12, $this->character->getClass()->getAttackRoll(18));
-        $this->assertEquals(12, $this->character->getClass()->getAttackRoll(19));
-        $this->assertEquals(13, $this->character->getClass()->getAttackRoll(20));
+        $this->assertEquals(0, $this->character->getClass()->getAttackRoll(1, 0, $this->character));
+        $this->assertEquals(1, $this->character->getClass()->getAttackRoll(2, 0, $this->character));
+        $this->assertEquals(2, $this->character->getClass()->getAttackRoll(3, 0, $this->character));
+        $this->assertEquals(3, $this->character->getClass()->getAttackRoll(4, 0, $this->character));
+        $this->assertEquals(3, $this->character->getClass()->getAttackRoll(5, 0, $this->character));
+        $this->assertEquals(4, $this->character->getClass()->getAttackRoll(6, 0, $this->character));
+        $this->assertEquals(4, $this->character->getClass()->getAttackRoll(7, 0, $this->character));
+        $this->assertEquals(5, $this->character->getClass()->getAttackRoll(8, 0, $this->character));
+        $this->assertEquals(6, $this->character->getClass()->getAttackRoll(9, 0, $this->character));
+        $this->assertEquals(7, $this->character->getClass()->getAttackRoll(10, 0, $this->character));
+        $this->assertEquals(7, $this->character->getClass()->getAttackRoll(11, 0, $this->character));
+        $this->assertEquals(8, $this->character->getClass()->getAttackRoll(12, 0, $this->character));
+        $this->assertEquals(8, $this->character->getClass()->getAttackRoll(13, 0, $this->character));
+        $this->assertEquals(9, $this->character->getClass()->getAttackRoll(14, 0, $this->character));
+        $this->assertEquals(10, $this->character->getClass()->getAttackRoll(15, 0, $this->character));
+        $this->assertEquals(11, $this->character->getClass()->getAttackRoll(16, 0, $this->character));
+        $this->assertEquals(11, $this->character->getClass()->getAttackRoll(17, 0, $this->character));
+        $this->assertEquals(12, $this->character->getClass()->getAttackRoll(18, 0, $this->character));
+        $this->assertEquals(12, $this->character->getClass()->getAttackRoll(19, 0, $this->character));
+        $this->assertEquals(13, $this->character->getClass()->getAttackRoll(20, 0, $this->character));
     }
 
     public function test_paladin_has_8_hit_points_per_level_instead_of_5()
@@ -157,10 +157,10 @@ class ClassesTest extends \PHPUnit\Framework\TestCase
     public function test_paladins_attack_rolls_increases_by_1_for_every_level()
     {
         $this->character->setClass(SocialClass::PALADIN);
-        $this->assertEquals(0, $this->character->getClass()->getAttackRoll(1));
-        $this->assertEquals(1, $this->character->getClass()->getAttackRoll(2));
-        $this->assertEquals(6, $this->character->getClass()->getAttackRoll(7));
-        $this->assertEquals(19, $this->character->getClass()->getAttackRoll(20));
+        $this->assertEquals(0, $this->character->getClass()->getAttackRoll(1, 0, $this->character));
+        $this->assertEquals(1, $this->character->getClass()->getAttackRoll(2, 0, $this->character));
+        $this->assertEquals(6, $this->character->getClass()->getAttackRoll(7, 0, $this->character));
+        $this->assertEquals(19, $this->character->getClass()->getAttackRoll(20, 0, $this->character));
     }
 
     public function test_paladin_can_only_have_good_alignment()

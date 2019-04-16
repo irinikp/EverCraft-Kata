@@ -144,8 +144,11 @@ class Character
     {
         $attack_bonus_on_this_target = 0;
         if (null !== $target) {
-            $attack_bonus_on_this_target += $this->getClass()->getAttackRoll($this->getLevel(), 0, $target)
-                + $this->getRace()->getAttackRoll($this->getLevel(), 0, $target);
+            $attack_bonus_on_this_target += $this->getClass()->getAttackRoll($this->getLevel(), 0, $this, $target)
+                + $this->getRace()->getAttackRoll($this->getLevel(), 0, $this, $target);
+            if ($this->wieldsWeapon()) {
+                $attack_bonus_on_this_target += $this->getWeapon()->getAttackRoll($this->getLevel(), 0, $this, $target);
+            }
         }
         return $attack_bonus_on_this_target + $this->attack_bonus;
     }
@@ -167,8 +170,11 @@ class Character
     {
         $damage = $this->damage;
         if (null !== $target) {
-            $damage += $this->getClass()->getDamageModifierWhenAttacking($target) +
-                $this->getRace()->getDamageModifierWhenAttacking($target);
+            $damage += $this->getClass()->getDamageModifierWhenAttacking($this, $target) +
+                $this->getRace()->getDamageModifierWhenAttacking($this, $target);
+            if ($this->wieldsWeapon()) {
+                $damage += $this->getWeapon()->getDamageModifierWhenAttacking($this, $target);
+            }
         }
         return $damage;
     }
@@ -518,9 +524,9 @@ class Character
     protected function recalculateAttackBonus(): void
     {
         $attack_bonus = $this->getAbilityModifier($this->getClass()->getAttackAbility());
-        if ($this->wieldsWeapon()) {
-            $attack_bonus += $this->weapon->getAttackRoll($this->getLevel());
-        }
+//        if ($this->wieldsWeapon()) {
+//            $attack_bonus += $this->weapon->getAttackRoll($this->getLevel(), 0, $this);
+//        }
         $this->setAttackBonus($attack_bonus);
     }
 

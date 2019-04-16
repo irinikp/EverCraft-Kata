@@ -29,11 +29,12 @@ abstract class CoreBuild
     }
 
     /**
+     * @param Character $attacker
      * @param Character $target
      *
      * @return int
      */
-    public function getDamageModifierWhenAttacking(Character $target): int
+    public function getDamageModifierWhenAttacking(Character $attacker, Character $target): int
     {
         return 0;
     }
@@ -89,11 +90,14 @@ abstract class CoreBuild
     }
 
     /**
+     * @param                $level
+     * @param int            $attack_roll
+     * @param Character      $attacker
      * @param Character|null $target
      *
      * @return int
      */
-    public function getAttackRoll($level, $attack_roll = 0, Character $target = null): int
+    public function getAttackRoll($level, $attack_roll = 0, Character $attacker, Character $target = null): int
     {
         return 0;
     }

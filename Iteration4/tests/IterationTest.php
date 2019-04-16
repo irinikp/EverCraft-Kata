@@ -5,9 +5,11 @@ namespace Tests;
 use EverCraft\Character;
 use EverCraft\Classes\SocialClass;
 use EverCraft\CombatAction;
+use EverCraft\Items\Elven;
 use EverCraft\Items\Weapons\Longsword;
 use EverCraft\Items\Weapons\Waraxe;
 use EverCraft\Items\Weapons\Weapon;
+use EverCraft\Races\Race;
 
 require __DIR__ . '/../vendor/autoload.php';
 
@@ -66,6 +68,45 @@ class IterationTest extends \PHPUnit\Framework\TestCase
         $target = new Character();
         $this->createAttackRoll(20, $target, 0);
         $this->assert_has_remaining_hp(-27, $target);
+    }
+
+    public function test_elven_longsword_does_6_points_of_damage()
+    {
+        $this->assert_damage_of_weapon(Weapon::ELVEN_LONGSWORD, 6, 0);
+    }
+
+    public function test_elven_longsword_has_plus_1_to_attack()
+    {
+        $this->character->wield(new Longsword\Elven());
+        $target = new Character();
+        $this->assert_attacker_hits_with_roll(9, $target);
+    }
+
+    public function test_elven_longsword_has_plus_2_to_attack_when_wielded_by_elf()
+    {
+        $this->character->setRace(Race::ELF);
+        $this->character->wield(new Longsword\Elven());
+        $target = new Character();
+        $this->assert_attacker_hits_with_roll(8, $target);
+    }
+
+    public function test_elven_longsword_has_plus_2_to_attack_when_wielded_against_orc()
+    {
+        $target = new Character();
+        $target->setRace(Race::ORC);
+        $this->assert_attacker_hits_with_roll(12, $target);
+        $this->character->wield(new Longsword\Elven());
+        $this->assert_attacker_hits_with_roll(10, $target);
+    }
+
+    public function test_elven_longsword_has_plus_5_to_attack_when_wielded_by_elf_against_orc()
+    {
+        $target = new Character();
+        $target->setRace(Race::ORC);
+        $this->character->setRace(Race::ELF);
+        $this->assert_attacker_hits_with_roll(12, $target);
+        $this->character->wield(new Longsword\Elven());
+        $this->assert_attacker_hits_with_roll(7, $target);
     }
 
     /**
