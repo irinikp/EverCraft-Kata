@@ -11,8 +11,6 @@ use EverCraft\Character;
  */
 class Waraxe extends Weapon
 {
-
-
     /**
      * @param Character $character
      *

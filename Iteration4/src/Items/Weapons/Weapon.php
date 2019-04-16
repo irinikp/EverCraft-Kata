@@ -24,6 +24,11 @@ abstract class Weapon extends CoreBuild
      */
     protected $magical;
 
+    /**
+     * Weapon constructor.
+     *
+     * @param int $magical
+     */
     public function __construct($magical = 0)
     {
         $this->magical = $magical;
@@ -49,6 +54,11 @@ abstract class Weapon extends CoreBuild
         return $this->magical;
     }
 
+    /**
+     * @param Character $target
+     *
+     * @return int
+     */
     public function getCriticalDamageMultiplier(Character $target): int
     {
         return intval($this->magical / 2);

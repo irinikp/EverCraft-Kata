@@ -114,6 +114,8 @@ class Character
 
     /**
      * @param Weapon $weapon
+     *
+     * @throws InvalidAlignmentException
      */
     public function wield(Weapon $weapon): void
     {
@@ -522,6 +524,9 @@ class Character
         $this->setAttackBonus($attack_bonus);
     }
 
+    /**
+     * @return bool
+     */
     protected function wieldsWeapon(): bool
     {
         return null !== $this->weapon;

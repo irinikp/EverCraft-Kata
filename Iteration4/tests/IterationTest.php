@@ -82,7 +82,7 @@ class IterationTest extends \PHPUnit\Framework\TestCase
 
     private function assert_damage_of_weapon($weapon, $damage, $magical)
     {
-        $weapon_class = '\\EverCraft\\Items\\Weapons\\'.$weapon;
+        $weapon_class = '\\EverCraft\\Items\\Weapons\\' . $weapon;
         $this->character->wield(new $weapon_class($magical));
         $target = new Character();
         $this->createAttackRoll(10, $target);
