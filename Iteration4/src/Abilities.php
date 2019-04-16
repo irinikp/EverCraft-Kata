@@ -97,16 +97,6 @@ class Abilities
     }
 
     /**
-     * @param string $ability
-     *
-     * @return bool
-     */
-    public static function isAbilityType($ability): bool
-    {
-        return in_array($ability, self::TYPE);
-    }
-
-    /**
      * @return int
      */
     public function getStrength(): int

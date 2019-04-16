@@ -27,16 +27,6 @@ abstract class Race extends CoreBuild
     ];
 
     /**
-     * @param string $type
-     *
-     * @return bool
-     */
-    public static function belongs(string $type): bool
-    {
-        return in_array($type, self::RACE_TYPES);
-    }
-
-    /**
      * @param Character $character
      *
      * @return int

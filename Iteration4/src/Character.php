@@ -195,7 +195,7 @@ class Character
     public function setRace(string $race): void
     {
         $race = ucfirst($race);
-        if (!Race::belongs($race)) {
+        if (!in_array($race, Race::RACE_TYPES)) {
             throw new \Exception("Undefined race $race");
         }
         $race       = '\EverCraft\\Races\\' . $race;
@@ -227,7 +227,7 @@ class Character
     public function setClass(string $class): void
     {
         $class = ucfirst($class);
-        if (!SocialClass::belongs($class)) {
+        if (!in_array($class, SocialClass::CLASS_TYPES)) {
             throw new \Exception("Undefined class $class");
         }
         $class       = '\EverCraft\\Classes\\' . $class;
@@ -380,7 +380,7 @@ class Character
     public function setAbility($ability, $value): void
     {
         $ability = ucfirst($ability);
-        if (!Abilities::isAbilityType($ability)) {
+        if (!in_array($ability, Abilities::TYPE)) {
             throw new \Exception('Undefined Ability $ability');
         }
         $function = "set$ability";
@@ -397,7 +397,7 @@ class Character
     public function getAbilityModifier($ability): int
     {
         $ability = ucfirst($ability);
-        if (!Abilities::isAbilityType($ability)) {
+        if (!in_array($ability, Abilities::TYPE)) {
             return 0;
         }
         $function = 'get' . $ability . 'Modifier';

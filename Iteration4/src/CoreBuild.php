@@ -11,13 +11,6 @@ abstract class CoreBuild
     const CRITICAL = 20;
 
     /**
-     * @param string $type
-     *
-     * @return bool
-     */
-    public abstract static function belongs(string $type): bool;
-
-    /**
      * @return int
      */
     public function getHpModifier(Character $character): int

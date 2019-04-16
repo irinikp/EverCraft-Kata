@@ -49,16 +49,6 @@ abstract class Weapon extends CoreBuild
         return $this->magical;
     }
 
-    /**
-     * @param string $type
-     *
-     * @return bool
-     */
-    public static function belongs(string $type): bool
-    {
-        return in_array($type, self::CLASS_TYPES);
-    }
-
     public function getCriticalDamageMultiplier(Character $target): int
     {
         return intval($this->magical / 2);

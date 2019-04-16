@@ -40,16 +40,6 @@ abstract class SocialClass extends CoreBuild
     }
 
     /**
-     * @param string $type
-     *
-     * @return bool
-     */
-    public static function belongs(string $type): bool
-    {
-        return in_array($type, self::CLASS_TYPES);
-    }
-
-    /**
      * @param int            $level
      * @param int            $attack_roll
      * @param Character|null $target
