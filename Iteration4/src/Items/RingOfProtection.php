@@ -22,14 +22,6 @@ class RingOfProtection extends Item
 
     /**
      * @param Character $character
-     */
-    public function remove(Character $character): void
-    {
-        return;
-    }
-
-    /**
-     * @param Character $character
      *
      * @return int
      */

@@ -12,6 +12,14 @@ class AmuletOfTheHeavens extends Item
 {
 
     /**
+     * @return bool
+     */
+    public function isMagical(): bool
+    {
+        return true;
+    }
+
+    /**
      * @param int            $level
      * @param int            $attack_roll
      * @param Character      $attacker
