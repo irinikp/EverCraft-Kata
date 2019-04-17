@@ -5,6 +5,7 @@ namespace Tests;
 use EverCraft\Character;
 use EverCraft\Classes\SocialClass;
 use EverCraft\CombatAction;
+use EverCraft\Items\Shields\Shield;
 use EverCraft\Items\Weapons\Longsword;
 use EverCraft\Items\Weapons\NunChucks;
 use EverCraft\Items\Weapons\Waraxe;
@@ -121,6 +122,16 @@ class IterationTest extends \PHPUnit\Framework\TestCase
         $target = new Character();
         $this->assert_attacker_hits_with_roll(14, $target);
         $this->assert_damage_of_weapon(Weapon::NUNCHUCKS, 6, 0, $this->character, 14);
+    }
+
+    public function test_character_can_don_one_shield()
+    {
+        // In order to confirm that a character holds only one shield, I compare the AC before and after he picks up the 2nd shield
+        // If he could hold 2 shields, his AC would change after picking up the 2nd one.
+        $this->character->don(new Shield());
+        $first_shield_ac = $this->character->getAc();
+        $this->character->don(new Shield());
+        $this->assertEquals($first_shield_ac, $this->character->getAc());
     }
 
     /**

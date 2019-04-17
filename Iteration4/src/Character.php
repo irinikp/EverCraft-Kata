@@ -4,6 +4,7 @@ namespace EverCraft;
 
 use EverCraft\Classes\Priest;
 use EverCraft\Classes\SocialClass;
+use EverCraft\Items\Shields\Shield;
 use EverCraft\Items\Weapons\Weapon;
 use EverCraft\Races\Human;
 use EverCraft\Races\Race;
@@ -76,6 +77,26 @@ class Character
     protected $weapon;
 
     /**
+     * @return Shield
+     */
+    public function getShield(): Shield
+    {
+        return $this->shield;
+    }
+
+    /**
+     * @param Shield $shield
+     */
+    public function setShield(Shield $shield): void
+    {
+        $this->shield = $shield;
+    }
+    /**
+     * @var Shield
+     */
+    protected $shield;
+
+    /**
      * Character constructor.
      */
     public function __construct()
@@ -91,6 +112,7 @@ class Character
         $this->alignment = Alignment::NEUTRAL;
         $this->race      = new Human();
         $this->weapon    = null;
+        $this->shield    = null;
         $this->recalculateStats();
     }
 
@@ -103,16 +125,6 @@ class Character
     }
 
     /**
-     * @return string
-     */
-    public function getWeaponName(): string
-    {
-        if ($this->wieldsWeapon()) {
-            return $this->getObjectClassNameWithoutNamespace($this->weapon);
-        }
-    }
-
-    /**
      * @param Weapon $weapon
      *
      * @throws InvalidAlignmentException
@@ -120,6 +132,17 @@ class Character
     public function wield(Weapon $weapon): void
     {
         $this->weapon = $weapon;
+        $this->recalculateStats();
+    }
+
+    /**
+     * @param Shield $shield
+     *
+     * @throws InvalidAlignmentException
+     */
+    public function don(Shield $shield): void
+    {
+        $this->shield = $shield;
         $this->recalculateStats();
     }
 
