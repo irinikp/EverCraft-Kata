@@ -89,6 +89,10 @@ class Character
      * @var Shield
      */
     protected $shield;
+    /**
+     * @var array<Item>
+     */
+    protected $items;
 
     /**
      * Character constructor.
@@ -108,6 +112,7 @@ class Character
         $this->weapon    = null;
         $this->shield    = null;
         $this->armor     = null;
+        $this->items     = [];
         $this->recalculateStats();
     }
 
@@ -164,6 +169,8 @@ class Character
             $this->shield = $item;
         } elseif (is_a($item, 'EverCraft\Items\Armors\Armor')) {
             $this->wearArmor($item);
+        } else {
+            array_push($this->items, $item);
         }
         $this->recalculateStats();
     }
@@ -661,8 +668,21 @@ class Character
             $this->getClass()->getAcModifier($this) +
             $this->getRace()->getAcModifier($this) +
             $this->getArmorAc() +
-            $this->getShieldAc()
+            $this->getShieldAc() +
+            $this->getItemsAc()
         );
+    }
+
+    /**
+     * @return int
+     */
+    protected function getItemsAc(): int
+    {
+        $ac = 0;
+        foreach ($this->items as $item) {
+            $ac += $item->getAcModifier($this);
+        }
+        return $ac;
     }
 
     /**

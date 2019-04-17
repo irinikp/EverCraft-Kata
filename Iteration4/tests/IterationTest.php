@@ -9,6 +9,7 @@ use EverCraft\Items\Armors;
 use EverCraft\Items\Armors\Leather;
 use EverCraft\Items\Armors\LeatherOfDamageReduction;
 use EverCraft\Items\Armors\Plate;
+use EverCraft\Items\RingOfProtection;
 use EverCraft\Items\Shields\Shield;
 use EverCraft\Items\Weapons\Longsword;
 use EverCraft\Items\Weapons\NunChucks;
@@ -249,6 +250,13 @@ class IterationTest extends \PHPUnit\Framework\TestCase
         $this->character->setClass(SocialClass::FIGHTER);
         $this->character->use(new Shield());
         $this->assert_attacker_hits_with_roll(12, $target);
+    }
+
+    public function test_ring_of_protection_adds_2_to_ac()
+    {
+        $old_ac = $this->character->getAc();
+        $this->character->use(new RingOfProtection());
+        $this->assertEquals(($old_ac + 2), $this->character->getAc());
     }
 
     /**
