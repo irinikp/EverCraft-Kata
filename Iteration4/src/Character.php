@@ -4,6 +4,7 @@ namespace EverCraft;
 
 use EverCraft\Classes\Priest;
 use EverCraft\Classes\SocialClass;
+use EverCraft\Items\Armors\Armor;
 use EverCraft\Items\Item;
 use EverCraft\Items\Shields\Shield;
 use EverCraft\Items\Weapons\Weapon;
@@ -76,22 +77,10 @@ class Character
      * @var Weapon
      */
     protected $weapon;
-
     /**
-     * @return Shield
+     * @var Armor
      */
-    public function getShield(): Shield
-    {
-        return $this->shield;
-    }
-
-    /**
-     * @param Shield $shield
-     */
-    public function setShield(Shield $shield): void
-    {
-        $this->shield = $shield;
-    }
+    protected $armor;
     /**
      * @var Shield
      */
@@ -114,7 +103,40 @@ class Character
         $this->race      = new Human();
         $this->weapon    = null;
         $this->shield    = null;
+        $this->armor     = null;
         $this->recalculateStats();
+    }
+
+    /**
+     * @return Armor
+     */
+    public function getArmor(): Armor
+    {
+        return $this->armor;
+    }
+
+    /**
+     * @param Armor $armor
+     */
+    public function setArmor(Armor $armor): void
+    {
+        $this->armor = $armor;
+    }
+
+    /**
+     * @return Shield
+     */
+    public function getShield(): Shield
+    {
+        return $this->shield;
+    }
+
+    /**
+     * @param Shield $shield
+     */
+    public function setShield(Shield $shield): void
+    {
+        $this->shield = $shield;
     }
 
     /**
@@ -126,18 +148,29 @@ class Character
     }
 
     /**
-     * @param Item $weapon
+     * @param Item $item
      *
      * @throws InvalidAlignmentException
      */
-    public function use(Item $weapon): void
+    public function use(Item $item): void
     {
-        if (is_a($weapon, 'EverCraft\Items\Weapons\Weapon')) {
-            $this->weapon = $weapon;
-        } elseif (is_a($weapon, 'EverCraft\Items\Shields\Shield')) {
-            $this->shield = $weapon;
+        if (is_a($item, 'EverCraft\Items\Weapons\Weapon')) {
+            $this->weapon = $item;
+        } elseif (is_a($item, 'EverCraft\Items\Shields\Shield')) {
+            $this->shield = $item;
+        } elseif (is_a($item, 'EverCraft\Items\Armors\Armor')) {
+            $this->armor = $item;
         }
         $this->recalculateStats();
+    }
+
+    public function getArmorName(): string
+    {
+        $name = '';
+        if (null !== $this->armor) {
+            $name = $this->getObjectClassNameWithoutNamespace($this->armor);
+        }
+        return $name;
     }
 
     /**

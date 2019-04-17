@@ -5,6 +5,8 @@ namespace Tests;
 use EverCraft\Character;
 use EverCraft\Classes\SocialClass;
 use EverCraft\CombatAction;
+use EverCraft\Items\Armors\Leather;
+use EverCraft\Items\Armors\Plate;
 use EverCraft\Items\Shields\Shield;
 use EverCraft\Items\Weapons\Longsword;
 use EverCraft\Items\Weapons\NunChucks;
@@ -133,6 +135,13 @@ class IterationTest extends \PHPUnit\Framework\TestCase
         $first_shield_ac = $this->character->getAc();
         $this->character->use(new Shield());
         $this->assertEquals($first_shield_ac, $this->character->getAc());
+    }
+
+    public function test_character_can_wear_one_armor()
+    {
+        $this->character->use(new Plate());
+        $this->character->use(new Leather());
+        $this->assertEquals('Leather', $this->character->getArmorName());
     }
 
     /**
