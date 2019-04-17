@@ -2,9 +2,11 @@
 
 namespace Tests;
 
+use EverCraft\Alignment;
 use EverCraft\Character;
 use EverCraft\Classes\SocialClass;
 use EverCraft\CombatAction;
+use EverCraft\Items\AmuletOfTheHeavens;
 use EverCraft\Items\Armors;
 use EverCraft\Items\Armors\Leather;
 use EverCraft\Items\Armors\LeatherOfDamageReduction;
@@ -268,6 +270,41 @@ class IterationTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(($old_str + 4), $this->character->getAbilities()->getStrength());
         $this->character->stopUsing($belt);
         $this->assertEquals($old_str, $this->character->getAbilities()->getStrength());
+    }
+
+    public function test_amulet_of_heavens_gives_plus_1_to_attack_against_neutral()
+    {
+        $this->character->use(new AmuletOfTheHeavens());
+        $target = new Character();
+        $target->setAlignment(Alignment::NEUTRAL);
+        $this->assert_attacker_hits_with_roll(9, $target);
+    }
+
+    public function test_amulet_of_heavens_gives_plus_2_to_attack_against_evil()
+    {
+        $this->character->use(new AmuletOfTheHeavens());
+        $target = new Character();
+        $target->setAlignment(Alignment::EVIL);
+        $this->assert_attacker_hits_with_roll(8, $target);
+    }
+
+    public function test_amulet_of_heavens_worn_by_paladin_gives_plus_2_to_attack_against_neutral()
+    {
+        $this->character->setClass(SocialClass::PALADIN);
+        $this->character->use(new AmuletOfTheHeavens());
+        $target = new Character();
+        $target->setAlignment(Alignment::NEUTRAL);
+        $this->assert_attacker_hits_with_roll(8, $target);
+    }
+
+    public function test_amulet_of_heavens_worn_by_paladin_gives_plus_4_to_attack_against_evil()
+    {
+        // Paladins already have +2 to attack against Evil, therefore when wearing the amulet they have +6 to attack roll
+        $this->character->setClass(SocialClass::PALADIN);
+        $this->character->use(new AmuletOfTheHeavens());
+        $target = new Character();
+        $target->setAlignment(Alignment::EVIL);
+        $this->assert_attacker_hits_with_roll(4, $target);
     }
 
     /**

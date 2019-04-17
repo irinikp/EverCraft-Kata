@@ -270,16 +270,7 @@ class Character
         $attack_bonus_on_this_target = 0;
         if ($target) {
             $attack_bonus_on_this_target += $this->getClass()->getAttackRoll($this->getLevel(), 0, $this, $target)
-                + $this->getRace()->getAttackRoll($this->getLevel(), 0, $this, $target);
-            if ($this->weapon) {
-                $attack_bonus_on_this_target += $this->getWeapon()->getAttackRoll($this->getLevel(), 0, $this, $target);
-            }
-            if ($this->armor) {
-                $attack_bonus_on_this_target += $this->getArmor()->getAttackRoll($this->getLevel(), 0, $this, $target);
-            }
-            if ($this->shield) {
-                $attack_bonus_on_this_target += $this->getShield()->getAttackRoll($this->getLevel(), 0, $this, $target);
-            }
+                + $this->getRace()->getAttackRoll($this->getLevel(), 0, $this, $target) + $this->getItemsAttackBonus($target);
         }
         return $attack_bonus_on_this_target + $this->attack_bonus;
     }
@@ -290,6 +281,29 @@ class Character
     public function setAttackBonus(int $attack_bonus): void
     {
         $this->attack_bonus = $attack_bonus;
+    }
+
+    /**
+     * @param Character $target
+     *
+     * @return int
+     */
+    public function getItemsAttackBonus(Character $target): int
+    {
+        $attack_bonus = 0;
+        if ($this->weapon) {
+            $attack_bonus += $this->getWeapon()->getAttackRoll($this->getLevel(), 0, $this, $target);
+        }
+        if ($this->armor) {
+            $attack_bonus += $this->getArmor()->getAttackRoll($this->getLevel(), 0, $this, $target);
+        }
+        if ($this->shield) {
+            $attack_bonus += $this->getShield()->getAttackRoll($this->getLevel(), 0, $this, $target);
+        }
+        foreach ($this->items as $item) {
+            $attack_bonus += $item->getAttackRoll($this->getLevel(), 0, $this, $target);
+        }
+        return $attack_bonus;
     }
 
     /**
