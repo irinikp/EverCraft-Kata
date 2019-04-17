@@ -10,7 +10,7 @@ use EverCraft\Character;
  * Class RingOfProtection
  * @package EverCraft\Items
  */
-class RingOfProtection implements Item
+class RingOfProtection extends Item
 {
     /**
      * @return bool
@@ -18,6 +18,14 @@ class RingOfProtection implements Item
     public function isMagical(): bool
     {
         return true;
+    }
+
+    /**
+     * @param Character $character
+     */
+    public function remove(Character $character): void
+    {
+        return;
     }
 
     /**

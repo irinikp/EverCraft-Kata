@@ -4,15 +4,30 @@ namespace EverCraft\Items\Armors;
 
 
 use EverCraft\Character;
-use EverCraft\CoreBuild;
 use EverCraft\Items\Item;
 
 /**
  * Class Armor
  * @package EverCraft\Items\Armors
  */
-class Armor extends CoreBuild implements Item
+class Armor extends Item
 {
+
+    /**
+     * @param Character $character
+     */
+    public function wear(Character $character): void
+    {
+        $character->wearArmor($this);
+    }
+
+    /**
+     * @param Character $character
+     */
+    public function remove(Character $character): void
+    {
+        $character->setArmor(null);
+    }
 
     /**
      * @param Character $character
@@ -22,13 +37,5 @@ class Armor extends CoreBuild implements Item
     public function isAllowedToWear(Character $character): bool
     {
         return true;
-    }
-
-    /**
-     * @return bool
-     */
-    public function isMagical(): bool
-    {
-        return false;
     }
 }

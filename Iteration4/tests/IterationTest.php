@@ -9,6 +9,7 @@ use EverCraft\Items\Armors;
 use EverCraft\Items\Armors\Leather;
 use EverCraft\Items\Armors\LeatherOfDamageReduction;
 use EverCraft\Items\Armors\Plate;
+use EverCraft\Items\BeltOfGiantStrength;
 use EverCraft\Items\RingOfProtection;
 use EverCraft\Items\Shields\Shield;
 use EverCraft\Items\Weapons\Longsword;
@@ -257,6 +258,16 @@ class IterationTest extends \PHPUnit\Framework\TestCase
         $old_ac = $this->character->getAc();
         $this->character->use(new RingOfProtection());
         $this->assertEquals(($old_ac + 2), $this->character->getAc());
+    }
+
+    public function test_belt_of_giant_strength()
+    {
+        $old_str = $this->character->getAbilities()->getStrength();
+        $belt    = new BeltOfGiantStrength();
+        $this->character->use($belt);
+        $this->assertEquals(($old_str + 4), $this->character->getAbilities()->getStrength());
+        $this->character->stopUsing($belt);
+        $this->assertEquals($old_str, $this->character->getAbilities()->getStrength());
     }
 
     /**

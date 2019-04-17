@@ -117,6 +117,38 @@ class Character
     }
 
     /**
+     * @return Weapon
+     */
+    public function getWeapon(): Weapon
+    {
+        return $this->weapon;
+    }
+
+    /**
+     * @param Weapon $weapon
+     */
+    public function setWeapon(Weapon $weapon): void
+    {
+        $this->weapon = $weapon;
+    }
+
+    /**
+     * @return array
+     */
+    public function getItems(): array
+    {
+        return $this->items;
+    }
+
+    /**
+     * @param array $items
+     */
+    public function setItems(array $items): void
+    {
+        $this->items = $items;
+    }
+
+    /**
      * @return Armor
      */
     public function getArmor(): Armor
@@ -149,11 +181,14 @@ class Character
     }
 
     /**
-     * @return Weapon|null
+     * @param Item $item
+     *
+     * @throws InvalidAlignmentException
      */
-    public function getWeapon(): Weapon
+    public function use(Item $item): void
     {
-        return $this->weapon;
+        $item->wear($this);
+        $this->recalculateStats();
     }
 
     /**
@@ -161,19 +196,29 @@ class Character
      *
      * @throws InvalidAlignmentException
      */
-    public function use(Item $item): void
+    public function stopUsing(Item $item): void
     {
-        if (is_a($item, 'EverCraft\Items\Weapons\Weapon')) {
-            $this->weapon = $item;
-        } elseif (is_a($item, 'EverCraft\Items\Shields\Shield')) {
-            $this->shield = $item;
-        } elseif (is_a($item, 'EverCraft\Items\Armors\Armor')) {
-            $this->wearArmor($item);
-        } else {
-            array_push($this->items, $item);
-        }
+        $item->remove($this);
         $this->recalculateStats();
     }
+
+    /**
+     * @param Item $item
+     */
+    public function pushItem(Item $item): void
+    {
+        array_push($this->items, $item);
+    }
+
+    /**
+     * @param Item $item
+     */
+    public function removeItem(Item $item): void
+    {
+        $key = array_search($item, $this->items);
+        unset($this->items[$key]);
+    }
+
 
     /**
      * @return int
@@ -607,7 +652,7 @@ class Character
     /**
      * @param Armor $armor
      */
-    protected function wearArmor(Armor $armor): void
+    public function wearArmor(Armor $armor): void
     {
         if ($armor->isAllowedToWear($this)) {
             $this->armor = $armor;

@@ -5,23 +5,29 @@ namespace EverCraft\Items\Shields;
 
 use EverCraft\Character;
 use EverCraft\Classes\SocialClass;
-use EverCraft\CoreBuild;
 use EverCraft\Items\Item;
-use EverCraft\Races\Race;
 
 /**
  * Class Shield
  * @package EverCraft\Items\Shields
  */
-class Shield extends CoreBuild implements Item
+class Shield extends Item
 {
 
     /**
-     * @return bool
+     * @param Character $character
      */
-    public function isMagical(): bool
+    public function wear(Character $character): void
     {
-        return false;
+        $character->setShield($this);
+    }
+
+    /**
+     * @param Character $character
+     */
+    public function remove(Character $character): void
+    {
+        $character->setShield(null);
     }
 
     /**
