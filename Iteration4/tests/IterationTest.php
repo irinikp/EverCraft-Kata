@@ -5,6 +5,7 @@ namespace Tests;
 use EverCraft\Character;
 use EverCraft\Classes\SocialClass;
 use EverCraft\CombatAction;
+use EverCraft\Items\Armors;
 use EverCraft\Items\Armors\Leather;
 use EverCraft\Items\Armors\LeatherOfDamageReduction;
 use EverCraft\Items\Armors\Plate;
@@ -203,6 +204,30 @@ class IterationTest extends \PHPUnit\Framework\TestCase
         $target->use(new LeatherOfDamageReduction());
         $this->createAttackRoll(13, $target, 0);
         $this->assert_has_remaining_hp(5, $target);
+    }
+
+    public function test_elven_chain_mail_adds_5_to_ac()
+    {
+        $old_ac = $this->character->getAc();
+        $this->character->use(new Armors\ChainMail\Elven());
+        $this->assertEquals(($old_ac + 5), $this->character->getAc());
+    }
+
+    public function test_elven_chain_mail_adds_8_to_ac_if_worn_by_an_elf()
+    {
+        $this->character->setRace(Race::ELF);
+        $old_ac = $this->character->getAc();
+        $this->character->use(new Armors\ChainMail\Elven());
+        $this->assertEquals(($old_ac + 8), $this->character->getAc());
+    }
+
+    public function test_elven_chainmail_gives_plus_1_to_attack_when_worn_by_elf()
+    {
+        $this->character->setRace(Race::ELF);
+        $target = new Character();
+        $this->assert_attacker_hits_with_roll(10, $target);
+        $this->character->use(new Armors\ChainMail\Elven());
+        $this->assert_attacker_hits_with_roll(9, $target);
     }
 
     /**

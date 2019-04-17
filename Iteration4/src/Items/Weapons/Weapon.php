@@ -57,7 +57,7 @@ abstract class Weapon extends CoreBuild implements Item
     }
 
     /**
-     * @param                $level
+     * @param int            $level
      * @param int            $attack_roll
      * @param Character      $attacker
      * @param Character|null $target

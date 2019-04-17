@@ -49,7 +49,7 @@ class Dwarf extends Race
     }
 
     /**
-     * @param                $level
+     * @param int            $level
      * @param int            $attack_roll
      * @param Character      $attacker
      * @param Character|null $target
