@@ -144,6 +144,13 @@ class IterationTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals('Leather', $this->character->getArmorName());
     }
 
+    public function test_leather_armor_adds_2_to_ac()
+    {
+        $old_ac = $this->character->getAc();
+        $this->character->use(new Leather());
+        $this->assertEquals(($old_ac + 2), $this->character->getAc());
+    }
+
     /**
      * @param int       $dice
      * @param Character $target

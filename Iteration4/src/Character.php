@@ -630,8 +630,18 @@ class Character
             $this->getClass()->getBasicAc() +
             $this->getAbilityModifier(Abilities::DEX) +
             $this->getClass()->getAcModifier($this) +
-            $this->getRace()->getAcModifier($this)
+            $this->getRace()->getAcModifier($this) +
+            $this->getArmorAc()
         );
+    }
+
+    protected function getArmorAc()
+    {
+        $ac = 0;
+        if ($this->armor) {
+            $ac = $this->getArmor()->getAcModifier($this);
+        }
+        return $ac;
     }
 
     /**
