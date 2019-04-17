@@ -172,6 +172,14 @@ class IterationTest extends \PHPUnit\Framework\TestCase
         $this->assertNotEquals('Plate', $this->character->getArmorName());
     }
 
+    public function test_plate_armor_adds_8_to_ac()
+    {
+        $this->character->setRace('Dwarf');
+        $old_ac = $this->character->getAc();
+        $this->character->use(new Plate());
+        $this->assertEquals(($old_ac + 8), $this->character->getAc());
+    }
+
     /**
      * @param int       $dice
      * @param Character $target
