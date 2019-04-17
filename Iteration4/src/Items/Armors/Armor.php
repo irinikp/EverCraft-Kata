@@ -23,4 +23,12 @@ class Armor extends CoreBuild implements Item
     {
         return true;
     }
+
+    /**
+     * @return bool
+     */
+    public function isMagical(): bool
+    {
+        return false;
+    }
 }

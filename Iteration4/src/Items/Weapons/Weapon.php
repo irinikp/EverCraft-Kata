@@ -39,6 +39,14 @@ abstract class Weapon extends CoreBuild implements Item
     }
 
     /**
+     * @return bool
+     */
+    public function isMagical(): bool
+    {
+        return $this->magical > 0;
+    }
+
+    /**
      * @param Character $character
      *
      * @return int

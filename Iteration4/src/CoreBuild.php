@@ -111,4 +111,12 @@ abstract class CoreBuild
     {
         return ($dice === self::CRITICAL);
     }
+
+    /**
+     * @return int
+     */
+    public function getDamageReceiving(): int
+    {
+        return 0;
+    }
 }

@@ -75,6 +75,7 @@ class CombatAction
         if ($this->attacker->isCritical($this->dice)) {
             $damage *= $this->attacker->getCriticalDamageMultiplier($this->target);
         }
-        return max(1, $damage);
+        $damage = max(1, $damage);
+        return max(0, $damage + $this->target->getDamageReceiving());
     }
 }

@@ -70,6 +70,10 @@ class Character
      */
     protected $damage;
     /**
+     * @var int
+     */
+    protected $damage_receiving;
+    /**
      * @var Race
      */
     protected $race;
@@ -164,11 +168,20 @@ class Character
         $this->recalculateStats();
     }
 
-    protected function wearArmor(Armor $armor)
+    /**
+     * @return int
+     */
+    public function getDamageReceiving(): int
     {
-        if ($armor->isAllowedToWear($this)) {
-            $this->armor = $armor;
-        }
+        return $this->damage_receiving;
+    }
+
+    /**
+     * @param int $damage_receiving
+     */
+    public function setDamageReceiving(int $damage_receiving): void
+    {
+        $this->damage_receiving = $damage_receiving;
     }
 
     /**
@@ -579,6 +592,16 @@ class Character
     }
 
     /**
+     * @param Armor $armor
+     */
+    protected function wearArmor(Armor $armor): void
+    {
+        if ($armor->isAllowedToWear($this)) {
+            $this->armor = $armor;
+        }
+    }
+
+    /**
      *
      */
     protected function recalculateAttackBonus(): void
@@ -608,6 +631,7 @@ class Character
         $this->recalculateAlignment();
         $this->recalculateAttackBonus();
         $this->recalculateDamage();
+        $this->recalculateDamageReceiving();
 
     }
 
@@ -693,6 +717,17 @@ class Character
             $this->setDamage($this->getWeapon()->getDamage($this));
         } else {
             $this->setDamage($this->getClass()->getDamage($this) + $this->getRace()->getDamage($this));
+        }
+    }
+
+    /**
+     *
+     */
+    protected function recalculateDamageReceiving(): void
+    {
+        $this->setDamageReceiving($this->getClass()->getDamageReceiving());
+        if ($this->armor) {
+            $this->setDamageReceiving($this->getArmor()->getDamageReceiving());
         }
     }
 

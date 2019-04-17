@@ -6,6 +6,7 @@ use EverCraft\Character;
 use EverCraft\Classes\SocialClass;
 use EverCraft\CombatAction;
 use EverCraft\Items\Armors\Leather;
+use EverCraft\Items\Armors\LeatherOfDamageReduction;
 use EverCraft\Items\Armors\Plate;
 use EverCraft\Items\Shields\Shield;
 use EverCraft\Items\Weapons\Longsword;
@@ -178,6 +179,30 @@ class IterationTest extends \PHPUnit\Framework\TestCase
         $old_ac = $this->character->getAc();
         $this->character->use(new Plate());
         $this->assertEquals(($old_ac + 8), $this->character->getAc());
+    }
+
+    public function test_leather_armor_of_damage_reduction_adds_2_to_ac()
+    {
+        $old_ac = $this->character->getAc();
+        $this->character->use(new LeatherOfDamageReduction());
+        $this->assertEquals(($old_ac + 2), $this->character->getAc());
+    }
+
+    public function test_leather_armor_of_damage_reduction_reduces_all_damage_received_by_2()
+    {
+        $target = new Character();
+        $target->use(new LeatherOfDamageReduction());
+        $this->character->use(new Waraxe());
+        $this->createAttackRoll(13, $target, 0);
+        $this->assert_has_remaining_hp(1, $target);
+    }
+
+    public function test_reducing_receiving_damage_does_not_give_extra_hit_points()
+    {
+        $target = new Character();
+        $target->use(new LeatherOfDamageReduction());
+        $this->createAttackRoll(13, $target, 0);
+        $this->assert_has_remaining_hp(5, $target);
     }
 
     /**
