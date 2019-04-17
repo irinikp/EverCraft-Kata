@@ -7,7 +7,7 @@ use EverCraft\Character;
 use EverCraft\CoreBuild;
 
 /**
- * Class iClass
+ * Class SocialClass
  * @package EverCraft
  */
 abstract class SocialClass extends CoreBuild

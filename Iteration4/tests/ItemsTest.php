@@ -22,7 +22,7 @@ use EverCraft\Races\Race;
 
 require __DIR__ . '/../vendor/autoload.php';
 
-class IterationTest extends \PHPUnit\Framework\TestCase
+class ItemsTest extends \PHPUnit\Framework\TestCase
 {
     protected $character;
 
@@ -71,7 +71,7 @@ class IterationTest extends \PHPUnit\Framework\TestCase
         $this->assert_has_remaining_hp(-19, $target);
     }
 
-    public function test_rogues__with_plus_2_weapon_does_quadruple_critical_hit()
+    public function test_rogues_with_plus_2_weapon_does_quadruple_critical_hit()
     {
         $this->character->setClass(SocialClass::ROGUE);
         $this->character->use(new Waraxe(2));
