@@ -225,9 +225,30 @@ class IterationTest extends \PHPUnit\Framework\TestCase
     {
         $this->character->setRace(Race::ELF);
         $target = new Character();
-        $this->assert_attacker_hits_with_roll(10, $target);
         $this->character->use(new Armors\ChainMail\Elven());
         $this->assert_attacker_hits_with_roll(9, $target);
+    }
+
+    public function test_shield_adds_3_to_ac()
+    {
+        $old_ac = $this->character->getAc();
+        $this->character->use(new Shield());
+        $this->assertEquals(($old_ac + 3), $this->character->getAc());
+    }
+
+    public function test_shield_reduces_attack_roll_by_four()
+    {
+        $target = new Character();
+        $this->character->use(new Shield());
+        $this->assert_attacker_hits_with_roll(14, $target);
+    }
+
+    public function test_shield_reduces_attack_roll_by_two_when_used_by_a_fighter()
+    {
+        $target = new Character();
+        $this->character->setClass(SocialClass::FIGHTER);
+        $this->character->use(new Shield());
+        $this->assert_attacker_hits_with_roll(12, $target);
     }
 
     /**

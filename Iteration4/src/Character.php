@@ -225,6 +225,9 @@ class Character
             if ($this->armor) {
                 $attack_bonus_on_this_target += $this->getArmor()->getAttackRoll($this->getLevel(), 0, $this, $target);
             }
+            if ($this->shield) {
+                $attack_bonus_on_this_target += $this->getShield()->getAttackRoll($this->getLevel(), 0, $this, $target);
+            }
         }
         return $attack_bonus_on_this_target + $this->attack_bonus;
     }
@@ -610,9 +613,6 @@ class Character
     protected function recalculateAttackBonus(): void
     {
         $attack_bonus = $this->getAbilityModifier($this->getClass()->getAttackAbility());
-//        if ($this->weapon) {
-//            $attack_bonus += $this->weapon->getAttackRoll($this->getLevel(), 0, $this);
-//        }
         $this->setAttackBonus($attack_bonus);
     }
 
@@ -660,7 +660,8 @@ class Character
             $this->getAbilityModifier(Abilities::DEX) +
             $this->getClass()->getAcModifier($this) +
             $this->getRace()->getAcModifier($this) +
-            $this->getArmorAc()
+            $this->getArmorAc() +
+            $this->getShieldAc()
         );
     }
 
@@ -672,6 +673,18 @@ class Character
         $ac = 0;
         if ($this->armor) {
             $ac = $this->getArmor()->getAcModifier($this);
+        }
+        return $ac;
+    }
+
+    /**
+     * @return int
+     */
+    protected function getShieldAc(): int
+    {
+        $ac = 0;
+        if ($this->shield) {
+            $ac = $this->getShield()->getAcModifier($this);
         }
         return $ac;
     }
