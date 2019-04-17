@@ -27,8 +27,9 @@ class IterationTest extends \PHPUnit\Framework\TestCase
 
     public function test_character_can_wield_only_1_weapon()
     {
-        $this->character->wield(new Longsword());
-        $this->character->wield(new Waraxe());
+        $this->character->use(new Longsword());
+        $this->assertTrue(true);
+        $this->character->use(new Waraxe());
         $this->assertEquals('Waraxe', $this->character->getWieldingWeaponName());
     }
 
@@ -49,14 +50,14 @@ class IterationTest extends \PHPUnit\Framework\TestCase
 
     public function test_waraxe_plus_2_has_plus_2_attack_bonus()
     {
-        $this->character->wield(new Waraxe(2));
+        $this->character->use(new Waraxe(2));
         $target = new Character();
         $this->assert_attacker_hits_with_roll(8, $target);
     }
 
     public function test_plus_2_weapon_triples_damage_on_critical()
     {
-        $this->character->wield(new Waraxe(2));
+        $this->character->use(new Waraxe(2));
         $target = new Character();
         $this->createAttackRoll(20, $target, 0);
         $this->assert_has_remaining_hp(-19, $target);
@@ -65,7 +66,7 @@ class IterationTest extends \PHPUnit\Framework\TestCase
     public function test_rogues__with_plus_2_weapon_does_quadruple_critical_hit()
     {
         $this->character->setClass(SocialClass::ROGUE);
-        $this->character->wield(new Waraxe(2));
+        $this->character->use(new Waraxe(2));
         $target = new Character();
         $this->createAttackRoll(20, $target, 0);
         $this->assert_has_remaining_hp(-27, $target);
@@ -78,7 +79,7 @@ class IterationTest extends \PHPUnit\Framework\TestCase
 
     public function test_elven_longsword_has_plus_1_to_attack()
     {
-        $this->character->wield(new Longsword\Elven());
+        $this->character->use(new Longsword\Elven());
         $target = new Character();
         $this->assert_attacker_hits_with_roll(9, $target);
     }
@@ -86,7 +87,7 @@ class IterationTest extends \PHPUnit\Framework\TestCase
     public function test_elven_longsword_has_plus_2_to_attack_when_wielded_by_elf()
     {
         $this->character->setRace(Race::ELF);
-        $this->character->wield(new Longsword\Elven());
+        $this->character->use(new Longsword\Elven());
         $target = new Character();
         $this->assert_attacker_hits_with_roll(8, $target);
     }
@@ -96,7 +97,7 @@ class IterationTest extends \PHPUnit\Framework\TestCase
         $target = new Character();
         $target->setRace(Race::ORC);
         $this->assert_attacker_hits_with_roll(12, $target);
-        $this->character->wield(new Longsword\Elven());
+        $this->character->use(new Longsword\Elven());
         $this->assert_attacker_hits_with_roll(10, $target);
     }
 
@@ -106,7 +107,7 @@ class IterationTest extends \PHPUnit\Framework\TestCase
         $target->setRace(Race::ORC);
         $this->character->setRace(Race::ELF);
         $this->assert_attacker_hits_with_roll(12, $target);
-        $this->character->wield(new Longsword\Elven());
+        $this->character->use(new Longsword\Elven());
         $this->assert_attacker_hits_with_roll(7, $target);
     }
 
@@ -118,7 +119,7 @@ class IterationTest extends \PHPUnit\Framework\TestCase
 
     public function test_non_monk_has_minus_4_penalty_to_attack_with_nunchunks()
     {
-        $this->character->wield(new NunChucks());
+        $this->character->use(new NunChucks());
         $target = new Character();
         $this->assert_attacker_hits_with_roll(14, $target);
         $this->assert_damage_of_weapon(Weapon::NUNCHUCKS, 6, 0, $this->character, 14);
@@ -128,9 +129,9 @@ class IterationTest extends \PHPUnit\Framework\TestCase
     {
         // In order to confirm that a character holds only one shield, I compare the AC before and after he picks up the 2nd shield
         // If he could hold 2 shields, his AC would change after picking up the 2nd one.
-        $this->character->don(new Shield());
+        $this->character->use(new Shield());
         $first_shield_ac = $this->character->getAc();
-        $this->character->don(new Shield());
+        $this->character->use(new Shield());
         $this->assertEquals($first_shield_ac, $this->character->getAc());
     }
 
@@ -156,7 +157,7 @@ class IterationTest extends \PHPUnit\Framework\TestCase
     private function assert_damage_of_weapon($weapon, $damage, $magical, $attacker, $dice = 10)
     {
         $weapon_class = '\\EverCraft\\Items\\Weapons\\' . $weapon;
-        $this->character->wield(new $weapon_class($magical));
+        $this->character->use(new $weapon_class($magical));
         $target = new Character();
         $this->createAttackRoll($dice, $target);
         $this->assert_has_remaining_hp(5 - $damage, $target);

@@ -4,6 +4,7 @@ namespace EverCraft;
 
 use EverCraft\Classes\Priest;
 use EverCraft\Classes\SocialClass;
+use EverCraft\Items\Item;
 use EverCraft\Items\Shields\Shield;
 use EverCraft\Items\Weapons\Weapon;
 use EverCraft\Races\Human;
@@ -125,24 +126,17 @@ class Character
     }
 
     /**
-     * @param Weapon $weapon
+     * @param Item $weapon
      *
      * @throws InvalidAlignmentException
      */
-    public function wield(Weapon $weapon): void
+    public function use(Item $weapon): void
     {
-        $this->weapon = $weapon;
-        $this->recalculateStats();
-    }
-
-    /**
-     * @param Shield $shield
-     *
-     * @throws InvalidAlignmentException
-     */
-    public function don(Shield $shield): void
-    {
-        $this->shield = $shield;
+        if (is_a($weapon, 'EverCraft\Items\Weapons\Weapon')) {
+            $this->weapon = $weapon;
+        } elseif (is_a($weapon, 'EverCraft\Items\Shields\Shield')) {
+            $this->shield = $weapon;
+        }
         $this->recalculateStats();
     }
 

@@ -3,13 +3,14 @@
 namespace EverCraft\Items\Weapons;
 
 use EverCraft\Character;
+use EverCraft\CoreBuild;
 use EverCraft\Items\Item;
 
 /**
  * Class Weapon
  * @package EverCraft\Items\Weapons
  */
-abstract class Weapon extends Item
+abstract class Weapon extends CoreBuild implements Item
 {
     const LONGSWORD       = 'Longsword';
     const WARAXE          = 'Waraxe';
