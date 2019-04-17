@@ -139,6 +139,7 @@ class IterationTest extends \PHPUnit\Framework\TestCase
 
     public function test_character_can_wear_one_armor()
     {
+        $this->character->setClass('Fighter');
         $this->character->use(new Plate());
         $this->character->use(new Leather());
         $this->assertEquals('Leather', $this->character->getArmorName());
@@ -149,6 +150,26 @@ class IterationTest extends \PHPUnit\Framework\TestCase
         $old_ac = $this->character->getAc();
         $this->character->use(new Leather());
         $this->assertEquals(($old_ac + 2), $this->character->getAc());
+    }
+
+    public function test_plate_armor_can_be_wore_by_fighters()
+    {
+        $this->character->setClass('Fighter');
+        $this->character->use(new Plate());
+        $this->assertEquals('Plate', $this->character->getArmorName());
+    }
+
+    public function test_plate_armor_can_be_wore_by_dwarves()
+    {
+        $this->character->setRace('Dwarf');
+        $this->character->use(new Plate());
+        $this->assertEquals('Plate', $this->character->getArmorName());
+    }
+
+    public function test_plate_armor_cannot_be_wore_by_non_fighters_and_non_dwarves()
+    {
+        $this->character->use(new Plate());
+        $this->assertNotEquals('Plate', $this->character->getArmorName());
     }
 
     /**

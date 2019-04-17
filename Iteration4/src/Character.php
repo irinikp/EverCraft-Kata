@@ -159,11 +159,21 @@ class Character
         } elseif (is_a($item, 'EverCraft\Items\Shields\Shield')) {
             $this->shield = $item;
         } elseif (is_a($item, 'EverCraft\Items\Armors\Armor')) {
-            $this->armor = $item;
+            $this->wearArmor($item);
         }
         $this->recalculateStats();
     }
 
+    protected function wearArmor(Armor $armor)
+    {
+        if ($armor->isAllowedToWear($this)) {
+            $this->armor = $armor;
+        }
+    }
+
+    /**
+     * @return string
+     */
     public function getArmorName(): string
     {
         $name = '';
@@ -635,7 +645,10 @@ class Character
         );
     }
 
-    protected function getArmorAc()
+    /**
+     * @return int
+     */
+    protected function getArmorAc(): int
     {
         $ac = 0;
         if ($this->armor) {
