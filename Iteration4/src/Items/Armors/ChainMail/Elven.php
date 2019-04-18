@@ -30,15 +30,14 @@ class Elven extends ChainMail
 
     /**
      * @param int            $level
-     * @param int            $attack_roll
      * @param Character      $attacker
      * @param Character|null $target
      *
      * @return int
      */
-    public function getAttackRoll($level, $attack_roll = 0, Character $attacker, Character $target = null): int
+    public function getAttackRoll($level, Character $attacker, Character $target = null): int
     {
-        $attack_roll = parent::getAttackRoll($level, $attack_roll, $attacker, $target);
+        $attack_roll = parent::getAttackRoll($level, $attacker, $target);
         if (Race::ELF === $attacker->getRaceName()) {
             $attack_roll++;
         }

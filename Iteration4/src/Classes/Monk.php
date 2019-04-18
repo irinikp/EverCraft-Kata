@@ -45,18 +45,30 @@ class Monk extends SocialClass
 
     /**
      * @param int            $level
+     * @param Character      $attacker
+     * @param Character|null $target
+     *
+     * @return int
+     */
+    public function getAttackRoll($level, Character $attacker, Character $target = null): int
+    {
+        return $this->recursivellyComputeAttackRoll($level, 0, $attacker, $target);
+    }
+
+    /**
+     * @param int            $level
      * @param int            $attack_roll
      * @param Character      $attacker
      * @param Character|null $target
      *
      * @return int
      */
-    public function getAttackRoll($level, $attack_roll = 0, Character $attacker, Character $target = null): int
+    protected function recursivellyComputeAttackRoll($level, $attack_roll, Character $attacker, Character $target = null): int
     {
         if (1 === $level) return $attack_roll;
         if (0 === $level % 2 || 0 === $level % 3) {
             $attack_roll += 1;
         }
-        return $this->getAttackRoll($level - 1, $attack_roll, $attacker, $target);
+        return $this->recursivellyComputeAttackRoll($level - 1, $attack_roll, $attacker, $target);
     }
 }

@@ -8,7 +8,7 @@ namespace EverCraft;
  * Class CoreStructure
  * @package EverCraft
  */
-class CoreStructure
+class CoreStructureCaller
 {
     /**
      * @var bool
@@ -58,7 +58,7 @@ class CoreStructure
     /**
      * @return bool
      */
-    public function isRace(): bool
+    public function callRace(): bool
     {
         return $this->race;
     }
@@ -74,7 +74,7 @@ class CoreStructure
     /**
      * @return bool
      */
-    public function isClass(): bool
+    public function callClass(): bool
     {
         return $this->class;
     }
@@ -90,7 +90,7 @@ class CoreStructure
     /**
      * @return bool
      */
-    public function isWeapon(): bool
+    public function callWeapon(): bool
     {
         return $this->weapon;
     }
@@ -106,7 +106,7 @@ class CoreStructure
     /**
      * @return bool
      */
-    public function isArmor(): bool
+    public function callArmor(): bool
     {
         return $this->armor;
     }
@@ -122,7 +122,7 @@ class CoreStructure
     /**
      * @return bool
      */
-    public function isShield(): bool
+    public function callShield(): bool
     {
         return $this->shield;
     }
@@ -138,7 +138,7 @@ class CoreStructure
     /**
      * @return bool
      */
-    public function isItems(): bool
+    public function callItems(): bool
     {
         return $this->items;
     }

@@ -42,15 +42,14 @@ class Shield extends Item
 
     /**
      * @param int            $level
-     * @param int            $attack_roll
      * @param Character      $attacker
      * @param Character|null $target
      *
      * @return int
      */
-    public function getAttackRoll($level, $attack_roll = 0, Character $attacker, Character $target = null): int
+    public function getAttackRoll($level, Character $attacker, Character $target = null): int
     {
-        $attack_roll = parent::getAttackRoll($level, $attack_roll, $attacker, $target);
+        $attack_roll = parent::getAttackRoll($level, $attacker, $target);
         $attack_roll -= 4;
         if (SocialClass::FIGHTER === $attacker->getClassName()) {
             $attack_roll += 2;

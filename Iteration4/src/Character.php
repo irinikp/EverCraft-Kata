@@ -256,7 +256,7 @@ class Character
     {
         $attack_bonus_on_this_target = 0;
         if ($target) {
-            $attack_bonus_on_this_target += $this->callFunctionTree('getAttackRoll', [$this->getLevel(), 0, $this, $target], new CoreStructure());
+            $attack_bonus_on_this_target += $this->callFunctionTree('getAttackRoll', [$this->getLevel(), $this, $target], new CoreStructureCaller());
         }
         return $attack_bonus_on_this_target + $this->attack_bonus;
     }
@@ -278,7 +278,7 @@ class Character
     {
         $damage = $this->damage;
         if ($target) {
-            $damage += $this->callFunctionTree('getDamageModifierWhenAttacking', [$this, $target], new CoreStructure());
+            $damage += $this->callFunctionTree('getDamageModifierWhenAttacking', [$this, $target], new CoreStructureCaller());
         }
         return $damage;
     }
@@ -536,7 +536,7 @@ class Character
     {
         $ac = $this->ac;
         if ($attacker) {
-            $ac += $this->callFunctionTree('getAcModifierWhenUnderAttack', [$this, $attacker], new CoreStructure());
+            $ac += $this->callFunctionTree('getAcModifierWhenUnderAttack', [$this, $attacker], new CoreStructureCaller());
         }
         return $ac;
     }
@@ -599,7 +599,7 @@ class Character
      */
     public function isCritical($dice): bool
     {
-        return $this->getRace()->isCritical($dice); // TODO come back again here
+        return $this->getRace()->isCritical($dice);
     }
 
     /**
@@ -609,7 +609,7 @@ class Character
      */
     public function getCriticalDamageMultiplier(Character $target): int
     {
-        return $this->callFunctionTree('getCriticalDamageMultiplier', [$target], new CoreStructure());
+        return $this->callFunctionTree('getCriticalDamageMultiplier', [$target], new CoreStructureCaller());
     }
 
     /**
@@ -623,31 +623,31 @@ class Character
     }
 
     /**
-     * @param string        $function
-     * @param array         $args
-     * @param CoreStructure $call
+     * @param string              $function
+     * @param array               $args
+     * @param CoreStructureCaller $call
      *
      * @return int
      */
-    protected function callFunctionTree($function, array $args, CoreStructure $call): int
+    protected function callFunctionTree($function, array $args, CoreStructureCaller $call): int
     {
         $output = 0;
-        if ($call->isClass()) {
+        if ($call->callClass()) {
             $output += call_user_func_array([$this->getClass(), $function], $args);
         }
-        if ($call->isRace()) {
+        if ($call->callRace()) {
             $output += call_user_func_array([$this->getRace(), $function], $args);
         }
-        if ($call->isWeapon() && $this->weapon) {
+        if ($call->callWeapon() && $this->weapon) {
             $output += call_user_func_array([$this->getWeapon(), $function], $args);
         }
-        if ($call->isArmor() && $this->armor) {
+        if ($call->callArmor() && $this->armor) {
             $output += call_user_func_array([$this->getArmor(), $function], $args);
         }
-        if ($call->isShield() && $this->shield) {
+        if ($call->callShield() && $this->shield) {
             $output += call_user_func_array([$this->getShield(), $function], $args);
         }
-        if ($call->isItems()) {
+        if ($call->callItems()) {
             foreach ($this->items as $item) {
                 $output += call_user_func_array([$item, $function], $args);
             }
@@ -706,7 +706,7 @@ class Character
         $this->setAc(
             $this->getClass()->getBasicAc() +
             $this->getAbilityModifier(Abilities::DEX) +
-            $this->callFunctionTree('getAcModifier', [$this], new CoreStructure())
+            $this->callFunctionTree('getAcModifier', [$this], new CoreStructureCaller())
         );
     }
 
@@ -726,7 +726,7 @@ class Character
      */
     protected function getHpModifier(): int
     {
-        return $this->callFunctionTree('getHpModifier', [$this], new CoreStructure());
+        return $this->callFunctionTree('getHpModifier', [$this], new CoreStructureCaller());
     }
 
     /**
@@ -743,10 +743,10 @@ class Character
     protected function recalculateDamage(): void
     {
         if ($this->weapon) {
-            $this->setDamage($this->callFunctionTree('getDamage', [$this], new CoreStructure(false, false)));
+            $this->setDamage($this->callFunctionTree('getDamage', [$this], new CoreStructureCaller(false, false)));
         } else {
             $this->setDamage(
-                $this->callFunctionTree('getDamage', [$this], new CoreStructure(true, true, false, false, false, false))
+                $this->callFunctionTree('getDamage', [$this], new CoreStructureCaller(true, true, false, false, false, false))
             );
         }
     }
@@ -756,7 +756,7 @@ class Character
      */
     protected function recalculateDamageReceiving(): void
     {
-        $this->setDamageReceiving($this->callFunctionTree('getDamageReceiving', [], new CoreStructure()));
+        $this->setDamageReceiving($this->callFunctionTree('getDamageReceiving', [], new CoreStructureCaller()));
     }
 
     /**
