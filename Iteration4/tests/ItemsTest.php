@@ -38,7 +38,7 @@ class ItemsTest extends \PHPUnit\Framework\TestCase
         $this->character->use(new Longsword());
         $this->assertTrue(true);
         $this->character->use(new Waraxe());
-        $this->assertEquals('Waraxe', $this->character->getWieldingWeaponName());
+        $this->assertEquals('Waraxe', $this->character->getObjectName('weapon'));
     }
 
     public function test_longsword_does_5_points_of_damage()
@@ -148,7 +148,7 @@ class ItemsTest extends \PHPUnit\Framework\TestCase
         $this->character->setClass('Fighter');
         $this->character->use(new Plate());
         $this->character->use(new Leather());
-        $this->assertEquals('Leather', $this->character->getArmorName());
+        $this->assertEquals('Leather', $this->character->getObjectName('armor'));
     }
 
     public function test_leather_armor_adds_2_to_ac()
@@ -162,20 +162,20 @@ class ItemsTest extends \PHPUnit\Framework\TestCase
     {
         $this->character->setClass('Fighter');
         $this->character->use(new Plate());
-        $this->assertEquals('Plate', $this->character->getArmorName());
+        $this->assertEquals('Plate', $this->character->getObjectName('armor'));
     }
 
     public function test_plate_armor_can_be_wore_by_dwarves()
     {
         $this->character->setRace('Dwarf');
         $this->character->use(new Plate());
-        $this->assertEquals('Plate', $this->character->getArmorName());
+        $this->assertEquals('Plate', $this->character->getObjectName('armor'));
     }
 
     public function test_plate_armor_cannot_be_wore_by_non_fighters_and_non_dwarves()
     {
         $this->character->use(new Plate());
-        $this->assertNotEquals('Plate', $this->character->getArmorName());
+        $this->assertNotEquals('Plate', $this->character->getObjectName('armor'));
     }
 
     public function test_plate_armor_adds_8_to_ac()

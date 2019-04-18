@@ -130,7 +130,7 @@ abstract class Race extends CoreBuild
      */
     protected function getAbilityModifier(Character $character, $ability): int
     {
-        $ability = 'get' . ucfirst($ability);
+        $ability = 'get' . $ability;
         return Abilities::MODIFIER[$character->getAbilities()->$ability()];
     }
 }

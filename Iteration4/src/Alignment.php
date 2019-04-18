@@ -31,7 +31,6 @@ class Alignment
      */
     public function __construct($alignment)
     {
-        $alignment = ucfirst($alignment);
         if (!in_array($alignment, self::TYPE)) {
             throw new InvalidAlignmentException('Undefined Alignment $alignment');
         }

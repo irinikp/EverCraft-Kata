@@ -37,7 +37,6 @@ class Rogue extends SocialClass
      */
     public function isAlignmentAllowed(string $alignment): bool
     {
-        $alignment = ucfirst($alignment);
         return in_array($alignment, $this->getAllowedAlignments());
     }
 

@@ -26,7 +26,6 @@ class Character
      * @var Alignment
      */
     protected $alignment;
-
     /**
      * @var int
      */
@@ -39,12 +38,10 @@ class Character
      * @var int
      */
     protected $max_hp;
-
     /**
      * @var bool
      */
     protected $dead;
-
     /**
      * @var Abilities
      */
@@ -237,25 +234,15 @@ class Character
     }
 
     /**
+     * @param $object
+     *
      * @return string
      */
-    public function getArmorName(): string
+    public function getObjectName($object): string
     {
         $name = '';
-        if ($this->armor) {
-            $name = $this->getObjectClassNameWithoutNamespace($this->armor);
-        }
-        return $name;
-    }
-
-    /**
-     * @return string
-     */
-    public function getWieldingWeaponName(): string
-    {
-        $name = '';
-        if ($this->weapon) {
-            $name = $this->getObjectClassNameWithoutNamespace($this->weapon);
+        if ($this->$object) {
+            $name = $this->getObjectClassNameWithoutNamespace($this->$object);
         }
         return $name;
     }
@@ -269,8 +256,7 @@ class Character
     {
         $attack_bonus_on_this_target = 0;
         if ($target) {
-            $attack_bonus_on_this_target += $this->getClass()->getAttackRoll($this->getLevel(), 0, $this, $target)
-                + $this->getRace()->getAttackRoll($this->getLevel(), 0, $this, $target) + $this->getItemsAttackBonus($target);
+            $attack_bonus_on_this_target += $this->callFunctionTree('getAttackRoll', [$this->getLevel(), 0, $this, $target], new CoreStructure());
         }
         return $attack_bonus_on_this_target + $this->attack_bonus;
     }
@@ -284,29 +270,6 @@ class Character
     }
 
     /**
-     * @param Character $target
-     *
-     * @return int
-     */
-    public function getItemsAttackBonus(Character $target): int
-    {
-        $attack_bonus = 0;
-        if ($this->weapon) {
-            $attack_bonus += $this->getWeapon()->getAttackRoll($this->getLevel(), 0, $this, $target);
-        }
-        if ($this->armor) {
-            $attack_bonus += $this->getArmor()->getAttackRoll($this->getLevel(), 0, $this, $target);
-        }
-        if ($this->shield) {
-            $attack_bonus += $this->getShield()->getAttackRoll($this->getLevel(), 0, $this, $target);
-        }
-        foreach ($this->items as $item) {
-            $attack_bonus += $item->getAttackRoll($this->getLevel(), 0, $this, $target);
-        }
-        return $attack_bonus;
-    }
-
-    /**
      * @param Character|null $target
      *
      * @return int
@@ -315,11 +278,7 @@ class Character
     {
         $damage = $this->damage;
         if ($target) {
-            $damage += $this->getClass()->getDamageModifierWhenAttacking($this, $target) +
-                $this->getRace()->getDamageModifierWhenAttacking($this, $target);
-            if ($this->weapon) {
-                $damage += $this->getWeapon()->getDamageModifierWhenAttacking($this, $target);
-            }
+            $damage += $this->callFunctionTree('getDamageModifierWhenAttacking', [$this, $target], new CoreStructure());
         }
         return $damage;
     }
@@ -347,7 +306,6 @@ class Character
      */
     public function setRace(string $race): void
     {
-        $race = ucfirst($race);
         if (!in_array($race, Race::RACE_TYPES)) {
             throw new \Exception("Undefined race $race");
         }
@@ -379,7 +337,6 @@ class Character
      */
     public function setClass(string $class): void
     {
-        $class = ucfirst($class);
         if (!in_array($class, SocialClass::CLASS_TYPES)) {
             throw new \Exception("Undefined class $class");
         }
@@ -488,7 +445,6 @@ class Character
      */
     public function setAlignment($alignment): void
     {
-        $alignment = ucfirst($alignment);
         if ($this->isAlignmentAllowed($alignment)) {
             $this->alignment = new Alignment($alignment);
         } else {
@@ -532,7 +488,6 @@ class Character
      */
     public function setAbility($ability, $value): void
     {
-        $ability = ucfirst($ability);
         if (!in_array($ability, Abilities::TYPE)) {
             throw new \Exception('Undefined Ability $ability');
         }
@@ -549,7 +504,6 @@ class Character
      */
     public function getAbilityModifier($ability): int
     {
-        $ability = ucfirst($ability);
         if (!in_array($ability, Abilities::TYPE)) {
             return 0;
         }
@@ -582,8 +536,7 @@ class Character
     {
         $ac = $this->ac;
         if ($attacker) {
-            $ac += $this->getClass()->getAcModifierWhenUnderAttack($this, $attacker) +
-                $this->getRace()->getAcModifierWhenUnderAttack($this, $attacker);
+            $ac += $this->callFunctionTree('getAcModifierWhenUnderAttack', [$this, $attacker], new CoreStructure());
         }
         return $ac;
     }
@@ -646,7 +599,7 @@ class Character
      */
     public function isCritical($dice): bool
     {
-        return $this->getRace()->isCritical($dice);
+        return $this->getRace()->isCritical($dice); // TODO come back again here
     }
 
     /**
@@ -656,11 +609,7 @@ class Character
      */
     public function getCriticalDamageMultiplier(Character $target): int
     {
-        $multiplier = $this->getClass()->getCriticalDamageMultiplier($target) + $this->getRace()->getCriticalDamageMultiplier($target);
-        if ($this->weapon) {
-            $multiplier += $this->getWeapon()->getCriticalDamageMultiplier($target);
-        }
-        return $multiplier;
+        return $this->callFunctionTree('getCriticalDamageMultiplier', [$target], new CoreStructure());
     }
 
     /**
@@ -671,6 +620,39 @@ class Character
         if ($armor->isAllowedToWear($this)) {
             $this->armor = $armor;
         }
+    }
+
+    /**
+     * @param string        $function
+     * @param array         $args
+     * @param CoreStructure $call
+     *
+     * @return int
+     */
+    protected function callFunctionTree($function, array $args, CoreStructure $call): int
+    {
+        $output = 0;
+        if ($call->isClass()) {
+            $output += call_user_func_array([$this->getClass(), $function], $args);
+        }
+        if ($call->isRace()) {
+            $output += call_user_func_array([$this->getRace(), $function], $args);
+        }
+        if ($call->isWeapon() && $this->weapon) {
+            $output += call_user_func_array([$this->getWeapon(), $function], $args);
+        }
+        if ($call->isArmor() && $this->armor) {
+            $output += call_user_func_array([$this->getArmor(), $function], $args);
+        }
+        if ($call->isShield() && $this->shield) {
+            $output += call_user_func_array([$this->getShield(), $function], $args);
+        }
+        if ($call->isItems()) {
+            foreach ($this->items as $item) {
+                $output += call_user_func_array([$item, $function], $args);
+            }
+        }
+        return $output;
     }
 
     /**
@@ -724,48 +706,8 @@ class Character
         $this->setAc(
             $this->getClass()->getBasicAc() +
             $this->getAbilityModifier(Abilities::DEX) +
-            $this->getClass()->getAcModifier($this) +
-            $this->getRace()->getAcModifier($this) +
-            $this->getArmorAc() +
-            $this->getShieldAc() +
-            $this->getItemsAc()
+            $this->callFunctionTree('getAcModifier', [$this], new CoreStructure())
         );
-    }
-
-    /**
-     * @return int
-     */
-    protected function getItemsAc(): int
-    {
-        $ac = 0;
-        foreach ($this->items as $item) {
-            $ac += $item->getAcModifier($this);
-        }
-        return $ac;
-    }
-
-    /**
-     * @return int
-     */
-    protected function getArmorAc(): int
-    {
-        $ac = 0;
-        if ($this->armor) {
-            $ac = $this->getArmor()->getAcModifier($this);
-        }
-        return $ac;
-    }
-
-    /**
-     * @return int
-     */
-    protected function getShieldAc(): int
-    {
-        $ac = 0;
-        if ($this->shield) {
-            $ac = $this->getShield()->getAcModifier($this);
-        }
-        return $ac;
     }
 
     /**
@@ -784,7 +726,7 @@ class Character
      */
     protected function getHpModifier(): int
     {
-        return $this->getClass()->getHpModifier($this) + $this->getRace()->getHpModifier($this);;
+        return $this->callFunctionTree('getHpModifier', [$this], new CoreStructure());
     }
 
     /**
@@ -801,9 +743,11 @@ class Character
     protected function recalculateDamage(): void
     {
         if ($this->weapon) {
-            $this->setDamage($this->getWeapon()->getDamage($this));
+            $this->setDamage($this->callFunctionTree('getDamage', [$this], new CoreStructure(false, false)));
         } else {
-            $this->setDamage($this->getClass()->getDamage($this) + $this->getRace()->getDamage($this));
+            $this->setDamage(
+                $this->callFunctionTree('getDamage', [$this], new CoreStructure(true, true, false, false, false, false))
+            );
         }
     }
 
@@ -812,10 +756,7 @@ class Character
      */
     protected function recalculateDamageReceiving(): void
     {
-        $this->setDamageReceiving($this->getClass()->getDamageReceiving());
-        if ($this->armor) {
-            $this->setDamageReceiving($this->getArmor()->getDamageReceiving());
-        }
+        $this->setDamageReceiving($this->callFunctionTree('getDamageReceiving', [], new CoreStructure()));
     }
 
     /**
@@ -823,7 +764,7 @@ class Character
      *
      * @return string
      */
-    private function getObjectClassNameWithoutNamespace($object): string
+    protected function getObjectClassNameWithoutNamespace($object): string
     {
         $class_name = get_class($object);
         return substr($class_name, strrpos($class_name, '\\') + 1);
