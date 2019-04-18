@@ -1,6 +1,3 @@
 .phpunit.result.cache
 .idea/
-Iteration1/vendor/
-Iteration2/vendor
-Iteration3/vendor
-Iteration4/vendor
+vendor/
