@@ -14,7 +14,6 @@ This is my solution on [Bonus Iteration](https://github.com/PuttingTheDnDInTDD/E
 * Dwarves and Halflings can move up to 15 squares per round
 
 #### Feature: Terrain
-* Characters move on a grid-based map
 * Each square has a specific terrain
 * Terrain can be 
     * higher (gives attacker +1 to attack roll)
