@@ -123,6 +123,14 @@ abstract class Race extends CoreBuild
     }
 
     /**
+     * @return int
+     */
+    public function getMovementSpeed(): int
+    {
+        return 20;
+    }
+
+    /**
      * @param Character $character
      * @param string    $ability
      *

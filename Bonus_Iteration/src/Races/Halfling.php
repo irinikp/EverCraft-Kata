@@ -51,4 +51,12 @@ class Halfling extends Race
             Alignment::NEUTRAL,
         ];
     }
+
+    /**
+     * @return int
+     */
+    public function getMovementSpeed(): int
+    {
+        return parent::getMovementSpeed() - 5;
+    }
 }

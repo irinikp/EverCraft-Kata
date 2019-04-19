@@ -117,4 +117,12 @@ abstract class CoreBuild
     {
         return 0;
     }
+
+    /**
+     * @return int
+     */
+    public function getMovementSpeed(): int
+    {
+        return 0;
+    }
 }

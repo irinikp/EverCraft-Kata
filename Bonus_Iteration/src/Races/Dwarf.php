@@ -35,6 +35,14 @@ class Dwarf extends Race
     }
 
     /**
+     * @return int
+     */
+    public function getMovementSpeed(): int
+    {
+        return parent::getMovementSpeed() - 5;
+    }
+
+    /**
      * @param Character $character
      *
      * @return int

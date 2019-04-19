@@ -90,6 +90,10 @@ class Character
      * @var array<Item>
      */
     protected $items;
+    /**
+     * @var int
+     */
+    protected $movement_speed;
 
     /**
      * Character constructor.
@@ -675,6 +679,7 @@ class Character
         $this->recalculateAttackBonus();
         $this->recalculateDamage();
         $this->recalculateDamageReceiving();
+        $this->recalculateMovementSpeed();
 
     }
 
@@ -752,6 +757,22 @@ class Character
     }
 
     /**
+     * @return int
+     */
+    public function getMovementSpeed(): int
+    {
+        return $this->movement_speed;
+    }
+
+    /**
+     * @param int $movement_speed
+     */
+    public function setMovementSpeed(int $movement_speed): void
+    {
+        $this->movement_speed = $movement_speed;
+    }
+
+    /**
      *
      */
     protected function recalculateDamageReceiving(): void
@@ -768,5 +789,10 @@ class Character
     {
         $class_name = get_class($object);
         return substr($class_name, strrpos($class_name, '\\') + 1);
+    }
+
+    protected function recalculateMovementSpeed()
+    {
+        $this->setMovementSpeed($this->callFunctionTree('getMovementSpeed', [], new CoreStructureCaller()));
     }
 }

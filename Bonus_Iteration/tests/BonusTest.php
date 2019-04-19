@@ -4,6 +4,7 @@ namespace Tests;
 
 require __DIR__ . '/../vendor/autoload.php';
 
+use DemeterChain\C;
 use EverCraft\BattleGrid\BattleGrid;
 use EverCraft\BattleGrid\Dimension;
 use EverCraft\BattleGrid\Terrain;
@@ -45,5 +46,23 @@ class BonusTest extends \PHPUnit\Framework\TestCase
         $this->assertTrue($this->battle_grid->isSpotEmpty(new Dimension(2, 4)));
         $this->assertFalse($this->battle_grid->isSpotEmpty(new Dimension(2, 2)));
         $this->assertFalse($this->battle_grid->isSpotEmpty(new Dimension(2, 3)));
+    }
+
+    public function test_characters_move_up_to_20_sq_per_round()
+    {
+        $character = new Character();
+        $this->assertEquals(20, $character->getMovementSpeed());
+    }
+
+    public function test_dwarves_move_up_to_15_sq_per_round()
+    {
+        $this->assertEquals(15, $this->player1->getMovementSpeed());
+    }
+
+    public function test_halflings_move_up_to_15_sq_per_round()
+    {
+        $character = new Character();
+        $character->setRace(Race::HALFLING);
+        $this->assertEquals(15, $character->getMovementSpeed());
     }
 }
