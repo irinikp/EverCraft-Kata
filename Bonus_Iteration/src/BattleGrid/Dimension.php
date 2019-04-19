@@ -8,7 +8,7 @@ namespace EverCraft\BattleGrid;
  * Class Dimensions
  * @package EverCraft\BattleGrid
  */
-class Dimensions
+class Dimension
 {
     /**
      * @var int
