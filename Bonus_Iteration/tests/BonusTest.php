@@ -36,34 +36,39 @@ class BonusTest extends \PHPUnit\Framework\TestCase
 
     public function test_high_battle_terrain()
     {
-        $this->battle_grid->setTerrainHeight(TERRAIN::HIGH, new Dimensions(0,0), new Dimensions(2,3));
-        $this->assertEquals(TERRAIN::HIGH, $this->battle_grid->getTerrainHeight(0,0));
-        $this->assertEquals(TERRAIN::HIGH, $this->battle_grid->getTerrainHeight(0,1));
-        $this->assertEquals(TERRAIN::HIGH, $this->battle_grid->getTerrainHeight(1,2));
-        $this->assertEquals(TERRAIN::HIGH, $this->battle_grid->getTerrainHeight(2,3));
-        $this->assertEquals(TERRAIN::NORMAL, $this->battle_grid->getTerrainHeight(3,3));
-        $this->assertEquals(TERRAIN::NORMAL, $this->battle_grid->getTerrainHeight(5,5));
+        $this->battle_grid->setTerrainHeight(TERRAIN::HIGH, new Dimensions(0, 0), new Dimensions(2, 3));
+        $this->assertEquals(TERRAIN::HIGH, $this->battle_grid->getTerrainHeight(new Dimensions(0, 0)));
+        $this->assertEquals(TERRAIN::HIGH, $this->battle_grid->getTerrainHeight(new Dimensions(0, 1)));
+        $this->assertEquals(TERRAIN::HIGH, $this->battle_grid->getTerrainHeight(new Dimensions(1, 2)));
+        $this->assertEquals(TERRAIN::HIGH, $this->battle_grid->getTerrainHeight(new Dimensions(2, 3)));
+        $this->assertEquals(TERRAIN::NORMAL, $this->battle_grid->getTerrainHeight(new Dimensions(3, 3)));
+        $this->assertEquals(TERRAIN::NORMAL, $this->battle_grid->getTerrainHeight(new Dimensions(5, 5)));
     }
 
     public function test_low_battle_terrain()
     {
-        $this->battle_grid->setTerrainHeight(TERRAIN::LOW, new Dimensions(5,5), new Dimensions(6,6));
-        $this->assertEquals(TERRAIN::LOW, $this->battle_grid->getTerrainHeight(5,5));
-        $this->assertEquals(TERRAIN::LOW, $this->battle_grid->getTerrainHeight(5,6));
-        $this->assertEquals(TERRAIN::LOW, $this->battle_grid->getTerrainHeight(6,5));
-        $this->assertEquals(TERRAIN::LOW, $this->battle_grid->getTerrainHeight(5,6));
-        $this->assertEquals(TERRAIN::NORMAL, $this->battle_grid->getTerrainHeight(5,7));
+        $this->battle_grid->setTerrainHeight(TERRAIN::LOW, new Dimensions(5, 5), new Dimensions(6, 6));
+        $this->assertEquals(TERRAIN::LOW, $this->battle_grid->getTerrainHeight(new Dimensions(5, 5)));
+        $this->assertEquals(TERRAIN::LOW, $this->battle_grid->getTerrainHeight(new Dimensions(5, 6)));
+        $this->assertEquals(TERRAIN::LOW, $this->battle_grid->getTerrainHeight(new Dimensions(6, 5)));
+        $this->assertEquals(TERRAIN::LOW, $this->battle_grid->getTerrainHeight(new Dimensions(5, 6)));
+        $this->assertEquals(TERRAIN::NORMAL, $this->battle_grid->getTerrainHeight(new Dimensions(5, 7)));
     }
 
     public function test_difficult_terrain()
     {
-        $this->battle_grid->setTerrainQuality(TERRAIN::DIFFICULT, new Dimensions(5,5), new Dimensions(6,6));
-        $this->assertEquals(TERRAIN::DIFFICULT, $this->battle_grid->getTerrainQuality(5,5));
-        $this->assertEquals(TERRAIN::DIFFICULT, $this->battle_grid->getTerrainQuality(5,6));
-        $this->assertEquals(TERRAIN::DIFFICULT, $this->battle_grid->getTerrainQuality(6,5));
-        $this->assertEquals(TERRAIN::DIFFICULT, $this->battle_grid->getTerrainQuality(5,6));
-        $this->assertEquals(TERRAIN::NORMAL, $this->battle_grid->getTerrainQuality(5,7));
-
+        $this->battle_grid->setTerrainQuality(TERRAIN::DIFFICULT, new Dimensions(5, 5), new Dimensions(6, 6));
+        $this->assertEquals(TERRAIN::DIFFICULT, $this->battle_grid->getTerrainQuality(new Dimensions(5, 5)));
+        $this->assertEquals(TERRAIN::DIFFICULT, $this->battle_grid->getTerrainQuality(new Dimensions(5, 6)));
+        $this->assertEquals(TERRAIN::DIFFICULT, $this->battle_grid->getTerrainQuality(new Dimensions(6, 5)));
+        $this->assertEquals(TERRAIN::DIFFICULT, $this->battle_grid->getTerrainQuality(new Dimensions(5, 6)));
+        $this->assertEquals(TERRAIN::NORMAL, $this->battle_grid->getTerrainQuality(new Dimensions(5, 7)));
     }
 
+    public function test_bounds()
+    {
+        $this->expectException(\OutOfBoundsException::class);
+        $this->battle_grid->getTerrainHeight(new Dimensions(21, 0));
+
+    }
 }

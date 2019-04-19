@@ -44,7 +44,7 @@ class BattleGrid
     public function setDimensions($x, $y): void
     {
         $this->dimensions = new Dimensions($x, $y);
-        $this->setTerrain($x, $y);
+        $this->setTerrain($this->dimensions);
     }
 
     /**
@@ -54,6 +54,8 @@ class BattleGrid
      */
     public function setTerrainHeight($height, Dimensions $from, Dimensions $to): void
     {
+        $this->checkBounds($from);
+        $this->checkBounds($to);
         $this->setTerrainCharacteristic($height, 'Height', $from, $to);
     }
 
@@ -64,41 +66,57 @@ class BattleGrid
      */
     public function setTerrainQuality($quality, Dimensions $from, Dimensions $to): void
     {
+        $this->checkBounds($from);
+        $this->checkBounds($to);
         $this->setTerrainCharacteristic($quality, 'Quality', $from, $to);
     }
 
     /**
-     * @param int $x
-     * @param int $y
+     * @param Dimensions $dimension
      *
      * @return string
      */
-    public function getTerrainHeight($x, $y): string
+    public function getTerrainHeight(Dimensions $dimension): string
     {
-        return $this->map[$x][$y]->getHeight();
+        $this->checkBounds($dimension);
+        return $this->map[$dimension->getX()][$dimension->getY()]->getHeight();
     }
 
     /**
-     * @param int $x
-     * @param int $y
+     * @param Dimensions $dimension
      *
      * @return string
      */
-    public function getTerrainQuality($x, $y): string
+    public function getTerrainQuality(Dimensions $dimension): string
     {
-        return $this->map[$x][$y]->getQuality();
+        $this->checkBounds($dimension);
+        return $this->map[$dimension->getX()][$dimension->getY()]->getQuality();
     }
 
     /**
-     * @param int $x
-     * @param int $y
+     * @param Dimensions $dimension
+     *
+     * @return bool
      */
-    protected function setTerrain($x, $y): void
+    protected function checkBounds(Dimensions $dimension): void
     {
-        $this->map = [array_fill(0, 20, new Terrain()), array_fill(0, 20, new Terrain())];
-        for ($i = 0; $i < $x; ++$i) {
-            for ($j = 0; $j < $y; ++$j) {
-                $this->map[$i][$j] = new Terrain();
+        if (sizeof($this->map) <= 0) throw new \OutOfBoundsException('The map has not been initiated');
+        if ($dimension->getX() > sizeof($this->map)) throw new \OutOfBoundsException($dimension->getX() . ' is out of the map');
+        if ($dimension->getY() > sizeof($this->map)) throw new \OutOfBoundsException($dimension->getY() . ' is out of the map');
+    }
+
+    /**
+     * @param Dimensions $dimension
+     */
+    protected function setTerrain(Dimensions $dimension): void
+    {
+        $this->map = [
+            array_fill(0, $dimension->getX(), new Terrain()),
+            array_fill(0, $dimension->getY(), new Terrain())
+        ];
+        for ($x = 0; $x < $dimension->getX(); ++$x) {
+            for ($y = 0; $y < $dimension->getY(); ++$y) {
+                $this->map[$x][$y] = new Terrain();
             }
         }
     }
@@ -120,6 +138,5 @@ class BattleGrid
             }
         }
     }
-
 
 }
