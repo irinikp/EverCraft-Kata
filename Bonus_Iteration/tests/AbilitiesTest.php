@@ -10,13 +10,21 @@ use EverCraft\Races\Race;
 
 class AbilitiesTest extends \PHPUnit\Framework\TestCase
 {
+    /**
+     * @var Character
+     */
     protected $character;
+    /**
+     * @var Helper
+     */
+    protected $helper;
 
     public function setUp(): void
     {
         parent::setUp();
         $this->character = new Character();
         $this->character->setName('Bilbur');
+        $this->helper = new Helper();
     }
 
     public function test_abilities_default_to_10()
@@ -87,32 +95,32 @@ class AbilitiesTest extends \PHPUnit\Framework\TestCase
 
     public function test_orc_has_plus_2_to_strength_modifier()
     {
-        $this->create_test_for_race_ability_modifier(Race::ORC, Abilities::STR, +2);
+        $this->helper->create_test_for_race_ability_modifier($this->character, Race::ORC, Abilities::STR, +2);
     }
 
     public function test_orc_has_minus_1_to_intelligence_modifier()
     {
-        $this->create_test_for_race_ability_modifier(Race::ORC, Abilities::INT, -1);
+        $this->helper->create_test_for_race_ability_modifier($this->character, Race::ORC, Abilities::INT, -1);
     }
 
     public function test_orc_has_minus_1_to_wisdom_modifier()
     {
-        $this->create_test_for_race_ability_modifier(Race::ORC, Abilities::WIS, -1);
+        $this->helper->create_test_for_race_ability_modifier($this->character, Race::ORC, Abilities::WIS, -1);
     }
 
     public function test_orc_has_minus_1_to_charisma_modifier()
     {
-        $this->create_test_for_race_ability_modifier(Race::ORC, Abilities::CHA, -1);
+        $this->helper->create_test_for_race_ability_modifier($this->character, Race::ORC, Abilities::CHA, -1);
     }
 
     public function test_dwarf_has_plus_1_to_constitution_modifier()
     {
-        $this->create_test_for_race_ability_modifier(Race::DWARF, Abilities::CON, 1);
+        $this->helper->create_test_for_race_ability_modifier($this->character, Race::DWARF, Abilities::CON, 1);
     }
 
     public function test_dwarf_has_minus_1_to_charisma_modifier()
     {
-        $this->create_test_for_race_ability_modifier(Race::DWARF, Abilities::CHA, -1);
+        $this->helper->create_test_for_race_ability_modifier($this->character, Race::DWARF, Abilities::CHA, -1);
     }
 
     public function test_dwarf_doubles_con_modifier_when_adding_to_hit_points_per_level_if_positive()
@@ -140,35 +148,82 @@ class AbilitiesTest extends \PHPUnit\Framework\TestCase
 
     public function test_elf_has_plus_1_to_dexterity_modifier()
     {
-        $this->create_test_for_race_ability_modifier(Race::ELF, Abilities::DEX, 1);
+        $this->helper->create_test_for_race_ability_modifier($this->character, Race::ELF, Abilities::DEX, 1);
     }
 
     public function test_elf_has_minus_1_to_constitution_modifier()
     {
-        $this->create_test_for_race_ability_modifier(Race::ELF, Abilities::CON, -1);
+        $this->helper->create_test_for_race_ability_modifier($this->character, Race::ELF, Abilities::CON, -1);
     }
 
     public function test_halfling_has_plus_1_to_dexterity_modifier()
     {
-        $this->create_test_for_race_ability_modifier(Race::HALFLING, Abilities::DEX, 1);
+        $this->helper->create_test_for_race_ability_modifier($this->character, Race::HALFLING, Abilities::DEX, 1);
     }
 
     public function test_halfling_has_minus_1_to_strength_modifier()
     {
-        $this->create_test_for_race_ability_modifier(Race::HALFLING, Abilities::STR, -1);
+        $this->helper->create_test_for_race_ability_modifier($this->character, Race::HALFLING, Abilities::STR, -1);
     }
 
-    /**
-     * @param string $race
-     * @param string $ability
-     * @param int    $ability_change
-     */
-    private function create_test_for_race_ability_modifier($race, $ability, $ability_change): void
+    public function test_add_strength_modifier_to_attack_roll_scenario_str3_roll13()
     {
-        $human_ability_modifier = $this->character->getAbilityModifier($ability);
-        $this->character->setRace($race);
-        $race_ability_modifier = $this->character->getAbilityModifier($ability);
-        $this->assertEquals(($human_ability_modifier + $ability_change), $race_ability_modifier);
+        $this->character->setAbility(Abilities::STR, 3);
+        $hits = $this->helper->createAttackRoll($this->character, 13, null);
+        $this->assertFalse($hits);
+    }
+
+    public function test_add_strength_modifier_to_attack_roll_scenario_str3_roll14()
+    {
+        $this->character->setAbility(Abilities::STR, 3);
+        $hits = $this->helper->createAttackRoll($this->character, 14, null);
+        $this->assertTrue($hits);
+    }
+
+    public function test_add_strength_modifier_to_attack_roll_scenario_str17_roll6()
+    {
+        $this->character->setAbility(Abilities::STR, 17);
+        $hits = $this->helper->createAttackRoll($this->character, 6, null);
+        $this->assertFalse($hits);
+    }
+
+    public function test_add_strength_modifier_to_attack_roll_scenario_str17_roll7()
+    {
+        $this->character->setAbility(Abilities::STR, 17);
+        $hits = $this->helper->createAttackRoll($this->character, 7, null);
+        $this->assertTrue($hits);
+    }
+
+    public function test_add_strength_modifier_to_damage_scenario_str3_roll14()
+    {
+        $target = new Character();
+        $this->character->setAbility(Abilities::STR, 3);
+        $this->helper->createAttackRoll($this->character, 14, $target);
+        $this->helper->assert_has_remaining_hp(4, $target);
+    }
+
+    public function test_add_strength_modifier_to_damage_scenario_str17_roll7()
+    {
+        $target = new Character();
+        $this->character->setAbility(Abilities::STR, 17);
+        $this->helper->createAttackRoll($this->character, 7, $target);
+        $this->helper->assert_has_remaining_hp(1, $target);
+    }
+
+    public function test_double_strength_modifier_to_critical_hits()
+    {
+        $target = new Character();
+        $this->character->setAbility(Abilities::STR, 12);
+        $this->helper->createAttackRoll($this->character, 20, $target);
+        $this->helper->assert_has_remaining_hp(1, $target);
+    }
+
+    public function test_add_dexterity_modifier_to_armor_class_of_target()
+    {
+        $target = new Character();
+        $target->setAbility(Abilities::DEX, 15);
+        $this->character->setAbility(Abilities::STR, 2);
+        $this->helper->assert_attacker_hits_with_roll($this->character, 16, $target);
     }
 
 }

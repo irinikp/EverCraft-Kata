@@ -12,13 +12,21 @@ require __DIR__ . '/../vendor/autoload.php';
 
 class ClassesTest extends \PHPUnit\Framework\TestCase
 {
+    /**
+     * @var Character
+     */
     protected $character;
+    /**
+     * @var Helper
+     */
+    protected $helper;
 
     public function setUp(): void
     {
         parent::setUp();
         $this->character = new Character();
         $this->character->setName('Bilbur');
+        $this->helper = new Helper();
     }
 
     public function test_fighter_attack_roll_increases_by_1_in_every_level()
@@ -173,5 +181,91 @@ class ClassesTest extends \PHPUnit\Framework\TestCase
 
         $this->expectException(InvalidAlignmentException::class);
         $this->character->setAlignment(Alignment::EVIL);
+    }
+
+    public function test_rogues_critical_hit_is_dealt_and_the_damage_is_tripled()
+    {
+        $this->character->setClass(SocialClass::ROGUE);
+        $target = new Character();
+        $this->helper->createAttackRoll($this->character, 20, $target);
+        $this->helper->assert_has_remaining_hp(2, $target);
+    }
+
+    public function test_rogues_strength_modifier_does_not_apply_to_attack()
+    {
+        $this->character->setAbility(Abilities::STR, 2);
+        $this->character->setClass(SocialClass::ROGUE);
+        $this->helper->assert_attacker_hits_with_roll($this->character, 10, new Character());
+    }
+
+    public function test_rogues_dexterity_modifier_applies_to_attack()
+    {
+        $this->character->setAbility(Abilities::DEX, 12);
+        $this->character->setClass(SocialClass::ROGUE);
+        $this->helper->assert_attacker_hits_with_roll($this->character, 9, new Character());
+    }
+
+    public function test_dexterity_modifier_of_target_is_ignored_if_positive_when_attacked_by_rogue()
+    {
+        $target = new Character();
+        $target->setAbility(Abilities::DEX, 15);
+        $this->character->setAbility(Abilities::DEX, 2);
+        $this->character->setClass(SocialClass::ROGUE);
+        $this->helper->assert_attacker_hits_with_roll($this->character, 14, $target);
+    }
+
+    public function test_dexterity_modifier_of_target_is_not_ignored_if_not_positive_when_attacked_by_rogue()
+    {
+        $target = new Character();
+        $target->setAbility(Abilities::DEX, 6);
+        $this->character->setAbility(Abilities::DEX, 2);
+        $this->character->setClass(SocialClass::ROGUE);
+        $this->helper->assert_attacker_hits_with_roll($this->character, 12, $target);
+    }
+
+    public function test_when_monk_attack_is_successful_other_character_takes_3_points_of_damage_when_hit()
+    {
+        $this->character->setClass(SocialClass::MONK);
+        $target = new Character();
+        $this->helper->createAttackRoll($this->character, 15, $target);
+        $this->helper->assert_has_remaining_hp(2, $target);
+        $this->assertEquals(5, $target->getMaxHp());
+    }
+
+    public function test_paladin_plus_2_to_attack_when_attacking_evil_characters()
+    {
+        $this->character->setClass(SocialClass::PALADIN);
+        $target = new Character();
+        $this->helper->assert_attacker_hits_with_roll($this->character, 10, $target);
+
+        $target->setAlignment(Alignment::EVIL);
+        $this->helper->assert_attacker_hits_with_roll($this->character, 8, $target);
+    }
+
+    public function test_paladin_plus_2_to_damage_when_attacking_evil_characters()
+    {
+        $this->character->setClass(SocialClass::PALADIN);
+        $target = new Character();
+        $this->helper->createAttackRoll($this->character, 10, $target);
+        $this->helper->assert_has_remaining_hp(4, $target);
+
+        $target = new Character();
+        $target->setAlignment(Alignment::EVIL);
+        $this->helper->createAttackRoll($this->character, 8, $target);
+        $this->helper->assert_has_remaining_hp(2, $target);
+    }
+
+    public function test_paladins_critical_hit_is_dealt_and_the_damage_is_tripled_when_target_is_evil()
+    {
+        $this->character->setClass(SocialClass::PALADIN);
+        $target = new Character();
+        $this->helper->createAttackRoll($this->character, 20, $target);
+        $this->helper->assert_has_remaining_hp(3, $target);
+
+        $target = new Character();
+        $target->setAlignment(Alignment::EVIL);
+        $this->helper->createAttackRoll($this->character, 20, $target);
+        $this->helper->assert_has_remaining_hp(-4, $target);
+        $this->assertTrue($target->isDead());
     }
 }

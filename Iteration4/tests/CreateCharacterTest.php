@@ -10,6 +10,9 @@ use EverCraft\InvalidAlignmentException;
 
 class CreateCharacterTest extends \PHPUnit\Framework\TestCase
 {
+    /**
+     * @var Character
+     */
     protected $character;
 
     public function setUp(): void

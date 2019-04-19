@@ -9,6 +9,9 @@ use EverCraft\Character;
 
 class LevelTest extends \PHPUnit\Framework\TestCase
 {
+    /**
+     * @var Character
+     */
     protected $character;
 
     public function setUp(): void
