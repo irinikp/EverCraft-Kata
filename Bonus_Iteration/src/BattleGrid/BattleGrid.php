@@ -173,33 +173,6 @@ class BattleGrid
     }
 
     /**
-     * @param Character $attacker
-     * @param Character $target
-     *
-     * @return bool
-     */
-    public function canHit(Character $attacker, Character $target)
-    {
-        if (!$attacker->holdsWeapon() || !$attacker->getWeapon()->isMissile()) {
-            return $this->areCharactersAdjacent($attacker, $target);
-        }
-        return false;
-    }
-
-    /**
-     * Characters are adjacent even diagonally
-     *
-     * @param Character $player1
-     * @param Character $player2
-     *
-     * @return bool
-     */
-    protected function areCharactersAdjacent(Character $player1, Character $player2): bool
-    {
-        return CartesianPoint::arePointsAdjacent($player1->getMapPosition(), $player2->getMapPosition());
-    }
-
-    /**
      * @param CartesianPoint $starting_point
      * @param CartesianPoint $end_point
      *
@@ -320,6 +293,24 @@ class BattleGrid
                 }
             }
         }
+    }
+
+    /**
+     * @param Character $attacker
+     * @param Character $target
+     *
+     * @return bool
+     */
+    public function isTargetInRange(Character $attacker, Character $target): bool
+    {
+        $min_range = 1;
+        $max_range = 1;
+        if ($attacker->holdsWeapon()) {
+            $min_range = $attacker->getWeapon()->getMinRange();
+            $max_range = $attacker->getWeapon()->getMaxRange();
+        }
+        return ($attacker->getMapPosition()->isFurtherThan($min_range, $target->getMapPosition()) &&
+            $attacker->getMapPosition()->isCloserThan($max_range, $target->getMapPosition()));
     }
 
 }

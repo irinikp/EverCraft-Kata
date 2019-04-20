@@ -95,16 +95,34 @@ class CartesianPoint
     }
 
     /**
-     * @param CartesianPoint $point1
-     * @param CartesianPoint $point2
+     * @param int            $distance
+     * @param CartesianPoint $point
      *
      * @return bool
      */
-    public static function arePointsAdjacent(CartesianPoint $point1, CartesianPoint $point2): bool
+    public function isFurtherThan(int $distance, CartesianPoint $point)
     {
-        return (
-            abs($point1->getX() - $point2->getX()) <= 1 &&
-            abs($point1->getY() - $point2->getY()) <= 1 &&
-            !($point1->getX() === $point2->getX() && $point1->getY() === $point2->getY()));
+        return $distance <= ($this->getDistance($point));
+    }
+
+    /**
+     * @param CartesianPoint $point
+     *
+     * @return float
+     */
+    public function getDistance(CartesianPoint $point)
+    {
+        return sqrt(pow($point->getX() - $this->getX(), 2) + pow($point->getY() - $this->getY(), 2));
+    }
+
+    /**
+     * @param int            $distance
+     * @param CartesianPoint $point
+     *
+     * @return bool
+     */
+    public function isCloserThan(int $distance, CartesianPoint $point)
+    {
+        return $distance >= floor($this->getDistance($point));
     }
 }
