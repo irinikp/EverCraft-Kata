@@ -706,7 +706,7 @@ class Character
         if ($call->callRace()) {
             $output += call_user_func_array([$this->getRace(), $function], $args);
         }
-        if ($call->callWeapon() && $this->weapon) {
+        if ($call->callWeapon() && $this->holdsWeapon()) {
             $output += call_user_func_array([$this->getWeapon(), $function], $args);
         }
         if ($call->callArmor() && $this->armor) {
@@ -721,6 +721,11 @@ class Character
             }
         }
         return $output;
+    }
+
+    public function holdsWeapon()
+    {
+        return null !== $this->weapon;
     }
 
     /**
@@ -811,7 +816,7 @@ class Character
      */
     protected function recalculateDamage(): void
     {
-        if ($this->weapon) {
+        if ($this->holdsWeapon()) {
             $this->setDamage($this->callFunctionTree('getDamage', [$this], new CoreStructureCaller(false, false)));
         } else {
             $this->setDamage(

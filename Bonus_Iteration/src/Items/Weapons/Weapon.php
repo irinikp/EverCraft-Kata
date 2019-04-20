@@ -135,4 +135,12 @@ abstract class Weapon extends Item
         return intval($this->magical / 2);
     }
 
+    /**
+     * @return bool
+     */
+    public function isMissile()
+    {
+        return false;
+    }
+
 }

@@ -93,4 +93,18 @@ class CartesianPoint
     {
         $this->y = $y;
     }
+
+    /**
+     * @param CartesianPoint $point1
+     * @param CartesianPoint $point2
+     *
+     * @return bool
+     */
+    public static function arePointsAdjacent(CartesianPoint $point1, CartesianPoint $point2): bool
+    {
+        return (
+            abs($point1->getX() - $point2->getX()) <= 1 &&
+            abs($point1->getY() - $point2->getY()) <= 1 &&
+            !($point1->getX() === $point2->getX() && $point1->getY() === $point2->getY()));
+    }
 }
