@@ -22,6 +22,10 @@ I have decided to create the features below
 * Characters can move as many squares as defined from their speed on each round
 * Character on difficult terrain moves with half speed
 
+#### Feature: Weapon Range
+* All non-missile weapons have range 1 square
+* Bows have range 2 - 30 square (it can't hit a target on an adjacent square) 
+
 #### Feature: Terrain affects the battle
 * Higher terrain gives attacker +1 to attack roll
 * Lower terrain gives attacker -1 to attack roll
@@ -29,8 +33,4 @@ I have decided to create the features below
 #### Feature: Initiative
 * Characters roll a 20-dice to define the initiative. (The higher the dice, the sooner the player plays)
 * Each player can either move or attack on each round, not both
-
-#### Feature: Weapon Range
-* All non-missile weapons have range 1 square
-* Bows have range 2 - 30 square (it can't hit a target on an adjacent square) 
 
