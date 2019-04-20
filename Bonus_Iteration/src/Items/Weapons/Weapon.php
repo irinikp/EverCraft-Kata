@@ -26,6 +26,14 @@ abstract class Weapon extends Item
      * @var int
      */
     protected $magical;
+    /**
+     * @var int
+     */
+    protected $min_range;
+    /**
+     * @var int
+     */
+    protected $max_range;
 
     /**
      * Weapon constructor.
@@ -34,7 +42,41 @@ abstract class Weapon extends Item
      */
     public function __construct($magical = 0)
     {
-        $this->magical = $magical;
+        $this->magical   = $magical;
+        $this->min_range = 1;
+        $this->max_range = 1;
+    }
+
+    /**
+     * @return int
+     */
+    public function getMaxRange(): int
+    {
+        return $this->max_range;
+    }
+
+    /**
+     * @param int $max_range
+     */
+    public function setMaxRange(int $max_range): void
+    {
+        $this->max_range = $max_range;
+    }
+
+    /**
+     * @return int
+     */
+    public function getMinRange(): int
+    {
+        return $this->min_range;
+    }
+
+    /**
+     * @param int $min_range
+     */
+    public function setMinRange(int $min_range): void
+    {
+        $this->min_range = $min_range;
     }
 
     /**
