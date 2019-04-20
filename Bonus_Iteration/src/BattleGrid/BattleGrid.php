@@ -26,6 +26,15 @@ class BattleGrid
     protected $character_positions;
 
     /**
+     * BattleGrid constructor.
+     */
+    public function __construct()
+    {
+        $this->map                 = [];
+        $this->character_positions = [];
+    }
+
+    /**
      * @return Terrain[][]
      */
     public function getMap(): array
@@ -55,15 +64,6 @@ class BattleGrid
     public function setCharacterPositions(array $character_positions): void
     {
         $this->character_positions = $character_positions;
-    }
-
-    /**
-     * BattleGrid constructor.
-     */
-    public function __construct()
-    {
-        $this->map                 = [];
-        $this->character_positions = [];
     }
 
     /**
@@ -159,14 +159,33 @@ class BattleGrid
      *
      * @return bool
      */
-    public function isRouteObstacleFree(Character $character, $route): bool
+    public function isRouteTraversable(Character $character, $route): bool
     {
         $current_position = $character->getMapPosition();
+        $total_squares    = 0;
         foreach ($route as $spot) {
-            if (!$this->isLineObstacleFree($current_position, $spot)) return false;
+            $line_squares = $this->getTraversableSquaresNumber($current_position, $spot);
+            if ($line_squares < 0) return false;
+            $total_squares    += $line_squares;
             $current_position = $spot;
         }
-        return true;
+        return ($total_squares <= $character->getMovementSpeed());
+    }
+
+    /**
+     * @param CartesianPoint $starting_point
+     * @param CartesianPoint $end_point
+     *
+     * @return int number of squares, or -1 if an obstacle was found
+     */
+    protected function getTraversableSquaresNumber(CartesianPoint $starting_point, CartesianPoint $end_point): int
+    {
+        if ($this->isMovementOnXAxis($starting_point, $end_point)) {
+            $squares = $this->getTraversableAxisLineLength($starting_point, $end_point, CartesianPoint::X_AXIS);
+        } else {
+            $squares = $this->getTraversableAxisLineLength($starting_point, $end_point, CartesianPoint::Y_AXIS);
+        }
+        return $squares;
     }
 
     /**
@@ -175,20 +194,6 @@ class BattleGrid
      *
      * @return bool
      */
-    protected function isLineObstacleFree(CartesianPoint $starting_point, CartesianPoint $end_point): bool
-    {
-        if ($this->isMovementOnXAxis($starting_point, $end_point)) {
-            if (!$this->isAxisLineObstacleFree($starting_point, $end_point, CartesianPoint::X_AXIS)) {
-                return false;
-            }
-        } else {
-            if (!$this->isAxisLineObstacleFree($starting_point, $end_point, CartesianPoint::Y_AXIS)) {
-                return false;
-            }
-        }
-        return true;
-    }
-
     protected function isMovementOnXAxis(CartesianPoint $starting_point, CartesianPoint $end_point): bool
     {
         return ($starting_point->getX() !== $end_point->getX());
@@ -199,10 +204,11 @@ class BattleGrid
      * @param CartesianPoint $end_point
      * @param string         $moving_axis the axis parallel to the line
      *
-     * @return bool
+     * @return int number of squares, or -1 if an obstacle was found
      */
-    protected function isAxisLineObstacleFree(CartesianPoint $starting_point, CartesianPoint $end_point, $moving_axis)
+    protected function getTraversableAxisLineLength(CartesianPoint $starting_point, CartesianPoint $end_point, $moving_axis)
     {
+        $squares               = 1;
         $fixed_axis            = CartesianPoint::getVerticalAxis($moving_axis);
         $get_moving_coordinate = "get$moving_axis";
         $get_fixed_coordinate  = "get$fixed_axis";
@@ -216,10 +222,11 @@ class BattleGrid
             $current_point = new CartesianPoint($i, $starting_point->$get_fixed_coordinate());
             if (CartesianPoint::Y_AXIS === $moving_axis) $current_point = new CartesianPoint($starting_point->$get_fixed_coordinate(), $i);
             if (!$this->isSpotEmpty($current_point)) {
-                return false;
+                return -1;
             }
+            $squares++;
         }
-        return true;
+        return $squares;
     }
 
 

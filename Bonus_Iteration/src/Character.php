@@ -651,6 +651,46 @@ class Character
     }
 
     /**
+     * @return int
+     */
+    public function getMovementSpeed(): int
+    {
+        return $this->movement_speed;
+    }
+
+    /**
+     * @param int $movement_speed
+     */
+    public function setMovementSpeed(int $movement_speed): void
+    {
+        $this->movement_speed = $movement_speed;
+    }
+
+    /**
+     * @param BattleGrid            $battle_grid
+     * @param array<CartesianPoint> $route
+     *
+     * @throws MovementException
+     */
+    public function move(BattleGrid $battle_grid, $route): void
+    {
+        if (!$this->map_position) {
+            throw new MovementException('Character is not on the map');
+        }
+        if ($battle_grid->getCharacterPositions()[$this->map_position->getX()][$this->map_position->getY()] !== $this) {
+            throw new MovementException('Character is not on this battle grid');
+        }
+        array_unshift($route, $this->getMapPosition());
+        if (!CartesianPoint::isStraightLine($this->getMapPosition(), $route)) {
+            throw new MovementException('Character can\'t move diagonally');
+        }
+        if (!$battle_grid->isRouteTraversable($this, $route)) {
+            throw new MovementException('This route is not traversable by this character');
+        }
+        $this->setMapPosition($route[sizeof($route) - 1]);
+    }
+
+    /**
      * @param string              $function
      * @param array               $args
      * @param CoreStructureCaller $call
@@ -778,46 +818,6 @@ class Character
                 $this->callFunctionTree('getDamage', [$this], new CoreStructureCaller(true, true, false, false, false, false))
             );
         }
-    }
-
-    /**
-     * @return int
-     */
-    public function getMovementSpeed(): int
-    {
-        return $this->movement_speed;
-    }
-
-    /**
-     * @param int $movement_speed
-     */
-    public function setMovementSpeed(int $movement_speed): void
-    {
-        $this->movement_speed = $movement_speed;
-    }
-
-    /**
-     * @param BattleGrid            $battle_grid
-     * @param array<CartesianPoint> $route
-     *
-     * @throws MovementException
-     */
-    public function move(BattleGrid $battle_grid, $route): void
-    {
-        if (!$this->map_position) {
-            throw new MovementException('Character is not on the map');
-        }
-        if ($battle_grid->getCharacterPositions()[$this->map_position->getX()][$this->map_position->getY()] !== $this) {
-            throw new MovementException('Character is not on this battle grid');
-        }
-        array_unshift($route, $this->getMapPosition());
-        if (!CartesianPoint::isStraightLine($this->getMapPosition(), $route)) {
-            throw new MovementException('Character can\'t move diagonally');
-        }
-        if (!$battle_grid->isRouteObstacleFree($this, $route)) {
-            throw new MovementException('This route is not obstacle free');
-        }
-        $this->setMapPosition($route[sizeof($route)-1]);
     }
 
     /**
