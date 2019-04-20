@@ -69,35 +69,37 @@ class MovementTest extends \PHPUnit\Framework\TestCase
     public function test_character_can_move_on_the_map()
     {
         $this->battle_grid->place($this->player1, new CartesianPoint(2, 2));
-        $this->player1->move($this->battle_grid, [new CartesianPoint(4, 2), new CartesianPoint(4, 4)]);
+        $this->battle_grid->moveCharacter($this->player1, [new CartesianPoint(4, 2), new CartesianPoint(4, 4)]);
         $end_position = $this->player1->getMapPosition();
         $this->assertEquals(4, $end_position->getX());
         $this->assertEquals(4, $end_position->getY());
+        $grid_map = $this->battle_grid->getCharacterPositions();
+        $this->assertEquals($this->player1, $grid_map[4][4]);
     }
 
     public function test_characters_cannot_move_on_a_map_where_they_have_not_been_placed()
     {
         $this->expectException(MovementException::class);
-        $this->player1->move($this->battle_grid, [new CartesianPoint(4, 2), new CartesianPoint(4, 4)]);
+        $this->battle_grid->moveCharacter($this->player1, [new CartesianPoint(4, 2), new CartesianPoint(4, 4)]);
     }
 
     public function test_characters_can_only_move_on_the_battle_field_they_have_been_placed()
     {
         $this->expectException(MovementException::class);
-        $this->player1->move(new BattleGrid(), [new CartesianPoint(4, 2), new CartesianPoint(4, 4)]);
+        (new BattleGrid())->moveCharacter($this->player1, [new CartesianPoint(4, 2), new CartesianPoint(4, 4)]);
     }
 
     public function test_a_character_can_only_move_on_connected_straight_lines()
     {
         $this->battle_grid->place($this->player1, new CartesianPoint(2, 2));
         $this->expectException(MovementException::class);
-        $this->player1->move($this->battle_grid, [new CartesianPoint(4, 3)]);
+        $this->battle_grid->moveCharacter($this->player1, [new CartesianPoint(4, 3)]);
     }
 
     public function test_a_character_can_move_on_connected_straight_lines_backwards()
     {
         $this->battle_grid->place($this->player1, new CartesianPoint(4, 3));
-        $this->player1->move($this->battle_grid, [new CartesianPoint(4, 0)]);
+        $this->battle_grid->moveCharacter($this->player1, [new CartesianPoint(4, 0)]);
         $end_position = $this->player1->getMapPosition();
         $this->assertEquals(4, $end_position->getX());
         $this->assertEquals(0, $end_position->getY());
@@ -108,14 +110,14 @@ class MovementTest extends \PHPUnit\Framework\TestCase
         $this->battle_grid->place($this->player1, new CartesianPoint(2, 2));
         $this->battle_grid->place($this->player2, new CartesianPoint(2, 3));
         $this->expectException(MovementException::class);
-        $this->player1->move($this->battle_grid, [new CartesianPoint(2, 4)]);
+        $this->battle_grid->moveCharacter($this->player1, [new CartesianPoint(2, 4)]);
     }
 
     public function test_characters_cannot_move_more_than_their_speed_on_a_single_move_polygonal_line_example()
     {
         $this->battle_grid->place($this->player1, new CartesianPoint(15, 0));
         $this->expectException(MovementException::class);
-        $this->player1->move($this->battle_grid, [
+        $this->battle_grid->moveCharacter($this->player1, [
             new CartesianPoint(25, 0),
             new CartesianPoint(25, 5),
             new CartesianPoint(27, 5)
@@ -126,7 +128,7 @@ class MovementTest extends \PHPUnit\Framework\TestCase
     {
         $this->battle_grid->place($this->player1, new CartesianPoint(1, 0));
         $this->expectException(MovementException::class);
-        $this->player1->move($this->battle_grid, [
+        $this->battle_grid->moveCharacter($this->player1, [
             new CartesianPoint(5, 0),
             new CartesianPoint(5, 4)
         ]);

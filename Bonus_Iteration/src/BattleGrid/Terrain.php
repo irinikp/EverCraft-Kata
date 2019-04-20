@@ -1,8 +1,6 @@
 <?php
 
-
 namespace EverCraft\BattleGrid;
-
 
 /**
  * Class Terrain
@@ -10,9 +8,9 @@ namespace EverCraft\BattleGrid;
  */
 class Terrain
 {
-    const NORMAL = 'Normal';
-    const HIGH   = 'High';
-    const LOW    = 'Low';
+    const NORMAL    = 'Normal';
+    const HIGH      = 'High';
+    const LOW       = 'Low';
     const DIFFICULT = 'Difficult';
 
     /**
@@ -29,7 +27,7 @@ class Terrain
      */
     public function __construct()
     {
-        $this->height = self::NORMAL;
+        $this->height  = self::NORMAL;
         $this->quality = self::NORMAL;
     }
 

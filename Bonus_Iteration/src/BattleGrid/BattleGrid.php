@@ -1,8 +1,6 @@
 <?php
 
-
 namespace EverCraft\BattleGrid;
-
 
 use EverCraft\Character;
 
@@ -145,12 +143,12 @@ class BattleGrid
 
     /**
      * @param Character      $character
-     * @param CartesianPoint $dimension
+     * @param CartesianPoint $position
      */
-    public function place(Character $character, CartesianPoint $dimension): void
+    public function place(Character $character, CartesianPoint $position): void
     {
-        $this->character_positions[$dimension->getX()][$dimension->getY()] = $character;
-        $character->setMapPosition($dimension);
+        $this->character_positions[$position->getX()][$position->getY()] = $character;
+        $character->setMapPosition($position);
     }
 
     /**
@@ -170,6 +168,49 @@ class BattleGrid
             $current_position = $spot;
         }
         return ($total_squares <= $character->getMovementSpeed());
+    }
+
+    /**
+     * @param Character $attacker
+     * @param Character $target
+     *
+     * @return bool
+     */
+    public function isTargetInRange(Character $attacker, Character $target): bool
+    {
+        $min_range = 1;
+        $max_range = 1;
+        if ($attacker->holdsWeapon()) {
+            $min_range = $attacker->getWeapon()->getMinRange();
+            $max_range = $attacker->getWeapon()->getMaxRange();
+        }
+        return ($attacker->getMapPosition()->isFurtherThan($min_range, $target->getMapPosition()) &&
+            $attacker->getMapPosition()->isCloserThan($max_range, $target->getMapPosition()));
+    }
+
+    /**
+     * @param Character             $character
+     * @param array<CartesianPoint> $route
+     *
+     * @throws MovementException
+     */
+    public function moveCharacter(Character $character, $route): void
+    {
+        $map_position = $character->getMapPosition();
+        if (!$map_position) {
+            throw new MovementException('Character is not on the map');
+        }
+        if ($this->getCharacterPositions()[$map_position->getX()][$map_position->getY()] !== $character) {
+            throw new MovementException('Character is not on this battle grid');
+        }
+        array_unshift($route, $character->getMapPosition());
+        if (!CartesianPoint::isStraightLine($character->getMapPosition(), $route)) {
+            throw new MovementException('Character can\'t move diagonally');
+        }
+        if (!$this->isRouteTraversable($character, $route)) {
+            throw new MovementException('This route is not traversable by this character');
+        }
+        $this->place($character, $route[sizeof($route) - 1]);
     }
 
     /**
@@ -243,7 +284,6 @@ class BattleGrid
         return $speed;
     }
 
-
     /**
      * @param CartesianPoint $dimension
      */
@@ -293,24 +333,6 @@ class BattleGrid
                 }
             }
         }
-    }
-
-    /**
-     * @param Character $attacker
-     * @param Character $target
-     *
-     * @return bool
-     */
-    public function isTargetInRange(Character $attacker, Character $target): bool
-    {
-        $min_range = 1;
-        $max_range = 1;
-        if ($attacker->holdsWeapon()) {
-            $min_range = $attacker->getWeapon()->getMinRange();
-            $max_range = $attacker->getWeapon()->getMaxRange();
-        }
-        return ($attacker->getMapPosition()->isFurtherThan($min_range, $target->getMapPosition()) &&
-            $attacker->getMapPosition()->isCloserThan($max_range, $target->getMapPosition()));
     }
 
 }

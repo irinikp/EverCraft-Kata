@@ -1,6 +1,5 @@
 <?php
 
-
 namespace EverCraft\Items;
 
 use EverCraft\Character;

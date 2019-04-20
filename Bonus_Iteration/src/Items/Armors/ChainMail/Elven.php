@@ -1,6 +1,5 @@
 <?php
 
-
 namespace EverCraft\Items\Armors\ChainMail;
 
 use EverCraft\Character;

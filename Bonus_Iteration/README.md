@@ -24,7 +24,7 @@ I have decided to create the features below
 
 #### Feature: Weapon Range
 * All non-missile weapons have range 1 square
-* Bows have range 2 - 30 square (it can't hit a target on an adjacent square) 
+* Missiles (p.ex. bows) have range 2 - 30 square (it can't hit a target on an adjacent square) 
 
 #### Feature: Terrain affects the battle
 * Higher terrain gives attacker +1 to attack roll

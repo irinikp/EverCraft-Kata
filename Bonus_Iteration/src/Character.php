@@ -2,9 +2,7 @@
 
 namespace EverCraft;
 
-use EverCraft\BattleGrid\BattleGrid;
 use EverCraft\BattleGrid\CartesianPoint;
-use EverCraft\BattleGrid\MovementException;
 use EverCraft\Classes\Priest;
 use EverCraft\Classes\SocialClass;
 use EverCraft\Items\Armors\Armor;
@@ -126,9 +124,9 @@ class Character
     }
 
     /**
-     * @return CartesianPoint
+     * @return CartesianPoint|null
      */
-    public function getMapPosition(): CartesianPoint
+    public function getMapPosition(): ?CartesianPoint
     {
         return $this->map_position;
     }
@@ -667,27 +665,11 @@ class Character
     }
 
     /**
-     * @param BattleGrid            $battle_grid
-     * @param array<CartesianPoint> $route
-     *
-     * @throws MovementException
+     * @return bool
      */
-    public function move(BattleGrid $battle_grid, $route): void
+    public function holdsWeapon(): bool
     {
-        if (!$this->map_position) {
-            throw new MovementException('Character is not on the map');
-        }
-        if ($battle_grid->getCharacterPositions()[$this->map_position->getX()][$this->map_position->getY()] !== $this) {
-            throw new MovementException('Character is not on this battle grid');
-        }
-        array_unshift($route, $this->getMapPosition());
-        if (!CartesianPoint::isStraightLine($this->getMapPosition(), $route)) {
-            throw new MovementException('Character can\'t move diagonally');
-        }
-        if (!$battle_grid->isRouteTraversable($this, $route)) {
-            throw new MovementException('This route is not traversable by this character');
-        }
-        $this->setMapPosition($route[sizeof($route) - 1]);
+        return null !== $this->weapon;
     }
 
     /**
@@ -721,11 +703,6 @@ class Character
             }
         }
         return $output;
-    }
-
-    public function holdsWeapon()
-    {
-        return null !== $this->weapon;
     }
 
     /**

@@ -2,7 +2,6 @@
 
 namespace EverCraft\Items\Weapons;
 
-
 use EverCraft\Character;
 
 /**

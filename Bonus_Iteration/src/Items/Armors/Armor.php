@@ -2,7 +2,6 @@
 
 namespace EverCraft\Items\Armors;
 
-
 use EverCraft\Character;
 use EverCraft\Items\Item;
 
