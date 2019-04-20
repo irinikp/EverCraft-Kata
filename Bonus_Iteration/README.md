@@ -2,6 +2,8 @@
 
 This is my solution on [Bonus Iteration](https://github.com/PuttingTheDnDInTDD/EverCraft-Kata#bonus-iteration---battle-grid) of EverCraft-Kata
 
+I have decided to create the features below
+
 #### Feature: Grid-based map
 * Create a grid-based map
 
@@ -18,9 +20,9 @@ This is my solution on [Bonus Iteration](https://github.com/PuttingTheDnDInTDD/E
 * Dwarves and Halflings have movement speed 15 squares per round
 * Characters can move on the map (not diagonally)
 * Characters can move as many squares as defined from their speed on each round
+* Character on difficult terrain moves with half speed
 
 #### Feature: Terrain affects the battle
-* Character on difficult terrain moves with half speed
 * Higher terrain gives attacker +1 to attack roll
 * Lower terrain gives attacker -1 to attack roll
 
