@@ -14,9 +14,9 @@ This is my solution on [Bonus Iteration](https://github.com/PuttingTheDnDInTDD/E
     * difficult
 
 #### Feature: Movement/Speed
-* Characters can move on the map
-* All races can move up to 20 squares per round
-* Dwarves and Halflings can move up to 15 squares per round
+* All races have movement speed 20 squares per round
+* Dwarves and Halflings have movement speed 15 squares per round
+* Characters can move on the map (not diagonally)
 
 #### Feature: Terrain affects the battle
 * Higher terrain gives attacker +1 to attack roll

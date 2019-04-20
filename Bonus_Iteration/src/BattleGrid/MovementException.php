@@ -4,7 +4,11 @@
 namespace EverCraft\BattleGrid;
 
 
-class MovementException
+/**
+ * Class MovementException
+ * @package EverCraft\BattleGrid
+ */
+class MovementException extends \Exception
 {
 
 }

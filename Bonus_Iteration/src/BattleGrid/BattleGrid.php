@@ -26,6 +26,38 @@ class BattleGrid
     protected $character_positions;
 
     /**
+     * @return Terrain[][]
+     */
+    public function getMap(): array
+    {
+        return $this->map;
+    }
+
+    /**
+     * @param Terrain[][] $map
+     */
+    public function setMap(array $map): void
+    {
+        $this->map = $map;
+    }
+
+    /**
+     * @return Character[][]
+     */
+    public function getCharacterPositions(): array
+    {
+        return $this->character_positions;
+    }
+
+    /**
+     * @param Character[][] $character_positions
+     */
+    public function setCharacterPositions(array $character_positions): void
+    {
+        $this->character_positions = $character_positions;
+    }
+
+    /**
      * BattleGrid constructor.
      */
     public function __construct()
@@ -118,7 +150,78 @@ class BattleGrid
     public function place(Character $character, Dimension $dimension): void
     {
         $this->character_positions[$dimension->getX()][$dimension->getY()] = $character;
+        $character->setMapPosition($dimension);
     }
+
+    /**
+     * @param Character        $character
+     * @param array<Dimension> $route
+     *
+     * @return bool
+     */
+    public function isRouteObstacleFree(Character $character, $route): bool
+    {
+        $current_position = $character->getMapPosition();
+        foreach ($route as $spot) {
+            if (!$this->isLineObstacleFree($current_position, $spot)) return false;
+            $current_position = $spot;
+        }
+        return true;
+    }
+
+    /**
+     * @param Dimension $starting_point
+     * @param Dimension $end_point
+     *
+     * @return bool
+     */
+    protected function isLineObstacleFree(Dimension $starting_point, Dimension $end_point): bool
+    {
+        if ($this->isMovementOnXAxis($starting_point, $end_point)) {
+            if (!$this->isAxisLineObstacleFree($starting_point, $end_point, Dimension::X_AXIS)) {
+                return false;
+            }
+        } else {
+            if (!$this->isAxisLineObstacleFree($starting_point, $end_point, Dimension::Y_AXIS)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    protected function isMovementOnXAxis(Dimension $starting_point, Dimension $end_point): bool
+    {
+        return ($starting_point->getX() !== $end_point->getX());
+    }
+
+    /**
+     * @param Dimension $starting_point
+     * @param Dimension $end_point
+     * @param string    $moving_axis the axis parallel to the line
+     *
+     * @return bool
+     */
+    protected function isAxisLineObstacleFree(Dimension $starting_point, Dimension $end_point, $moving_axis)
+    {
+        $fixed_axis            = Dimension::getVerticalAxis($moving_axis);
+        $get_moving_coordinate = "get$moving_axis";
+        $get_fixed_coordinate  = "get$fixed_axis";
+        $starting_coordinate   = $starting_point->$get_moving_coordinate();
+        $ending_coordinate     = $end_point->$get_moving_coordinate();
+        if ($starting_coordinate > $ending_coordinate) {
+            $starting_coordinate = $end_point->$get_moving_coordinate();
+            $ending_coordinate   = $starting_point->$get_moving_coordinate();
+        }
+        for ($i = $starting_coordinate + 1; $i < $ending_coordinate; ++$i) {
+            $current_point = new Dimension($i, $starting_point->$get_fixed_coordinate());
+            if (Dimension::Y_AXIS === $moving_axis) $current_point = new Dimension($starting_point->$get_fixed_coordinate(), $i);
+            if (!$this->isSpotEmpty($current_point)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
 
     /**
      * @param Dimension $dimension

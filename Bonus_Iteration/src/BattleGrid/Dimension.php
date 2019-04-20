@@ -10,6 +10,8 @@ namespace EverCraft\BattleGrid;
  */
 class Dimension
 {
+    const X_AXIS = 'X';
+    const Y_AXIS = 'Y';
     /**
      * @var int
      */
@@ -19,10 +21,45 @@ class Dimension
      */
     protected $y;
 
+    /**
+     * Dimension constructor.
+     *
+     * @param int $x
+     * @param int $y
+     */
     public function __construct($x, $y)
     {
         $this->x = $x;
         $this->y = $y;
+    }
+
+    /**
+     * @param Dimension        $initial_position
+     * @param array<Dimension> $route
+     *
+     * @return bool
+     */
+    public static function isStraightLine($initial_position, $route): bool
+    {
+        $current_position = $initial_position;
+        foreach ($route as $spot) {
+            if ($current_position->getX() !== $spot->getX() && $current_position->getY() !== $spot->getY()) {
+                return false;
+            }
+            $current_position = $spot;
+        }
+        return true;
+    }
+
+    /**
+     * @param string $axis
+     *
+     * @return string
+     */
+    public static function getVerticalAxis($axis): string
+    {
+        if (self::X_AXIS === $axis) return self::Y_AXIS;
+        else return self::X_AXIS;
     }
 
     /**

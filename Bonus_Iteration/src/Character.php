@@ -2,6 +2,9 @@
 
 namespace EverCraft;
 
+use EverCraft\BattleGrid\BattleGrid;
+use EverCraft\BattleGrid\Dimension;
+use EverCraft\BattleGrid\MovementException;
 use EverCraft\Classes\Priest;
 use EverCraft\Classes\SocialClass;
 use EverCraft\Items\Armors\Armor;
@@ -94,27 +97,48 @@ class Character
      * @var int
      */
     protected $movement_speed;
+    /**
+     * @var Dimension
+     */
+    protected $map_position;
 
     /**
      * Character constructor.
      */
     public function __construct()
     {
-        $this->ac        = 10;
-        $this->class     = new Priest();
-        $this->hp        = $this->class->getHpPerLevel();
-        $this->max_hp    = $this->class->getHpPerLevel();
-        $this->dead      = false;
-        $this->abilities = new Abilities();
-        $this->xp        = 0;
-        $this->level     = 1;
-        $this->alignment = Alignment::NEUTRAL;
-        $this->race      = new Human();
-        $this->weapon    = null;
-        $this->shield    = null;
-        $this->armor     = null;
-        $this->items     = [];
+        $this->ac           = 10;
+        $this->class        = new Priest();
+        $this->hp           = $this->class->getHpPerLevel();
+        $this->max_hp       = $this->class->getHpPerLevel();
+        $this->dead         = false;
+        $this->abilities    = new Abilities();
+        $this->xp           = 0;
+        $this->level        = 1;
+        $this->alignment    = Alignment::NEUTRAL;
+        $this->race         = new Human();
+        $this->weapon       = null;
+        $this->shield       = null;
+        $this->armor        = null;
+        $this->items        = [];
+        $this->map_position = null;
         $this->recalculateStats();
+    }
+
+    /**
+     * @return Dimension
+     */
+    public function getMapPosition(): Dimension
+    {
+        return $this->map_position;
+    }
+
+    /**
+     * @param Dimension $map_position
+     */
+    public function setMapPosition(Dimension $map_position): void
+    {
+        $this->map_position = $map_position;
     }
 
     /**
@@ -773,6 +797,30 @@ class Character
     }
 
     /**
+     * @param BattleGrid       $battle_grid
+     * @param array<Dimension> $route
+     *
+     * @throws MovementException
+     */
+    public function move(BattleGrid $battle_grid, $route): void
+    {
+        if (!$this->map_position) {
+            throw new MovementException('Character is not on the map');
+        }
+        if ($battle_grid->getCharacterPositions()[$this->map_position->getX()][$this->map_position->getY()] !== $this) {
+            throw new MovementException('Character is not on this battle grid');
+        }
+        array_unshift($route, $this->getMapPosition());
+        if (!Dimension::isStraightLine($this->getMapPosition(), $route)) {
+            throw new MovementException('Character can\'t move diagonally');
+        }
+        if (!$battle_grid->isRouteObstacleFree($this, $route)) {
+            throw new MovementException('This route is not obstacle free');
+        }
+        $this->setMapPosition($route[sizeof($route)-1]);
+    }
+
+    /**
      *
      */
     protected function recalculateDamageReceiving(): void
@@ -791,7 +839,10 @@ class Character
         return substr($class_name, strrpos($class_name, '\\') + 1);
     }
 
-    protected function recalculateMovementSpeed()
+    /**
+     *
+     */
+    protected function recalculateMovementSpeed(): void
     {
         $this->setMovementSpeed($this->callFunctionTree('getMovementSpeed', [], new CoreStructureCaller()));
     }
