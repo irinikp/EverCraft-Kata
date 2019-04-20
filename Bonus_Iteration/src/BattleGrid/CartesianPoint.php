@@ -8,7 +8,7 @@ namespace EverCraft\BattleGrid;
  * Class Dimensions
  * @package EverCraft\BattleGrid
  */
-class Dimension
+class CartesianPoint
 {
     const X_AXIS = 'X';
     const Y_AXIS = 'Y';
@@ -22,7 +22,7 @@ class Dimension
     protected $y;
 
     /**
-     * Dimension constructor.
+     * CartesianPoint constructor.
      *
      * @param int $x
      * @param int $y
@@ -34,8 +34,8 @@ class Dimension
     }
 
     /**
-     * @param Dimension        $initial_position
-     * @param array<Dimension> $route
+     * @param CartesianPoint        $initial_position
+     * @param array<CartesianPoint> $route
      *
      * @return bool
      */

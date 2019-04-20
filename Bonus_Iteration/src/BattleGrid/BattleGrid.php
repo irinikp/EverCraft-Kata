@@ -13,7 +13,7 @@ use EverCraft\Character;
 class BattleGrid
 {
     /**
-     * @var Dimension
+     * @var CartesianPoint
      */
     protected $dimensions;
     /**
@@ -67,9 +67,9 @@ class BattleGrid
     }
 
     /**
-     * @return Dimension
+     * @return CartesianPoint
      */
-    public function getDimensions(): Dimension
+    public function getDimensions(): CartesianPoint
     {
         return $this->dimensions;
     }
@@ -82,27 +82,27 @@ class BattleGrid
      */
     public function setDimensions($x, $y): void
     {
-        $this->dimensions = new Dimension($x, $y);
+        $this->dimensions = new CartesianPoint($x, $y);
         $this->setTerrain($this->dimensions);
         $this->initiatePositions();
     }
 
     /**
-     * @param Dimension $spot
+     * @param CartesianPoint $spot
      *
      * @return bool
      */
-    public function isSpotEmpty(Dimension $spot): bool
+    public function isSpotEmpty(CartesianPoint $spot): bool
     {
         return null === $this->character_positions[$spot->getX()][$spot->getY()];
     }
 
     /**
-     * @param string    $height
-     * @param Dimension $from
-     * @param Dimension $to
+     * @param string         $height
+     * @param CartesianPoint $from
+     * @param CartesianPoint $to
      */
-    public function setTerrainHeight($height, Dimension $from, Dimension $to): void
+    public function setTerrainHeight($height, CartesianPoint $from, CartesianPoint $to): void
     {
         $this->checkBounds($from);
         $this->checkBounds($to);
@@ -110,11 +110,11 @@ class BattleGrid
     }
 
     /**
-     * @param string    $quality
-     * @param Dimension $from
-     * @param Dimension $to
+     * @param string         $quality
+     * @param CartesianPoint $from
+     * @param CartesianPoint $to
      */
-    public function setTerrainQuality($quality, Dimension $from, Dimension $to): void
+    public function setTerrainQuality($quality, CartesianPoint $from, CartesianPoint $to): void
     {
         $this->checkBounds($from);
         $this->checkBounds($to);
@@ -122,40 +122,40 @@ class BattleGrid
     }
 
     /**
-     * @param Dimension $dimension
+     * @param CartesianPoint $dimension
      *
      * @return string
      */
-    public function getTerrainHeight(Dimension $dimension): string
+    public function getTerrainHeight(CartesianPoint $dimension): string
     {
         $this->checkBounds($dimension);
         return $this->map[$dimension->getX()][$dimension->getY()]->getHeight();
     }
 
     /**
-     * @param Dimension $dimension
+     * @param CartesianPoint $dimension
      *
      * @return string
      */
-    public function getTerrainQuality(Dimension $dimension): string
+    public function getTerrainQuality(CartesianPoint $dimension): string
     {
         $this->checkBounds($dimension);
         return $this->map[$dimension->getX()][$dimension->getY()]->getQuality();
     }
 
     /**
-     * @param Character $character
-     * @param Dimension $dimension
+     * @param Character      $character
+     * @param CartesianPoint $dimension
      */
-    public function place(Character $character, Dimension $dimension): void
+    public function place(Character $character, CartesianPoint $dimension): void
     {
         $this->character_positions[$dimension->getX()][$dimension->getY()] = $character;
         $character->setMapPosition($dimension);
     }
 
     /**
-     * @param Character        $character
-     * @param array<Dimension> $route
+     * @param Character             $character
+     * @param array<CartesianPoint> $route
      *
      * @return bool
      */
@@ -170,40 +170,40 @@ class BattleGrid
     }
 
     /**
-     * @param Dimension $starting_point
-     * @param Dimension $end_point
+     * @param CartesianPoint $starting_point
+     * @param CartesianPoint $end_point
      *
      * @return bool
      */
-    protected function isLineObstacleFree(Dimension $starting_point, Dimension $end_point): bool
+    protected function isLineObstacleFree(CartesianPoint $starting_point, CartesianPoint $end_point): bool
     {
         if ($this->isMovementOnXAxis($starting_point, $end_point)) {
-            if (!$this->isAxisLineObstacleFree($starting_point, $end_point, Dimension::X_AXIS)) {
+            if (!$this->isAxisLineObstacleFree($starting_point, $end_point, CartesianPoint::X_AXIS)) {
                 return false;
             }
         } else {
-            if (!$this->isAxisLineObstacleFree($starting_point, $end_point, Dimension::Y_AXIS)) {
+            if (!$this->isAxisLineObstacleFree($starting_point, $end_point, CartesianPoint::Y_AXIS)) {
                 return false;
             }
         }
         return true;
     }
 
-    protected function isMovementOnXAxis(Dimension $starting_point, Dimension $end_point): bool
+    protected function isMovementOnXAxis(CartesianPoint $starting_point, CartesianPoint $end_point): bool
     {
         return ($starting_point->getX() !== $end_point->getX());
     }
 
     /**
-     * @param Dimension $starting_point
-     * @param Dimension $end_point
-     * @param string    $moving_axis the axis parallel to the line
+     * @param CartesianPoint $starting_point
+     * @param CartesianPoint $end_point
+     * @param string         $moving_axis the axis parallel to the line
      *
      * @return bool
      */
-    protected function isAxisLineObstacleFree(Dimension $starting_point, Dimension $end_point, $moving_axis)
+    protected function isAxisLineObstacleFree(CartesianPoint $starting_point, CartesianPoint $end_point, $moving_axis)
     {
-        $fixed_axis            = Dimension::getVerticalAxis($moving_axis);
+        $fixed_axis            = CartesianPoint::getVerticalAxis($moving_axis);
         $get_moving_coordinate = "get$moving_axis";
         $get_fixed_coordinate  = "get$fixed_axis";
         $starting_coordinate   = $starting_point->$get_moving_coordinate();
@@ -213,8 +213,8 @@ class BattleGrid
             $ending_coordinate   = $starting_point->$get_moving_coordinate();
         }
         for ($i = $starting_coordinate + 1; $i < $ending_coordinate; ++$i) {
-            $current_point = new Dimension($i, $starting_point->$get_fixed_coordinate());
-            if (Dimension::Y_AXIS === $moving_axis) $current_point = new Dimension($starting_point->$get_fixed_coordinate(), $i);
+            $current_point = new CartesianPoint($i, $starting_point->$get_fixed_coordinate());
+            if (CartesianPoint::Y_AXIS === $moving_axis) $current_point = new CartesianPoint($starting_point->$get_fixed_coordinate(), $i);
             if (!$this->isSpotEmpty($current_point)) {
                 return false;
             }
@@ -224,9 +224,9 @@ class BattleGrid
 
 
     /**
-     * @param Dimension $dimension
+     * @param CartesianPoint $dimension
      */
-    protected function checkBounds(Dimension $dimension): void
+    protected function checkBounds(CartesianPoint $dimension): void
     {
         if (sizeof($this->map) <= 0) throw new \OutOfBoundsException('The map has not been initiated');
         if ($dimension->getX() >= sizeof($this->map)) throw new \OutOfBoundsException($dimension->getX() . ' is out of the map');
@@ -234,9 +234,9 @@ class BattleGrid
     }
 
     /**
-     * @param Dimension $dimension
+     * @param CartesianPoint $dimension
      */
-    protected function setTerrain(Dimension $dimension): void
+    protected function setTerrain(CartesianPoint $dimension): void
     {
         // I don't use array_fill because it uses one new Terrain object for all instances,
         // whereas i need a different one for each map position
@@ -257,12 +257,12 @@ class BattleGrid
     }
 
     /**
-     * @param string    $characteristic
-     * @param string    $type
-     * @param Dimension $from
-     * @param Dimension $to
+     * @param string         $characteristic
+     * @param string         $type
+     * @param CartesianPoint $from
+     * @param CartesianPoint $to
      */
-    protected function setTerrainCharacteristic($characteristic, $type, Dimension $from, Dimension $to): void
+    protected function setTerrainCharacteristic($characteristic, $type, CartesianPoint $from, CartesianPoint $to): void
     {
         if ('Quality' === $type || 'Height' === $type) {
             $function = 'set' . $type;

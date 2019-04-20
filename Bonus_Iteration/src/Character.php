@@ -3,7 +3,7 @@
 namespace EverCraft;
 
 use EverCraft\BattleGrid\BattleGrid;
-use EverCraft\BattleGrid\Dimension;
+use EverCraft\BattleGrid\CartesianPoint;
 use EverCraft\BattleGrid\MovementException;
 use EverCraft\Classes\Priest;
 use EverCraft\Classes\SocialClass;
@@ -98,7 +98,7 @@ class Character
      */
     protected $movement_speed;
     /**
-     * @var Dimension
+     * @var CartesianPoint
      */
     protected $map_position;
 
@@ -126,17 +126,17 @@ class Character
     }
 
     /**
-     * @return Dimension
+     * @return CartesianPoint
      */
-    public function getMapPosition(): Dimension
+    public function getMapPosition(): CartesianPoint
     {
         return $this->map_position;
     }
 
     /**
-     * @param Dimension $map_position
+     * @param CartesianPoint $map_position
      */
-    public function setMapPosition(Dimension $map_position): void
+    public function setMapPosition(CartesianPoint $map_position): void
     {
         $this->map_position = $map_position;
     }
@@ -797,8 +797,8 @@ class Character
     }
 
     /**
-     * @param BattleGrid       $battle_grid
-     * @param array<Dimension> $route
+     * @param BattleGrid            $battle_grid
+     * @param array<CartesianPoint> $route
      *
      * @throws MovementException
      */
@@ -811,7 +811,7 @@ class Character
             throw new MovementException('Character is not on this battle grid');
         }
         array_unshift($route, $this->getMapPosition());
-        if (!Dimension::isStraightLine($this->getMapPosition(), $route)) {
+        if (!CartesianPoint::isStraightLine($this->getMapPosition(), $route)) {
             throw new MovementException('Character can\'t move diagonally');
         }
         if (!$battle_grid->isRouteObstacleFree($this, $route)) {

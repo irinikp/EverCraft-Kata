@@ -6,7 +6,7 @@ require __DIR__ . '/../vendor/autoload.php';
 
 use DemeterChain\C;
 use EverCraft\BattleGrid\BattleGrid;
-use EverCraft\BattleGrid\Dimension;
+use EverCraft\BattleGrid\CartesianPoint;
 use EverCraft\BattleGrid\MovementException;
 use EverCraft\BattleGrid\Terrain;
 use EverCraft\Character;
@@ -33,20 +33,20 @@ class BonusTest extends \PHPUnit\Framework\TestCase
         // See tests/test_battle_grid.jpg for an image of the field
         $this->battle_grid = new BattleGrid();
         $this->battle_grid->setDimensions(30, 9);
-        $this->battle_grid->setTerrainHeight(TERRAIN::HIGH, new Dimension(1, 0), new Dimension(2, 3));
-        $this->battle_grid->setTerrainHeight(TERRAIN::LOW, new Dimension(5, 5), new Dimension(8, 8));
-        $this->battle_grid->setTerrainQuality(TERRAIN::DIFFICULT, new Dimension(1, 0), new Dimension(14,8));
+        $this->battle_grid->setTerrainHeight(TERRAIN::HIGH, new CartesianPoint(1, 0), new CartesianPoint(2, 3));
+        $this->battle_grid->setTerrainHeight(TERRAIN::LOW, new CartesianPoint(5, 5), new CartesianPoint(8, 8));
+        $this->battle_grid->setTerrainQuality(TERRAIN::DIFFICULT, new CartesianPoint(1, 0), new CartesianPoint(14,8));
     }
 
     public function test_character_placing()
     {
-        $this->battle_grid->place($this->player1, new Dimension(2,2));
-        $this->battle_grid->place($this->player2, new Dimension(2,3));
+        $this->battle_grid->place($this->player1, new CartesianPoint(2,2));
+        $this->battle_grid->place($this->player2, new CartesianPoint(2,3));
 
-        $this->assertTrue($this->battle_grid->isSpotEmpty(new Dimension(1, 2)));
-        $this->assertTrue($this->battle_grid->isSpotEmpty(new Dimension(2, 4)));
-        $this->assertFalse($this->battle_grid->isSpotEmpty(new Dimension(2, 2)));
-        $this->assertFalse($this->battle_grid->isSpotEmpty(new Dimension(2, 3)));
+        $this->assertTrue($this->battle_grid->isSpotEmpty(new CartesianPoint(1, 2)));
+        $this->assertTrue($this->battle_grid->isSpotEmpty(new CartesianPoint(2, 4)));
+        $this->assertFalse($this->battle_grid->isSpotEmpty(new CartesianPoint(2, 2)));
+        $this->assertFalse($this->battle_grid->isSpotEmpty(new CartesianPoint(2, 3)));
     }
 
     public function test_characters_have_movement_speed_20_sq_per_round()
@@ -69,8 +69,8 @@ class BonusTest extends \PHPUnit\Framework\TestCase
 
     public function test_character_can_move_on_the_map()
     {
-        $this->battle_grid->place($this->player1, new Dimension(2,2));
-        $this->player1->move($this->battle_grid, [new Dimension(4,2), new Dimension(4,4)]);
+        $this->battle_grid->place($this->player1, new CartesianPoint(2,2));
+        $this->player1->move($this->battle_grid, [new CartesianPoint(4,2), new CartesianPoint(4,4)]);
         $end_position = $this->player1->getMapPosition();
         $this->assertEquals(4, $end_position->getX());
         $this->assertEquals(4, $end_position->getY());
@@ -79,26 +79,26 @@ class BonusTest extends \PHPUnit\Framework\TestCase
     public function test_characters_cannot_move_on_a_map_where_they_have_not_been_placed()
     {
         $this->expectException(MovementException::class);
-        $this->player1->move($this->battle_grid, [new Dimension(4,2), new Dimension(4,4)]);
+        $this->player1->move($this->battle_grid, [new CartesianPoint(4,2), new CartesianPoint(4,4)]);
     }
 
     public function test_characters_can_only_move_on_the_battle_field_they_have_been_placed()
     {
         $this->expectException(MovementException::class);
-        $this->player1->move(new BattleGrid(), [new Dimension(4,2), new Dimension(4,4)]);
+        $this->player1->move(new BattleGrid(), [new CartesianPoint(4,2), new CartesianPoint(4,4)]);
     }
 
     public function test_a_character_can_only_move_on_connected_straight_lines()
     {
-        $this->battle_grid->place($this->player1, new Dimension(2,2));
+        $this->battle_grid->place($this->player1, new CartesianPoint(2,2));
         $this->expectException(MovementException::class);
-        $this->player1->move($this->battle_grid, [new Dimension(4,3)]);
+        $this->player1->move($this->battle_grid, [new CartesianPoint(4,3)]);
     }
 
     public function test_a_character_can_move_on_connected_straight_lines_backwards()
     {
-        $this->battle_grid->place($this->player1, new Dimension(4,3));
-        $this->player1->move($this->battle_grid, [new Dimension(4,0)]);
+        $this->battle_grid->place($this->player1, new CartesianPoint(4,3));
+        $this->player1->move($this->battle_grid, [new CartesianPoint(4,0)]);
         $end_position = $this->player1->getMapPosition();
         $this->assertEquals(4, $end_position->getX());
         $this->assertEquals(0, $end_position->getY());
@@ -106,9 +106,9 @@ class BonusTest extends \PHPUnit\Framework\TestCase
 
     public function test_a_character_cannot_move_through_another_character()
     {
-        $this->battle_grid->place($this->player1, new Dimension(2,2));
-        $this->battle_grid->place($this->player2, new Dimension(2,3));
+        $this->battle_grid->place($this->player1, new CartesianPoint(2,2));
+        $this->battle_grid->place($this->player2, new CartesianPoint(2,3));
         $this->expectException(MovementException::class);
-        $this->player1->move($this->battle_grid, [new Dimension(2,4)]);
+        $this->player1->move($this->battle_grid, [new CartesianPoint(2,4)]);
     }
 }
