@@ -208,7 +208,7 @@ class BattleGrid
      */
     protected function getTraversableAxisLineLength(CartesianPoint $starting_point, CartesianPoint $end_point, $moving_axis)
     {
-        $squares               = 1;
+        $squares               = $this->getPointTerrainSpeed($starting_point);
         $fixed_axis            = CartesianPoint::getVerticalAxis($moving_axis);
         $get_moving_coordinate = "get$moving_axis";
         $get_fixed_coordinate  = "get$fixed_axis";
@@ -224,9 +224,23 @@ class BattleGrid
             if (!$this->isSpotEmpty($current_point)) {
                 return -1;
             }
-            $squares++;
+            $squares += $this->getPointTerrainSpeed($current_point);
         }
         return $squares;
+    }
+
+    /**
+     * @param CartesianPoint $point
+     *
+     * @return int
+     */
+    protected function getPointTerrainSpeed(CartesianPoint $point): int
+    {
+        $speed = 1;
+        if (Terrain::DIFFICULT === $this->map[$point->getX()][$point->getY()]->getQuality()) {
+            $speed++;
+        }
+        return $speed;
     }
 
 

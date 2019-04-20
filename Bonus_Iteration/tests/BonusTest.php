@@ -111,21 +111,24 @@ class BonusTest extends \PHPUnit\Framework\TestCase
         $this->player1->move($this->battle_grid, [new CartesianPoint(2, 4)]);
     }
 
-    public function test_characters_cannot_move_more_than_their_speed_on_a_single_move_straight_line_example()
-    {
-        $this->battle_grid->place($this->player2, new CartesianPoint(0, 0));
-        $this->expectException(MovementException::class);
-        $this->player2->move($this->battle_grid, [new CartesianPoint(21, 0)]);
-    }
-
     public function test_characters_cannot_move_more_than_their_speed_on_a_single_move_polygonal_line_example()
     {
-        $this->battle_grid->place($this->player2, new CartesianPoint(0, 0));
+        $this->battle_grid->place($this->player1, new CartesianPoint(15, 0));
         $this->expectException(MovementException::class);
-        $this->player2->move($this->battle_grid, [
-            new CartesianPoint(10, 0),
-            new CartesianPoint(10, 5),
-            new CartesianPoint(16, 5)
+        $this->player1->move($this->battle_grid, [
+            new CartesianPoint(25, 0),
+            new CartesianPoint(25, 5),
+            new CartesianPoint(27, 5)
+        ]);
+    }
+
+    public function test_characters_move_on_difficult_terrain_with_half_their_speed()
+    {
+        $this->battle_grid->place($this->player1, new CartesianPoint(1, 0));
+        $this->expectException(MovementException::class);
+        $this->player1->move($this->battle_grid, [
+            new CartesianPoint(5, 0),
+            new CartesianPoint(5, 4)
         ]);
     }
 }

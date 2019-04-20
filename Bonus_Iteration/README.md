@@ -20,9 +20,9 @@ This is my solution on [Bonus Iteration](https://github.com/PuttingTheDnDInTDD/E
 * Characters can move as many squares as defined from their speed on each round
 
 #### Feature: Terrain affects the battle
+* Character on difficult terrain moves with half speed
 * Higher terrain gives attacker +1 to attack roll
 * Lower terrain gives attacker -1 to attack roll
-* Character on difficult terrain moves with half speed
 
 #### Feature: Initiative
 * Characters roll a 20-dice to define the initiative. (The higher the dice, the sooner the player plays)
