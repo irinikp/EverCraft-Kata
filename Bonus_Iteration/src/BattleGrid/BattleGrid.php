@@ -3,6 +3,7 @@
 namespace EverCraft\BattleGrid;
 
 use EverCraft\Character;
+use EverCraft\CombatAction;
 
 /**
  * Class BattleGrid
@@ -189,6 +190,22 @@ class BattleGrid
     }
 
     /**
+     * @param Character $attacker
+     * @param Character $target
+     * @param int       $dice
+     *
+     * @return bool true if attacker hits the target, false otherwise
+     */
+    public function attack(Character $attacker, Character $target, $dice): bool
+    {
+        if ($this->isTargetInRange($attacker, $target)) {
+            $action = new CombatAction($attacker, $target, $dice, $this);
+            return $action->attackRoll();
+        }
+        return false;
+    }
+
+    /**
      * @param Character             $character
      * @param array<CartesianPoint> $route
      *
@@ -211,6 +228,19 @@ class BattleGrid
             throw new MovementException('This route is not traversable by this character');
         }
         $this->place($character, $route[sizeof($route) - 1]);
+    }
+
+    /**
+     * @param Character $attacker
+     * @param Character $target
+     *
+     * @return int
+     */
+    public function getTerrainAttackModifier(Character $attacker, Character $target): int
+    {
+        $attacker_terrain = $this->map[$attacker->getMapPosition()->getX()][$attacker->getMapPosition()->getY()];
+        $target_terrain   = $this->map[$target->getMapPosition()->getX()][$target->getMapPosition()->getY()];
+        return $attacker_terrain->getHeight() - $target_terrain->getHeight();
     }
 
     /**

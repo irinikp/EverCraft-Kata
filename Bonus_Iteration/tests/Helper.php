@@ -4,6 +4,8 @@
 namespace Tests;
 
 
+use EverCraft\BattleGrid\BattleGrid;
+use EverCraft\BattleGrid\CartesianPoint;
 use EverCraft\Character;
 use EverCraft\CombatAction;
 use EverCraft\InvalidAlignmentException;
@@ -60,7 +62,7 @@ class Helper extends \PHPUnit\Framework\TestCase
             $target = new Character();
         }
 
-        $action = new CombatAction($character, $target, $dice);
+        $action = new CombatAction($character, $target, $dice, $this->initiate_battle_grid($character, $target));
         return $action->attackRoll();
     }
 
@@ -82,7 +84,7 @@ class Helper extends \PHPUnit\Framework\TestCase
      */
     public function createCounterAttackRoll(Character $character, $dice, $target): bool
     {
-        $action = new CombatAction($target, $character, $dice);
+        $action = new CombatAction($target, $character, $dice, $this->initiate_battle_grid($target, $character));
         return $action->attackRoll();
     }
 
@@ -113,6 +115,21 @@ class Helper extends \PHPUnit\Framework\TestCase
         $character->setRace($race);
         $race_ability_modifier = $character->getAbilityModifier($ability);
         $this->assertEquals(($human_ability_modifier + $ability_change), $race_ability_modifier);
+    }
+
+    /**
+     * @param Character $attacker
+     * @param Character $target
+     *
+     * @return BattleGrid
+     */
+    protected function initiate_battle_grid(Character $attacker, Character $target): BattleGrid
+    {
+        $battle_grid = new BattleGrid();
+        $battle_grid->setDimensions(10, 10);
+        $battle_grid->place($attacker, new CartesianPoint(0, 0));
+        $battle_grid->place($target, new CartesianPoint(0, 1));
+        return $battle_grid;
     }
 
 }

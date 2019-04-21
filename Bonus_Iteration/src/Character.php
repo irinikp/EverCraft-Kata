@@ -2,6 +2,7 @@
 
 namespace EverCraft;
 
+use EverCraft\BattleGrid\BattleGrid;
 use EverCraft\BattleGrid\CartesianPoint;
 use EverCraft\Classes\Priest;
 use EverCraft\Classes\SocialClass;
@@ -274,15 +275,18 @@ class Character
     }
 
     /**
+     * @param BattleGrid     $battle_grid
      * @param Character|null $target
      *
      * @return int
      */
-    public function getAttackBonus(Character $target = null): int
+    public function getAttackBonus(BattleGrid $battle_grid, Character $target = null): int
     {
         $attack_bonus_on_this_target = 0;
         if ($target) {
-            $attack_bonus_on_this_target += $this->callFunctionTree('getAttackRoll', [$this->getLevel(), $this, $target], new CoreStructureCaller());
+            $attack_bonus_on_this_target +=
+                $this->callFunctionTree('getAttackRoll', [$this->getLevel(), $this, $target], new CoreStructureCaller()) +
+                $battle_grid->getTerrainAttackModifier($this, $target);
         }
         return $attack_bonus_on_this_target + $this->attack_bonus;
     }

@@ -8,13 +8,13 @@ namespace EverCraft\BattleGrid;
  */
 class Terrain
 {
-    const NORMAL    = 'Normal';
-    const HIGH      = 'High';
-    const LOW       = 'Low';
+    const NORMAL    = 0;
+    const HIGH      = 1;
+    const LOW       = -1;
     const DIFFICULT = 'Difficult';
 
     /**
-     * @var string
+     * @var int
      */
     protected $height;
     /**
@@ -48,17 +48,17 @@ class Terrain
     }
 
     /**
-     * @return string
+     * @return int
      */
-    public function getHeight(): string
+    public function getHeight(): int
     {
         return $this->height;
     }
 
     /**
-     * @param string $height
+     * @param int $height
      */
-    public function setHeight(string $height): void
+    public function setHeight(int $height): void
     {
         $this->height = $height;
     }

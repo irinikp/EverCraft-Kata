@@ -2,6 +2,8 @@
 
 namespace EverCraft;
 
+use EverCraft\BattleGrid\BattleGrid;
+
 /**
  * Class CombatAction
  * @package EverCraft
@@ -20,19 +22,25 @@ class CombatAction
      * @var int
      */
     protected $dice;
+    /**
+     * @var BattleGrid
+     */
+    protected $battle_grid;
 
     /**
      * CombatAction constructor.
      *
-     * @param Character $attacker
-     * @param Character $target
-     * @param int       $dice
+     * @param Character       $attacker
+     * @param Character       $target
+     * @param int             $dice
+     * @param BattleGrid|null $battle_grid
      */
-    public function __construct($attacker, $target, $dice)
+    public function __construct($attacker, $target, $dice, BattleGrid $battle_grid)
     {
-        $this->attacker = $attacker;
-        $this->target   = $target;
-        $this->dice     = $dice;
+        $this->attacker    = $attacker;
+        $this->target      = $target;
+        $this->dice        = $dice;
+        $this->battle_grid = $battle_grid;
     }
 
     /**
@@ -40,7 +48,7 @@ class CombatAction
      */
     public function attackRoll(): bool
     {
-        $hits = $this->hits($this->attacker->getAttackBonus($this->target));
+        $hits = $this->hits($this->attacker->getAttackBonus($this->battle_grid, $this->target));
         if ($hits) {
             $this->target->takeDamage($this->calculate_damage());
             $this->attacker->gainSuccessfulAttackXp();
