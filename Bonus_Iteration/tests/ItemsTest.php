@@ -67,7 +67,7 @@ class ItemsTest extends \PHPUnit\Framework\TestCase
     {
         $this->character->use(new Waraxe(2));
         $target = new Character();
-        $this->helper->assert_attacker_hits_with_roll($this->character, 8, $target);
+        $this->helper->assert_attacker_hits_with_roll($this->character, $target, 8);
     }
 
     public function test_plus_2_weapon_triples_damage_on_critical()
@@ -96,7 +96,7 @@ class ItemsTest extends \PHPUnit\Framework\TestCase
     {
         $this->character->use(new Longsword\Elven());
         $target = new Character();
-        $this->helper->assert_attacker_hits_with_roll($this->character, 9, $target);
+        $this->helper->assert_attacker_hits_with_roll($this->character, $target, 9);
     }
 
     public function test_elven_longsword_has_plus_2_to_attack_when_wielded_by_elf()
@@ -104,16 +104,16 @@ class ItemsTest extends \PHPUnit\Framework\TestCase
         $this->character->setRace(Race::ELF);
         $this->character->use(new Longsword\Elven());
         $target = new Character();
-        $this->helper->assert_attacker_hits_with_roll($this->character, 8, $target);
+        $this->helper->assert_attacker_hits_with_roll($this->character, $target, 8);
     }
 
     public function test_elven_longsword_has_plus_2_to_attack_when_wielded_against_orc()
     {
         $target = new Character();
         $target->setRace(Race::ORC);
-        $this->helper->assert_attacker_hits_with_roll($this->character, 12, $target);
+        $this->helper->assert_attacker_hits_with_roll($this->character, $target, 12);
         $this->character->use(new Longsword\Elven());
-        $this->helper->assert_attacker_hits_with_roll($this->character, 10, $target);
+        $this->helper->assert_attacker_hits_with_roll($this->character, $target, 10);
     }
 
     public function test_elven_longsword_has_plus_5_to_attack_when_wielded_by_elf_against_orc()
@@ -121,9 +121,9 @@ class ItemsTest extends \PHPUnit\Framework\TestCase
         $target = new Character();
         $target->setRace(Race::ORC);
         $this->character->setRace(Race::ELF);
-        $this->helper->assert_attacker_hits_with_roll($this->character, 12, $target);
+        $this->helper->assert_attacker_hits_with_roll($this->character, $target, 12);
         $this->character->use(new Longsword\Elven());
-        $this->helper->assert_attacker_hits_with_roll($this->character, 7, $target);
+        $this->helper->assert_attacker_hits_with_roll($this->character, $target, 7);
     }
 
     public function test_monk_does_6_damage_with_nunchunks()
@@ -136,7 +136,7 @@ class ItemsTest extends \PHPUnit\Framework\TestCase
     {
         $this->character->use(new NunChucks());
         $target = new Character();
-        $this->helper->assert_attacker_hits_with_roll($this->character, 14, $target);
+        $this->helper->assert_attacker_hits_with_roll($this->character, $target, 14);
         $this->helper->assert_damage_of_weapon($this->character, Weapon::NUNCHUCKS, 6, 0, $this->character, 14);
     }
 
@@ -237,7 +237,7 @@ class ItemsTest extends \PHPUnit\Framework\TestCase
         $this->character->setRace(Race::ELF);
         $target = new Character();
         $this->character->use(new Armors\ChainMail\Elven());
-        $this->helper->assert_attacker_hits_with_roll($this->character, 9, $target);
+        $this->helper->assert_attacker_hits_with_roll($this->character, $target, 9);
     }
 
     public function test_shield_adds_3_to_ac()
@@ -251,7 +251,7 @@ class ItemsTest extends \PHPUnit\Framework\TestCase
     {
         $target = new Character();
         $this->character->use(new Shield());
-        $this->helper->assert_attacker_hits_with_roll($this->character, 14, $target);
+        $this->helper->assert_attacker_hits_with_roll($this->character, $target, 14);
     }
 
     public function test_shield_reduces_attack_roll_by_two_when_used_by_a_fighter()
@@ -259,7 +259,7 @@ class ItemsTest extends \PHPUnit\Framework\TestCase
         $target = new Character();
         $this->character->setClass(SocialClass::FIGHTER);
         $this->character->use(new Shield());
-        $this->helper->assert_attacker_hits_with_roll($this->character, 12, $target);
+        $this->helper->assert_attacker_hits_with_roll($this->character, $target, 12);
     }
 
     public function test_ring_of_protection_adds_2_to_ac()
@@ -284,7 +284,7 @@ class ItemsTest extends \PHPUnit\Framework\TestCase
         $this->character->use(new AmuletOfTheHeavens());
         $target = new Character();
         $target->setAlignment(Alignment::NEUTRAL);
-        $this->helper->assert_attacker_hits_with_roll($this->character, 9, $target);
+        $this->helper->assert_attacker_hits_with_roll($this->character, $target, 9);
     }
 
     public function test_amulet_of_heavens_gives_plus_2_to_attack_against_evil()
@@ -292,7 +292,7 @@ class ItemsTest extends \PHPUnit\Framework\TestCase
         $this->character->use(new AmuletOfTheHeavens());
         $target = new Character();
         $target->setAlignment(Alignment::EVIL);
-        $this->helper->assert_attacker_hits_with_roll($this->character, 8, $target);
+        $this->helper->assert_attacker_hits_with_roll($this->character, $target, 8);
     }
 
     public function test_amulet_of_heavens_worn_by_paladin_gives_plus_2_to_attack_against_neutral()
@@ -301,7 +301,7 @@ class ItemsTest extends \PHPUnit\Framework\TestCase
         $this->character->use(new AmuletOfTheHeavens());
         $target = new Character();
         $target->setAlignment(Alignment::NEUTRAL);
-        $this->helper->assert_attacker_hits_with_roll($this->character, 8, $target);
+        $this->helper->assert_attacker_hits_with_roll($this->character, $target, 8);
     }
 
     public function test_amulet_of_heavens_worn_by_paladin_gives_plus_4_to_attack_against_evil()
@@ -311,7 +311,7 @@ class ItemsTest extends \PHPUnit\Framework\TestCase
         $this->character->use(new AmuletOfTheHeavens());
         $target = new Character();
         $target->setAlignment(Alignment::EVIL);
-        $this->helper->assert_attacker_hits_with_roll($this->character, 4, $target);
+        $this->helper->assert_attacker_hits_with_roll($this->character, $target, 4);
     }
 
 }

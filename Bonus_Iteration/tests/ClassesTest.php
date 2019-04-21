@@ -195,14 +195,14 @@ class ClassesTest extends \PHPUnit\Framework\TestCase
     {
         $this->character->setAbility(Abilities::STR, 2);
         $this->character->setClass(SocialClass::ROGUE);
-        $this->helper->assert_attacker_hits_with_roll($this->character, 10, new Character());
+        $this->helper->assert_attacker_hits_with_roll($this->character, new Character(), 10);
     }
 
     public function test_rogues_dexterity_modifier_applies_to_attack()
     {
         $this->character->setAbility(Abilities::DEX, 12);
         $this->character->setClass(SocialClass::ROGUE);
-        $this->helper->assert_attacker_hits_with_roll($this->character, 9, new Character());
+        $this->helper->assert_attacker_hits_with_roll($this->character, new Character(), 9);
     }
 
     public function test_dexterity_modifier_of_target_is_ignored_if_positive_when_attacked_by_rogue()
@@ -211,7 +211,7 @@ class ClassesTest extends \PHPUnit\Framework\TestCase
         $target->setAbility(Abilities::DEX, 15);
         $this->character->setAbility(Abilities::DEX, 2);
         $this->character->setClass(SocialClass::ROGUE);
-        $this->helper->assert_attacker_hits_with_roll($this->character, 14, $target);
+        $this->helper->assert_attacker_hits_with_roll($this->character, $target, 14);
     }
 
     public function test_dexterity_modifier_of_target_is_not_ignored_if_not_positive_when_attacked_by_rogue()
@@ -220,7 +220,7 @@ class ClassesTest extends \PHPUnit\Framework\TestCase
         $target->setAbility(Abilities::DEX, 6);
         $this->character->setAbility(Abilities::DEX, 2);
         $this->character->setClass(SocialClass::ROGUE);
-        $this->helper->assert_attacker_hits_with_roll($this->character, 12, $target);
+        $this->helper->assert_attacker_hits_with_roll($this->character, $target, 12);
     }
 
     public function test_when_monk_attack_is_successful_other_character_takes_3_points_of_damage_when_hit()
@@ -236,10 +236,10 @@ class ClassesTest extends \PHPUnit\Framework\TestCase
     {
         $this->character->setClass(SocialClass::PALADIN);
         $target = new Character();
-        $this->helper->assert_attacker_hits_with_roll($this->character, 10, $target);
+        $this->helper->assert_attacker_hits_with_roll($this->character, $target, 10);
 
         $target->setAlignment(Alignment::EVIL);
-        $this->helper->assert_attacker_hits_with_roll($this->character, 8, $target);
+        $this->helper->assert_attacker_hits_with_roll($this->character, $target, 8);
     }
 
     public function test_paladin_plus_2_to_damage_when_attacking_evil_characters()

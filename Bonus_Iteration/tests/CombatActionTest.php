@@ -145,13 +145,13 @@ class CombatActionTest extends \PHPUnit\Framework\TestCase
 
         // Battle round 1
         // Dwarf +2 to attack Orc, Paladin +2 to attack Evil, Orc +2 on AC
-        $this->helper->assert_attacker_hits_with_roll($this->character, 8, $target);
+        $this->helper->assert_attacker_hits_with_roll($this->character, $target, 8);
         // 1 + Dwarf +2 damage VS Orc, Paladin +2 damage VS Evil
         $this->helper->assert_has_remaining_hp(1, $target);
 
 
         // +2 to attack modifier from STR because of ORC
-        $this->helper->assert_defender_hits_with_roll($this->character, 8, $target);
+        $this->helper->assert_defender_hits_with_roll($this->character, $target, 8);
         // Monk 3 damage + 2 from Orc's STR modifier
         $this->helper->assert_has_remaining_hp(5, $this->character);
 
@@ -168,9 +168,9 @@ class CombatActionTest extends \PHPUnit\Framework\TestCase
         $this->helper->assert_has_remaining_hp(7, $target);
 
         // Dwarf +2 to attack Orc, Paladin +2 to attack Evil, +1 attack logo paladin level, Orc +2 on AC
-        $this->helper->assert_attacker_hits_with_roll($this->character, 7, $target);
+        $this->helper->assert_attacker_hits_with_roll($this->character, $target, 7);
         // +2 to attack modifier from STR because of ORC + 1 apo monk level up
-        $this->helper->assert_defender_hits_with_roll($this->character, 7, $target);
+        $this->helper->assert_defender_hits_with_roll($this->character, $target, 7);
         // 1 + Dwarf +2 damage VS Orc, Paladin +2 damage VS Evil
         $this->helper->assert_has_remaining_hp(2, $target);
         // Monk 3 damage + 2 from Orc's STR modifier
@@ -189,9 +189,9 @@ class CombatActionTest extends \PHPUnit\Framework\TestCase
         $this->helper->assert_has_remaining_hp(8, $target);
 
         // Dwarf +2 to attack Orc, Paladin +2 to attack Evil, +2 attack logo paladin level, Orc +2 on AC
-        $this->helper->assert_attacker_hits_with_roll($this->character, 6, $target);
+        $this->helper->assert_attacker_hits_with_roll($this->character, $target, 6);
         // +2 to attack modifier from STR because of ORC + 2 apo monk level up
-        $this->helper->assert_defender_hits_with_roll($this->character, 6, $target);
+        $this->helper->assert_defender_hits_with_roll($this->character, $target, 6);
 
         // 1 + Dwarf +2 damage VS Orc, Paladin +2 damage VS Evil
         $this->helper->assert_has_remaining_hp(3, $target);

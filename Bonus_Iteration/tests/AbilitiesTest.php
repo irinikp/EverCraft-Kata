@@ -223,7 +223,7 @@ class AbilitiesTest extends \PHPUnit\Framework\TestCase
         $target = new Character();
         $target->setAbility(Abilities::DEX, 15);
         $this->character->setAbility(Abilities::STR, 2);
-        $this->helper->assert_attacker_hits_with_roll($this->character, 16, $target);
+        $this->helper->assert_attacker_hits_with_roll($this->character, $target, 16);
     }
 
 }

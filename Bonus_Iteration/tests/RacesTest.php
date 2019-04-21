@@ -87,20 +87,20 @@ class RacesTest extends \PHPUnit\Framework\TestCase
     {
         $this->character->setRace(Race::DWARF);
         $target = new Character();
-        $this->helper->assert_attacker_hits_with_roll($this->character, 10, $target);
+        $this->helper->assert_attacker_hits_with_roll($this->character, $target, 10);
 
         $target->setRace(Race::ORC);
-        $this->helper->assert_attacker_hits_with_roll($this->character, 10, $target);
+        $this->helper->assert_attacker_hits_with_roll($this->character, $target, 10);
     }
 
     public function test_elf_plus_two_to_ac_when_being_attacked_by_orcs()
     {
         $target = new Character();
         $this->character->setRace(Race::ORC);
-        $this->helper->assert_attacker_hits_with_roll($this->character, 8, $target);
+        $this->helper->assert_attacker_hits_with_roll($this->character, $target, 8);
 
         $target->setRace(Race::ELF);
-        $this->helper->assert_attacker_hits_with_roll($this->character, 11, $target);
+        $this->helper->assert_attacker_hits_with_roll($this->character, $target, 11);
     }
 
     public function test_halfling_plus_two_to_ac_when_being_attacked_by_orcs()
@@ -108,44 +108,44 @@ class RacesTest extends \PHPUnit\Framework\TestCase
         $target = new Character();
         $this->character->setRace(Race::ORC);
         // Orc hits with +2 from STR
-        $this->helper->assert_attacker_hits_with_roll($this->character, 8, $target);
+        $this->helper->assert_attacker_hits_with_roll($this->character, $target, 8);
 
         // Halfling has +1 to AC from DEX plus 2 from this test
         $target->setRace(Race::HALFLING);
-        $this->helper->assert_attacker_hits_with_roll($this->character, 11, $target);
+        $this->helper->assert_attacker_hits_with_roll($this->character, $target, 11);
     }
 
     public function test_halfling_plus_two_to_ac_when_being_attacked_by_dwarves()
     {
         $target = new Character();
         $this->character->setRace(Race::DWARF);
-        $this->helper->assert_attacker_hits_with_roll($this->character, 10, $target);
+        $this->helper->assert_attacker_hits_with_roll($this->character, $target, 10);
 
         // Halfling has +1 to AC from DEX plus 2 from this test
         $target->setRace(Race::HALFLING);
-        $this->helper->assert_attacker_hits_with_roll($this->character, 13, $target);
+        $this->helper->assert_attacker_hits_with_roll($this->character, $target, 13);
     }
 
     public function test_halfling_plus_two_to_ac_when_being_attacked_by_elf()
     {
         $target = new Character();
         $this->character->setRace(Race::ELF);
-        $this->helper->assert_attacker_hits_with_roll($this->character, 10, $target);
+        $this->helper->assert_attacker_hits_with_roll($this->character, $target, 10);
 
         // Halfling has +1 to AC from DEX plus 2 from this test
         $target->setRace(Race::HALFLING);
-        $this->helper->assert_attacker_hits_with_roll($this->character, 13, $target);
+        $this->helper->assert_attacker_hits_with_roll($this->character, $target, 13);
     }
 
     public function test_halfling_plus_two_to_ac_when_being_attacked_by_human()
     {
         $target = new Character();
         $this->character->setRace(Race::HUMAN);
-        $this->helper->assert_attacker_hits_with_roll($this->character, 10, $target);
+        $this->helper->assert_attacker_hits_with_roll($this->character, $target, 10);
 
         // Halfling has +1 to AC from DEX plus 2 from this test
         $target->setRace(Race::HALFLING);
-        $this->helper->assert_attacker_hits_with_roll($this->character, 13, $target);
+        $this->helper->assert_attacker_hits_with_roll($this->character, $target, 13);
     }
 
     public function test_halfling_non_plus_two_to_ac_when_being_attacked_by_halfling()
@@ -153,10 +153,10 @@ class RacesTest extends \PHPUnit\Framework\TestCase
         $target = new Character();
         $this->character->setRace(Race::HALFLING);
         // Has -1 to attack from STR
-        $this->helper->assert_attacker_hits_with_roll($this->character, 11, $target);
+        $this->helper->assert_attacker_hits_with_roll($this->character, $target, 11);
 
         // Halfling has +1 to AC from DEX
         $target->setRace(Race::HALFLING);
-        $this->helper->assert_attacker_hits_with_roll($this->character, 12, $target);
+        $this->helper->assert_attacker_hits_with_roll($this->character, $target, 12);
     }
 }

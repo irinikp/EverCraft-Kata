@@ -89,8 +89,7 @@ class TerrainTest extends \PHPUnit\Framework\TestCase
         $this->battle_grid->place($this->character, new CartesianPoint(2, 2));
         $this->battle_grid->place($target, new CartesianPoint(2, 3));
         $this->battle_grid->setTerrainHeight(TERRAIN::HIGH, new CartesianPoint(2,2), new CartesianPoint(2, 2));
-        $this->assertFalse($this->battle_grid->attack($this->character, $target, 8));
-        $this->assertTrue($this->battle_grid->attack($this->character, $target, 9));
+        $this->assert_attacker_hits_with($this->character, $target, 9);
     }
 
     public function test_lower_terrain_gives_the_attacker_minus_1_to_attack_roll()
@@ -99,8 +98,7 @@ class TerrainTest extends \PHPUnit\Framework\TestCase
         $this->battle_grid->place($this->character, new CartesianPoint(2, 2));
         $this->battle_grid->place($target, new CartesianPoint(2, 3));
         $this->battle_grid->setTerrainHeight(TERRAIN::LOW, new CartesianPoint(2,2), new CartesianPoint(2, 2));
-        $this->assertFalse($this->battle_grid->attack($this->character, $target, 10));
-        $this->assertTrue($this->battle_grid->attack($this->character, $target, 11));
+        $this->assert_attacker_hits_with($this->character, $target, 11);
     }
 
     public function test_high_terrain_gives_the_attacker_plus_2_to_attack_roll_when_target_is_on_low_terrain()
@@ -110,7 +108,15 @@ class TerrainTest extends \PHPUnit\Framework\TestCase
         $this->battle_grid->place($target, new CartesianPoint(2, 3));
         $this->battle_grid->setTerrainHeight(TERRAIN::HIGH, new CartesianPoint(2,2), new CartesianPoint(2, 2));
         $this->battle_grid->setTerrainHeight(TERRAIN::LOW, new CartesianPoint(2,3), new CartesianPoint(2, 3));
-        $this->assertFalse($this->battle_grid->attack($this->character, $target, 7));
-        $this->assertTrue($this->battle_grid->attack($this->character, $target, 8));
+        $this->assert_attacker_hits_with($this->character, $target, 8);
+    }
+
+    protected function assert_attacker_hits_with(Character $attacker, Character $target, int $dice): void
+    {
+        $attack_action = new CombatAction(CombatAction::ATTACK);
+        $attack_action->setUpAttack($attacker, $target, $dice-1, $this->battle_grid);
+        $this->assertFalse($attack_action->attackRoll());
+        $attack_action->setUpAttack($attacker, $target, $dice, $this->battle_grid);
+        $this->assertTrue($attack_action->attackRoll());
     }
 }

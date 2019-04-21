@@ -3,6 +3,8 @@
 namespace EverCraft;
 
 use EverCraft\BattleGrid\BattleGrid;
+use EverCraft\BattleGrid\CartesianPoint;
+use EverCraft\BattleGrid\MovementException;
 
 /**
  * Class CombatAction
@@ -10,10 +12,12 @@ use EverCraft\BattleGrid\BattleGrid;
  */
 class CombatAction
 {
+    const ATTACK = 'Attack';
+    const MOVE   = 'Move';
     /**
      * @var Character
      */
-    protected $attacker;
+    protected $player;
     /**
      * @var Character
      */
@@ -26,21 +30,23 @@ class CombatAction
      * @var BattleGrid
      */
     protected $battle_grid;
+    /**
+     * @var string
+     */
+    protected $action;
+    /**
+     * @var array<CartesianPoint>
+     */
+    protected $route;
 
     /**
      * CombatAction constructor.
      *
-     * @param Character       $attacker
-     * @param Character       $target
-     * @param int             $dice
-     * @param BattleGrid|null $battle_grid
+     * @param string $action
      */
-    public function __construct($attacker, $target, $dice, BattleGrid $battle_grid)
+    public function __construct($action)
     {
-        $this->attacker    = $attacker;
-        $this->target      = $target;
-        $this->dice        = $dice;
-        $this->battle_grid = $battle_grid;
+        $this->action = $action;
     }
 
     /**
@@ -48,12 +54,70 @@ class CombatAction
      */
     public function attackRoll(): bool
     {
-        $hits = $this->hits($this->attacker->getAttackBonus($this->battle_grid, $this->target));
+        $hits = $this->hits($this->player->getAttackBonus($this->battle_grid, $this->target));
         if ($hits) {
             $this->target->takeDamage($this->calculate_damage());
-            $this->attacker->gainSuccessfulAttackXp();
+            $this->player->gainSuccessfulAttackXp();
         }
         return $hits;
+    }
+
+    /**
+     * @param Character  $attacker
+     * @param Character  $target
+     * @param int        $dice
+     * @param BattleGrid $battle_grid
+     *
+     * @throws \Exception
+     */
+    public function setUpAttack(Character $attacker, Character $target, int $dice, BattleGrid $battle_grid): void
+    {
+        if (self::ATTACK === $this->action) {
+            $this->player      = $attacker;
+            $this->target      = $target;
+            $this->dice        = $dice;
+            $this->battle_grid = $battle_grid;
+        } else {
+            throw new \Exception('This combat action is not an attack');
+        }
+    }
+
+    /**
+     * @param Character             $player
+     * @param BattleGrid            $battle_grid
+     * @param array<CartesianPoint> $route
+     *
+     * @throws \Exception
+     */
+    public function setUpMovement(Character $player, BattleGrid $battle_grid, array $route)
+    {
+        if (self::MOVE === $this->action) {
+            $this->player      = $player;
+            $this->battle_grid = $battle_grid;
+            $this->route       = $route;
+        } else {
+            throw new \Exception('This combat action is not a move');
+        }
+    }
+
+    /**
+     *
+     */
+    public function perform(): void
+    {
+        if (self::ATTACK === $this->action) {
+            $this->attackRoll();
+        } elseif (self::MOVE === $this->action) {
+            $this->move();
+        }
+    }
+
+    /**
+     * @throws MovementException
+     */
+    public function move(): void
+    {
+        $this->battle_grid->moveCharacter($this->player, $this->route);
     }
 
     /**
@@ -63,7 +127,7 @@ class CombatAction
      */
     protected function hits($modifier): bool
     {
-        return ($this->dice + $modifier) >= $this->target->getAc($this->attacker);
+        return ($this->dice + $modifier) >= $this->target->getAc($this->player);
     }
 
     /**
@@ -71,7 +135,7 @@ class CombatAction
      */
     protected function getDamage(): int
     {
-        return $this->attacker->getDamage($this->target);
+        return $this->player->getDamage($this->target);
     }
 
     /**
@@ -80,8 +144,8 @@ class CombatAction
     protected function calculate_damage(): int
     {
         $damage = $this->getDamage();
-        if ($this->attacker->isCritical($this->dice)) {
-            $damage *= $this->attacker->getCriticalDamageMultiplier($this->target);
+        if ($this->player->isCritical($this->dice)) {
+            $damage *= $this->player->getCriticalDamageMultiplier($this->target);
         }
         $damage = max(1, $damage);
         return max(0, $damage + $this->target->getDamageReceiving());

@@ -16,16 +16,20 @@ class Helper extends \PHPUnit\Framework\TestCase
 {
 
     /**
-     * @param Character $character
-     * @param int       $dice
+     * @param Character $attacker
      * @param Character $target
+     * @param int       $dice
+     *
+     * @throws \Exception
      */
-    public function assert_attacker_hits_with_roll(Character $character, $dice, $target): void
+    public function assert_attacker_hits_with_roll(Character $attacker, Character $target, int $dice): void
     {
-        $hits = $this->createAttackRoll($character, $dice - 1, $target);
-        $this->assertFalse($hits);
-        $hits = $this->createAttackRoll($character, $dice, $target);
-        $this->assertTrue($hits);
+        $battle_grid   = $this->initiateBattleGrid($attacker, $target);
+        $attack_action = new CombatAction(CombatAction::ATTACK);
+        $attack_action->setUpAttack($attacker, $target, $dice - 1, $battle_grid);
+        $this->assertFalse($attack_action->attackRoll());
+        $attack_action->setUpAttack($attacker, $target, $dice, $battle_grid);
+        $this->assertTrue($attack_action->attackRoll());
     }
 
     /**
@@ -37,6 +41,7 @@ class Helper extends \PHPUnit\Framework\TestCase
      * @param int       $dice
      *
      * @throws InvalidAlignmentException
+     * @throws \Exception
      */
     public function assert_damage_of_weapon(Character $character, $weapon, $damage, $magical, $attacker, $dice = 10)
     {
@@ -48,20 +53,23 @@ class Helper extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @param Character      $character
+     * @param Character      $attacker
      * @param int            $dice
      * @param Character|null $target
      *
      * @return bool
+     *
+     * @throws \Exception
      */
-    public function createAttackRoll(Character $character, $dice, $target = null): bool
+    public function createAttackRoll(Character $attacker, $dice, ?Character $target = null): bool
     {
         if (null === $target) {
             $target = new Character();
         }
 
-        $action = new CombatAction($character, $target, $dice, $this->initiateBattleGrid($character, $target));
-        return $action->attackRoll();
+        $attack_action = new CombatAction(CombatAction::ATTACK);
+        $attack_action->setUpAttack($attacker, $target, $dice, $this->initiateBattleGrid($attacker, $target));
+        return $attack_action->attackRoll();
     }
 
     /**
@@ -74,28 +82,34 @@ class Helper extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @param Character $character
-     * @param int       $dice
+     * @param Character $attacker
      * @param Character $target
      *
+     * @param int       $dice
+     *
      * @return bool
+     * @throws \Exception
      */
-    public function createCounterAttackRoll(Character $character, $dice, $target): bool
+    public function createCounterAttackRoll(Character $attacker, Character $target, int $dice): bool
     {
-        $action = new CombatAction($target, $character, $dice, $this->initiateBattleGrid($target, $character));
-        return $action->attackRoll();
+        $attack_action = new CombatAction(CombatAction::ATTACK);
+        $attack_action->setUpAttack($target, $attacker, $dice, $this->initiateBattleGrid($target, $attacker));
+        return $attack_action->attackRoll();
     }
 
     /**
      * @param Character $character
-     * @param int       $dice
      * @param Character $defender
+     *
+     * @param int       $dice
+     *
+     * @throws \Exception
      */
-    public function assert_defender_hits_with_roll(Character $character, $dice, $defender): void
+    public function assert_defender_hits_with_roll(Character $character, Character $defender, $dice): void
     {
-        $hits = $this->createCounterAttackRoll($character, $dice - 1, $defender);
+        $hits = $this->createCounterAttackRoll($character, $defender, $dice - 1);
         $this->assertFalse($hits);
-        $hits = $this->createCounterAttackRoll($character, $dice, $defender);
+        $hits = $this->createCounterAttackRoll($character, $defender, $dice);
         $this->assertTrue($hits);
     }
 
