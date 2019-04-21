@@ -1,8 +1,6 @@
 <?php
 
-
 namespace Tests;
-
 
 use EverCraft\BattleGrid\BattleGrid;
 use EverCraft\BattleGrid\CartesianPoint;
@@ -62,7 +60,7 @@ class Helper extends \PHPUnit\Framework\TestCase
             $target = new Character();
         }
 
-        $action = new CombatAction($character, $target, $dice, $this->initiate_battle_grid($character, $target));
+        $action = new CombatAction($character, $target, $dice, $this->initiateBattleGrid($character, $target));
         return $action->attackRoll();
     }
 
@@ -84,7 +82,7 @@ class Helper extends \PHPUnit\Framework\TestCase
      */
     public function createCounterAttackRoll(Character $character, $dice, $target): bool
     {
-        $action = new CombatAction($target, $character, $dice, $this->initiate_battle_grid($target, $character));
+        $action = new CombatAction($target, $character, $dice, $this->initiateBattleGrid($target, $character));
         return $action->attackRoll();
     }
 
@@ -123,7 +121,7 @@ class Helper extends \PHPUnit\Framework\TestCase
      *
      * @return BattleGrid
      */
-    protected function initiate_battle_grid(Character $attacker, Character $target): BattleGrid
+    protected function initiateBattleGrid(Character $attacker, Character $target): BattleGrid
     {
         $battle_grid = new BattleGrid();
         $battle_grid->setDimensions(10, 10);
