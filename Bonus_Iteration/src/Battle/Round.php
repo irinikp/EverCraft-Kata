@@ -1,6 +1,6 @@
 <?php
 
-namespace EverCraft;
+namespace EverCraft\Battle;
 
 /**
  * Class Round

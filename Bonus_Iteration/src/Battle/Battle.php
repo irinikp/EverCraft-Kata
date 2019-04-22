@@ -1,8 +1,8 @@
 <?php
 
-namespace EverCraft;
+namespace EverCraft\Battle;
 
-use EverCraft\BattleGrid\BattleGrid;
+use EverCraft\Map\BattleGrid;
 
 /**
  * Class Battle

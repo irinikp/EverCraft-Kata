@@ -2,10 +2,10 @@
 
 namespace Tests;
 
-use EverCraft\BattleGrid\BattleGrid;
-use EverCraft\BattleGrid\CartesianPoint;
+use EverCraft\Battle\CombatAction;
+use EverCraft\Map\BattleGrid;
+use EverCraft\Map\CartesianPoint;
 use EverCraft\Character;
-use EverCraft\CombatAction;
 use EverCraft\InvalidAlignmentException;
 
 /**

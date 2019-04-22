@@ -1,10 +1,11 @@
 <?php
 
-namespace EverCraft;
+namespace EverCraft\Battle;
 
-use EverCraft\BattleGrid\BattleGrid;
-use EverCraft\BattleGrid\CartesianPoint;
-use EverCraft\BattleGrid\MovementException;
+use EverCraft\Character;
+use EverCraft\Map\BattleGrid;
+use EverCraft\Map\CartesianPoint;
+use EverCraft\Map\MovementException;
 
 /**
  * Class CombatAction

@@ -4,10 +4,10 @@ namespace Tests;
 
 require __DIR__ . '/../vendor/autoload.php';
 
-use EverCraft\BattleGrid\BattleGrid;
-use EverCraft\BattleGrid\CartesianPoint;
-use EverCraft\BattleGrid\MovementException;
-use EverCraft\BattleGrid\Terrain;
+use EverCraft\Map\BattleGrid;
+use EverCraft\Map\CartesianPoint;
+use EverCraft\Map\MovementException;
+use EverCraft\Map\Terrain;
 use EverCraft\Character;
 use EverCraft\Classes\SocialClass;
 use EverCraft\Races\Race;

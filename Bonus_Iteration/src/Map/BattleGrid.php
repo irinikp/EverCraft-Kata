@@ -1,6 +1,6 @@
 <?php
 
-namespace EverCraft\BattleGrid;
+namespace EverCraft\Map;
 
 use EverCraft\Character;
 use EverCraft\CombatAction;

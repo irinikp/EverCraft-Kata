@@ -2,8 +2,8 @@
 
 namespace EverCraft;
 
-use EverCraft\BattleGrid\BattleGrid;
-use EverCraft\BattleGrid\CartesianPoint;
+use EverCraft\Map\BattleGrid;
+use EverCraft\Map\CartesianPoint;
 use EverCraft\Classes\Priest;
 use EverCraft\Classes\SocialClass;
 use EverCraft\Items\Armors\Armor;

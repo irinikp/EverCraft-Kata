@@ -2,14 +2,14 @@
 
 namespace Tests;
 
-use EverCraft\Battle;
-use EverCraft\BattleGrid\BattleGrid;
-use EverCraft\BattleGrid\CartesianPoint;
+use EverCraft\Battle\Battle;
+use EverCraft\Battle\CombatAction;
+use EverCraft\Battle\Round;
 use EverCraft\Character;
-use EverCraft\CombatAction;
 use EverCraft\Items\Weapons\Bow;
 use EverCraft\Items\Weapons\Longsword;
-use EverCraft\Round;
+use EverCraft\Map\BattleGrid;
+use EverCraft\Map\CartesianPoint;
 
 require __DIR__ . '/../vendor/autoload.php';
 

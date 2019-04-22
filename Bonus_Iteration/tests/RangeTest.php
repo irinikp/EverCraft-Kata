@@ -2,8 +2,8 @@
 
 namespace Tests;
 
-use EverCraft\BattleGrid\BattleGrid;
-use EverCraft\BattleGrid\CartesianPoint;
+use EverCraft\Map\BattleGrid;
+use EverCraft\Map\CartesianPoint;
 use EverCraft\Character;
 use EverCraft\Items\Weapons\Bow;
 use EverCraft\Items\Weapons\Longsword;

@@ -4,11 +4,11 @@ namespace Tests;
 
 require __DIR__ . '/../vendor/autoload.php';
 
-use EverCraft\BattleGrid\BattleGrid;
-use EverCraft\BattleGrid\CartesianPoint;
-use EverCraft\BattleGrid\Terrain;
+use EverCraft\Battle\CombatAction;
+use EverCraft\Map\BattleGrid;
+use EverCraft\Map\CartesianPoint;
+use EverCraft\Map\Terrain;
 use EverCraft\Character;
-use EverCraft\CombatAction;
 
 class TerrainTest extends \PHPUnit\Framework\TestCase
 {
