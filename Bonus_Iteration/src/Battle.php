@@ -24,6 +24,17 @@ class Battle
     protected $current_round;
 
     /**
+     * Battle constructor.
+     */
+    public function __construct()
+    {
+        $this->rounds        = [];
+        $this->current_round = -1;
+    }
+
+    /**
+     * First round is number 0
+     *
      * @return int
      */
     public function getCurrentRoundNumber(): int
@@ -52,15 +63,6 @@ class Battle
     }
 
     /**
-     * Battle constructor.
-     */
-    public function __construct()
-    {
-        $this->rounds        = [];
-        $this->current_round = -1;
-    }
-
-    /**
      * @return BattleGrid
      */
     public function getBattleGrid(): BattleGrid
@@ -77,7 +79,7 @@ class Battle
     }
 
     /**
-     * @return array
+     * @return array<Round>
      */
     public function getRounds(): array
     {
@@ -85,7 +87,7 @@ class Battle
     }
 
     /**
-     * @param array $rounds
+     * @param array<Round> $rounds
      */
     public function setRounds(array $rounds): void
     {

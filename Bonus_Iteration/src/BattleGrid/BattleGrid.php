@@ -148,8 +148,17 @@ class BattleGrid
      */
     public function place(Character $character, CartesianPoint $position): void
     {
+        $this->removeFromCurrentPosition($character);
         $this->character_positions[$position->getX()][$position->getY()] = $character;
         $character->setMapPosition($position);
+    }
+
+    public function removeFromCurrentPosition(Character $character): void
+    {
+        $position = $character->getMapPosition();
+        if ($position) {
+            $this->character_positions[$position->getX()][$position->getY()] = null;
+        }
     }
 
     /**

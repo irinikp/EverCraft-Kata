@@ -22,7 +22,7 @@ class Round
      */
     public function __construct()
     {
-        $this->actions = [];
+        $this->actions        = [];
         $this->current_action = -1;
     }
 
@@ -49,12 +49,12 @@ class Round
     public function begin(): void
     {
         $sorted_actions = [];
-        $index = 0;
-        ksort($this->actions);
-        foreach ($this->actions as $initiative=>$action) {
+        $index          = 0;
+        krsort($this->actions, SORT_NUMERIC);
+        foreach ($this->actions as $initiative => $action) {
             $sorted_actions[$index++] = $action;
         }
-        $this->actions = $sorted_actions;
+        $this->actions        = $sorted_actions;
         $this->current_action = 0;
     }
 
@@ -66,6 +66,22 @@ class Round
         $action = $this->getNextAction();
         $action->perform();
         $this->current_action++;
+    }
+
+    /**
+     * @return array
+     */
+    public function getActions(): array
+    {
+        return $this->actions;
+    }
+
+    /**
+     * @param array $actions
+     */
+    public function setActions(array $actions): void
+    {
+        $this->actions = $actions;
     }
 
     /**

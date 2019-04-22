@@ -50,6 +50,22 @@ class CombatAction
     }
 
     /**
+     * @return Character
+     */
+    public function getPlayer(): Character
+    {
+        return $this->player;
+    }
+
+    /**
+     * @param Character $player
+     */
+    public function setPlayer(Character $player): void
+    {
+        $this->player = $player;
+    }
+
+    /**
      * @return bool
      */
     public function attackRoll(): bool
@@ -105,10 +121,12 @@ class CombatAction
      */
     public function perform(): void
     {
-        if (self::ATTACK === $this->action) {
-            $this->attackRoll();
-        } elseif (self::MOVE === $this->action) {
-            $this->move();
+        if (!$this->player->isDead()) {
+            if (self::ATTACK === $this->action) {
+                $this->attackRoll();
+            } elseif (self::MOVE === $this->action) {
+                $this->move();
+            }
         }
     }
 
