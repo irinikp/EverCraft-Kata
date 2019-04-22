@@ -14,7 +14,7 @@ developed each phase, and in which phases I decided to restructure.
 
 [Bonus Iteration - Battle Grid](Bonus_Iteration/)
 
-#### What was I thinking
+#### My train of thought
 
 All code is written in PHP, therefore Single Inheritance was used. 
 Multiple Inheritance through Interfaces was not used because it would end up in code duplication 
@@ -59,5 +59,5 @@ overwrite it only when it's necessary
 
 All attributes of a Character are set on `\EverCraft\Character`
 
-`\EverCraft\CombatAction` implements all functions necessary on a single combat action 
-In our case, the only combat action set is 'attack'. 
+`\EverCraft\Battle\CombatAction` implements all functions necessary on a single combat action 
+In our case, the only combat actions set are 'move' and 'attack'. 
