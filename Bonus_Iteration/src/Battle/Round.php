@@ -38,7 +38,7 @@ class Round
     /**
      * @return bool
      */
-    public function finished(): bool
+    public function isCompleted(): bool
     {
         return ($this->current_action >= sizeof($this->actions));
     }
@@ -64,7 +64,7 @@ class Round
     public function performNextAction(): void
     {
         $action = $this->getNextAction();
-        $action->perform();
+        $action->performAction();
         $this->current_action++;
     }
 

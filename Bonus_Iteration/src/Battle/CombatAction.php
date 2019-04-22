@@ -120,7 +120,7 @@ class CombatAction
     /**
      *
      */
-    public function perform(): void
+    public function performAction(): void
     {
         if (!$this->player->isDead()) {
             if (self::ATTACK === $this->action) {

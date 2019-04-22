@@ -36,7 +36,7 @@ class InitiativeTest extends \PHPUnit\Framework\TestCase
         $round1      = $this->setUpTestBattlePlayersAndTheirActions($battle, $player1, $player2, $player3);
 
         $round1->begin();
-        while (!$round1->finished()) {
+        while (!$round1->isCompleted()) {
             $round1->performNextAction();
         }
         $this->helper->assert_has_remaining_hp(4, $player2);
@@ -116,7 +116,7 @@ class InitiativeTest extends \PHPUnit\Framework\TestCase
         $round1->declareAction($player2_action, 10);
 
         $round1->begin();
-        while (!$round1->finished()) {
+        while (!$round1->isCompleted()) {
             $round1->performNextAction();
         }
         $this->helper->assert_has_remaining_hp(0, $player2);

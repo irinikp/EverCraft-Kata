@@ -199,22 +199,6 @@ class BattleGrid
     }
 
     /**
-     * @param Character $attacker
-     * @param Character $target
-     * @param int       $dice
-     *
-     * @return bool true if attacker hits the target, false otherwise
-     */
-    public function attack(Character $attacker, Character $target, $dice): bool
-    {
-        if ($this->isTargetInRange($attacker, $target)) {
-            $action = new CombatAction($attacker, $target, $dice, $this);
-            return $action->attackRoll();
-        }
-        return false;
-    }
-
-    /**
      * @param Character             $character
      * @param array<CartesianPoint> $route
      *
