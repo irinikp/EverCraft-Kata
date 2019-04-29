@@ -61,3 +61,7 @@ All attributes of a Character are set on `\EverCraft\Character`
 
 `\EverCraft\Battle\CombatAction` implements all functions necessary on a single combat action 
 In our case, the only combat actions set are 'move' and 'attack'. 
+
+##### Help needed
+After a lot of thought and advice from Domain Masters (aka Dungeon Masters) I still haven't found a better name for Class `CoreBuild`. Please send me a PR if you've got one. 
+
